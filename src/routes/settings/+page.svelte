@@ -69,13 +69,21 @@
         <p class="text-sm text-content2">{@html $t.hint.settings.endpoint}</p>
     </div>
     {#if $wsFromHttps}
-        <div class="alert alert-warning" data-sveltekit-replacestate>
-            <Alert01Icon size={35} class="text-warning" />
+        <div class="alert alert-warning items-start" data-sveltekit-replacestate>
+            <Alert01Icon size={35} class="text-warning min-w-max" />
             <div class="flex flex-col">
                 <span>{$t.hint.ws.title}</span>
-                <span class="text-content2 text-sm">
+                <span class="text-content2 text-sm text-justify">
                     {@html $t.hint.ws.description}
                 </span>
+                <span class="text-content2 text-sm font-semibold">
+                    {$t.hint.ws.suggestions.title}
+                </span>
+                <ul class="list-disc list-inside text-content2 text-sm">
+                    <li>{$t.hint.ws.suggestions.http}</li>
+                    <li>{$t.hint.ws.suggestions.proxy}</li>
+                    <li>{$t.hint.ws.suggestions.portForwarding}</li>
+                </ul>
             </div>
         </div>
     {/if}

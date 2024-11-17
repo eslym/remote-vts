@@ -11,10 +11,10 @@
     {@render children?.()}
 {:else}
     <div class="alert alert-warning" data-sveltekit-replacestate>
-        <Alert01Icon size={35} class="text-warning" />
+        <Alert01Icon size={35} class="text-warning min-w-max" />
         <div class="flex flex-col">
             <span>{$t.hint.status.warning.title}</span>
-            <span class="text-content2 text-sm">
+            <span class="text-content2 text-sm text-justify">
                 {@html $t.hint.status.warning.description}
             </span>
         </div>

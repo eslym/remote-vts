@@ -12,13 +12,19 @@
       "disconnected": "Disconnected from VTS",
       "instruction": "Unable to connect to VTube Studio, please check the settings and connection status.",
       "warning": {
-        "title": "Not connecting to VTuber Studio",
-        "description": "Please check the <a href=\"/settings\" class=\"hover:underline\">settings</a> and your connection status."
+        "description": "Please check the <a href=\"/settings\" class=\"hover:underline\">settings</a> and your connection status.",
+        "title": "Not connecting to VTuber Studio"
       }
     },
     "ws": {
-      "title": "Connect WS from HTTPS",
-      "description": "This site is accessed via HTTPS, <code class=\"font-mono\">ws://</code> connection will not work due to security issue, please use <code class=\"font-mono\">http://</code> or setting up a secure proxy for your websocket connection."
+      "description": "This site is accessed via HTTPS, <code class=\"font-mono\">ws://</code> connection will not work due to browser security policy.",
+      "suggestions": {
+        "title": "You may:",
+        "http": "Use <code class=\"font-mono\">http://</code> instead of <code class=\"font-mono\">https://</code>.",
+        "portForwarding": "Use port forwarding so the connection can be treated as a local connection.",
+        "proxy": "Use a secure proxy server to connect to VTube Studio."
+      },
+      "title": "Connect WS from HTTPS"
     }
   },
   "icon": "🇺🇸",
