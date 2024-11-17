@@ -79,7 +79,7 @@
                 <span class="text-content2 text-sm font-semibold mt-2">
                     {$t.hint.ws.suggestions.title}
                 </span>
-                <ul class="list-disc list-outside text-content2 text-sm">
+                <ul class="list-disc list-outside text-content2 text-sm ml-4">
                     <li>{@html $t.hint.ws.suggestions.http}</li>
                     <li>{@html $t.hint.ws.suggestions.proxy}</li>
                     <li>{@html $t.hint.ws.suggestions.portForwarding}</li>
