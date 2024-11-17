@@ -70,19 +70,19 @@
     </div>
     {#if $wsFromHttps}
         <div class="alert alert-warning items-start" data-sveltekit-replacestate>
-            <Alert01Icon size={35} class="text-warning min-w-max" />
+            <Alert01Icon size={35} class="text-warning min-w-max mt-2" />
             <div class="flex flex-col">
                 <span>{$t.hint.ws.title}</span>
                 <span class="text-content2 text-sm text-justify">
                     {@html $t.hint.ws.description}
                 </span>
-                <span class="text-content2 text-sm font-semibold">
+                <span class="text-content2 text-sm font-semibold mt-2">
                     {$t.hint.ws.suggestions.title}
                 </span>
-                <ul class="list-disc list-inside text-content2 text-sm">
-                    <li>{$t.hint.ws.suggestions.http}</li>
-                    <li>{$t.hint.ws.suggestions.proxy}</li>
-                    <li>{$t.hint.ws.suggestions.portForwarding}</li>
+                <ul class="list-disc list-outside text-content2 text-sm">
+                    <li>{@html $t.hint.ws.suggestions.http}</li>
+                    <li>{@html $t.hint.ws.suggestions.proxy}</li>
+                    <li>{@html $t.hint.ws.suggestions.portForwarding}</li>
                 </ul>
             </div>
         </div>
