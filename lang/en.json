@@ -1,0 +1,34 @@
+{
+  "actions": {
+    "save": "Save"
+  },
+  "code": "en",
+  "hint": {
+    "settings": {
+      "endpoint": "The websocket endpoint for VTube Studio, starting with <code class=\"font-mono\">ws://</code> or <code class=\"font-mono\">wss://</code>, for more information please refer to <a href=\"https://github.com/DenchiSoft/VTubeStudio/wiki/Plugins#how-to-use-plugins\" target=\"_blank\" class=\"link link-secondary text-sm\">VTube Studio document</a>."
+    },
+    "status": {
+      "connected": "Connected to VTS",
+      "disconnected": "Disconnected from VTS",
+      "instruction": "Unable to connect to VTube Studio, please check the settings and connection status.",
+      "warning": {
+        "title": "Not connecting to VTuber Studio",
+        "description": "Please check the <a href=\"/settings\" class=\"hover:underline\">settings</a> and your connection status."
+      }
+    }
+  },
+  "icon": "🇺🇸",
+  "lang": "English",
+  "menu": {
+    "expressions": "Expressions",
+    "hotkeys": "HotKeys",
+    "models": "Models",
+    "move": "Move",
+    "settings": "Settings"
+  },
+  "name": "Remote VTS",
+  "settings": {
+    "endpoint": "VTS Plugin Endpoint",
+    "lang": "Language"
+  }
+}

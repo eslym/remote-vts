@@ -1,0 +1,7 @@
+{
+  "javascript.preferences.importModuleSpecifier": "non-relative",
+  "javascript.preferences.importModuleSpecifierEnding": "minimal",
+  "i18nJsonEditor.forceKeyUPPERCASE": false,
+  "i18n-l10n-editor.keyCaseStyle": "camelCase",
+  "i18n-l10n-editor.supportedFolders": ["lang"]
+}

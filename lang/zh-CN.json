@@ -1,0 +1,30 @@
+{
+  "actions": {
+    "save": "保存"
+  },
+  "code": "zh-Hans",
+  "hint": {
+    "settings": {
+      "endpoint": "VTube Studio的websocket端点，以<code class=\"font-mono\">ws://</code>或<code class=\"font-mono\">wss://</code>开头，更多信息请参考<a href=\"https://github.com/DenchiSoft/VTubeStudio/wiki/Plugins#how-to-use-plugins\" target=\"_blank\" class=\"link link-secondary text-sm\">VTube Studio文档</a>。"
+    },
+    "status": {
+      "connected": "已链接VTS",
+      "disconnected": "VTS未链接",
+      "instruction": "无法连接到VTube Studio，请检查设置和连接状态。"
+    }
+  },
+  "icon": "🇨🇳",
+  "lang": "简体中文",
+  "menu": {
+    "expressions": "表情",
+    "hotkeys": "快捷键",
+    "models": "模型",
+    "move": "移动",
+    "settings": "设置"
+  },
+  "name": "VTS 遙控",
+  "settings": {
+    "endpoint": "VTS 插件端点",
+    "lang": "语言"
+  }
+}

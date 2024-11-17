@@ -1,0 +1,60 @@
+import '@fontsource/noto-sans/100.css';
+import '@fontsource/noto-sans/200.css';
+import '@fontsource/noto-sans/300.css';
+import '@fontsource/noto-sans/400.css';
+import '@fontsource/noto-sans/500.css';
+import '@fontsource/noto-sans/600.css';
+import '@fontsource/noto-sans/700.css';
+import '@fontsource/noto-sans/800.css';
+import '@fontsource/noto-sans/900.css';
+import '@fontsource/noto-sans/100-italic.css';
+import '@fontsource/noto-sans/200-italic.css';
+import '@fontsource/noto-sans/300-italic.css';
+import '@fontsource/noto-sans/400-italic.css';
+import '@fontsource/noto-sans/500-italic.css';
+import '@fontsource/noto-sans/600-italic.css';
+import '@fontsource/noto-sans/700-italic.css';
+import '@fontsource/noto-sans/800-italic.css';
+import '@fontsource/noto-sans/900-italic.css';
+
+import '@fontsource/noto-sans-sc/100.css';
+import '@fontsource/noto-sans-sc/200.css';
+import '@fontsource/noto-sans-sc/300.css';
+import '@fontsource/noto-sans-sc/400.css';
+import '@fontsource/noto-sans-sc/500.css';
+import '@fontsource/noto-sans-sc/600.css';
+import '@fontsource/noto-sans-sc/700.css';
+import '@fontsource/noto-sans-sc/800.css';
+import '@fontsource/noto-sans-sc/900.css';
+
+import '@fontsource/noto-sans-tc/100.css';
+import '@fontsource/noto-sans-tc/200.css';
+import '@fontsource/noto-sans-tc/300.css';
+import '@fontsource/noto-sans-tc/400.css';
+import '@fontsource/noto-sans-tc/500.css';
+import '@fontsource/noto-sans-tc/600.css';
+import '@fontsource/noto-sans-tc/700.css';
+import '@fontsource/noto-sans-tc/800.css';
+import '@fontsource/noto-sans-tc/900.css';
+
+import '@fontsource/noto-sans-jp/100.css';
+import '@fontsource/noto-sans-jp/200.css';
+import '@fontsource/noto-sans-jp/300.css';
+import '@fontsource/noto-sans-jp/400.css';
+import '@fontsource/noto-sans-jp/500.css';
+import '@fontsource/noto-sans-jp/600.css';
+import '@fontsource/noto-sans-jp/700.css';
+import '@fontsource/noto-sans-jp/800.css';
+import '@fontsource/noto-sans-jp/900.css';
+
+import '@fontsource/noto-sans-mono/100.css';
+import '@fontsource/noto-sans-mono/200.css';
+import '@fontsource/noto-sans-mono/300.css';
+import '@fontsource/noto-sans-mono/400.css';
+import '@fontsource/noto-sans-mono/500.css';
+import '@fontsource/noto-sans-mono/600.css';
+import '@fontsource/noto-sans-mono/700.css';
+import '@fontsource/noto-sans-mono/800.css';
+import '@fontsource/noto-sans-mono/900.css';
+
+import 'twemoji-colr-font/twemoji.css';

@@ -1,0 +1,22 @@
+<script lang="ts">
+    import { connected } from '$lib/client';
+    import { t } from '$lib/lang';
+    import { Alert01Icon } from 'hugeicons-svelte';
+    import type { Snippet } from 'svelte';
+
+    let { children = undefined }: { children?: Snippet } = $props();
+</script>
+
+{#if $connected}
+    {@render children?.()}
+{:else}
+    <div class="alert alert-warning" data-sveltekit-replacestate>
+        <Alert01Icon size={35} class="text-warning" />
+        <div class="flex flex-col">
+            <span>{$t.hint.status.warning.title}</span>
+            <span class="text-content2 text-sm">
+                {@html $t.hint.status.warning.description}
+            </span>
+        </div>
+    </div>
+{/if}

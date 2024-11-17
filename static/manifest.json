@@ -1,0 +1,16 @@
+{
+  "name": "Remote VTS",
+  "short_name": "Remote VTS",
+  "description": "Control VTube Studio Remotely",
+  "start_url": "/",
+  "lang": "en-US",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

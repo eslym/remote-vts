@@ -1,0 +1,15 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@layer base {
+    * {
+        @apply scrollbar-thin scrollbar-track-inherit scrollbar-thumb-inherit;
+    }
+    body {
+        @apply select-none font-sans antialiased scrollbar-track-backgroundPrimary scrollbar-thumb-content3;
+    }
+    code {
+        @apply font-mono;
+    }
+}
