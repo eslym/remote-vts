@@ -6,6 +6,7 @@ let _client: ApiClient;
 let _url: string = '';
 
 export const connected = writable(false);
+export const wsFromHttps = writable(false);
 
 function onConnect() {
     connected.set(true);
@@ -24,20 +25,26 @@ export const client = derived(endpoint, ($endpoint) => {
         _client.disconnect();
     }
     connected.set(false);
-    _url = $endpoint;
-    _client = new ApiClient({
-        pluginName: 'Remote VTS',
-        url: _url,
-        pluginDeveloper: '0nepeop1e',
-        authTokenGetter() {
-            return localStorage.getItem('authToken');
-        },
-        async authTokenSetter(token) {
-            localStorage.setItem('authToken', token);
-        }
-    });
-    _client.on('connect', onConnect);
-    _client.on('disconnect', onDisconnect);
+    wsFromHttps.set(false);
+    try {
+        _url = $endpoint;
+        _client = new ApiClient({
+            pluginName: 'Remote VTS',
+            url: _url,
+            pluginDeveloper: '0nepeop1e',
+            authTokenGetter() {
+                return localStorage.getItem('authToken');
+            },
+            async authTokenSetter(token) {
+                localStorage.setItem('authToken', token);
+            }
+        });
+        _client.on('connect', onConnect);
+        _client.on('disconnect', onDisconnect);
+    } catch (e) {
+        wsFromHttps.set(true);
+        console.error(e);
+    }
     return _client;
 });
 

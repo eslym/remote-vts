@@ -1,7 +1,8 @@
 <script lang="ts">
-    import { FloppyDiskIcon } from 'hugeicons-svelte';
+    import { Alert01Icon, FloppyDiskIcon } from 'hugeicons-svelte';
     import { endpoint } from '$lib/config';
     import { lang, t, languages } from '$lib/lang';
+    import { wsFromHttps } from '$lib/client';
 
     let ep = $state($endpoint);
 
@@ -67,4 +68,15 @@
         </div>
         <p class="text-sm text-content2">{@html $t.hint.settings.endpoint}</p>
     </div>
+    {#if $wsFromHttps}
+        <div class="alert alert-warning" data-sveltekit-replacestate>
+            <Alert01Icon size={35} class="text-warning" />
+            <div class="flex flex-col">
+                <span>{$t.hint.ws.title}</span>
+                <span class="text-content2 text-sm">
+                    {@html $t.hint.ws.description}
+                </span>
+            </div>
+        </div>
+    {/if}
 </div>

@@ -15,6 +15,10 @@
         "title": "Not connecting to VTuber Studio",
         "description": "Please check the <a href=\"/settings\" class=\"hover:underline\">settings</a> and your connection status."
       }
+    },
+    "ws": {
+      "title": "Connect WS from HTTPS",
+      "description": "This site is accessed via HTTPS, <code class=\"font-mono\">ws://</code> connection will not work due to security issue, please use <code class=\"font-mono\">http://</code> or setting up a secure proxy for your websocket connection."
     }
   },
   "icon": "🇺🇸",
