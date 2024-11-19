@@ -9,12 +9,12 @@ export default {
         extend: {
             fontFamily: {
                 sans: [
-                    '"Twemoji"',
                     '"Noto Sans"',
                     '"Noto Sans SC"',
                     '"Noto Sans TC"',
                     '"Noto Sans JP"',
                     '"Noto Sans KR"',
+                    '"Twemoji"',
                     'ui-sans-serif',
                     'system-ui',
                     'sans-serif',
@@ -24,12 +24,12 @@ export default {
                     "'Noto Color Emoji'"
                 ],
                 mono: [
-                    '"Twemoji"',
                     '"Noto Sans Mono"',
                     '"Noto Sans SC"',
                     '"Noto Sans TC"',
                     '"Noto Sans JP"',
                     '"Noto Sans KR"',
+                    '"Twemoji"',
                     'ui-monospace',
                     'SFMono-Regular',
                     'Menlo',
@@ -39,7 +39,7 @@ export default {
                     "'Courier New'",
                     'monospace'
                 ],
-                emoji: ['"Noto Emoji"']
+                emoji: ['"Twemoji"']
             }
         }
     },
