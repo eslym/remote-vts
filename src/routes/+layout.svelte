@@ -114,7 +114,7 @@
         </aside>
     </div>
     <div class="w-full">
-        <div class="navbar sticky top-1 z-40 md:pl-4">
+        <div class="navbar sticky top-0 z-40 md:pl-4">
             <div class="navbar-start">
                 <label
                     for="sidebar-mobile-fixed"
