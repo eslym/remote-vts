@@ -23,7 +23,7 @@ sw.addEventListener('install', (event: ExtendableEvent) => {
     // Create a new cache and add all files to it
     async function addFilesToCache() {
         const cache = await caches.open(CACHE);
-        await cache.addAll(ASSETS.map((u) => new Request(u, { cache: 'reload' })));
+        await cache.addAll(ASSETS.map((u) => new Request(u)));
     }
 
     event.waitUntil(Promise.all([addFilesToCache(), sw.skipWaiting()]));

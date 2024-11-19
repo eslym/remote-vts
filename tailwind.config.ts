@@ -10,19 +10,24 @@ export default {
             fontFamily: {
                 sans: [
                     '"Noto Sans"',
-                    '"Noto Sans SC"',
-                    '"Noto Sans TC"',
-                    '"Noto Sans JP"',
-                    '"Noto Sans KR"',
-                    '"Twemoji"',
-                    'sans-serif'
+                    'ui-sans-serif',
+                    'system-ui',
+                    'sans-serif',
+                    'Twemoji',
+                    "'Apple Color Emoji'",
+                    "'Segoe UI Emoji'",
+                    "'Segoe UI Symbol'",
+                    "'Noto Color Emoji'"
                 ],
                 mono: [
                     '"Noto Sans Mono"',
-                    '"Noto Sans SC"',
-                    '"Noto Sans TC"',
-                    '"Noto Sans JP"',
-                    '"Noto Sans KR"',
+                    'ui-monospace',
+                    'SFMono-Regular',
+                    'Menlo',
+                    'Monaco',
+                    'Consolas',
+                    "'Liberation Mono'",
+                    "'Courier New'",
                     '"Twemoji"',
                     'monospace'
                 ],
