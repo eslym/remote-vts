@@ -23,7 +23,13 @@ sw.addEventListener('install', (event: ExtendableEvent) => {
     // Create a new cache and add all files to it
     async function addFilesToCache() {
         const cache = await caches.open(CACHE);
-        await cache.addAll(ASSETS.map((u) => new Request(u)));
+        await cache.addAll(
+            ASSETS.map((u) => {
+                return new Request(u, {
+                    cache: u.startsWith('/lib/immutable/') ? 'default' : 'reload'
+                });
+            })
+        );
     }
 
     event.waitUntil(Promise.all([addFilesToCache(), sw.skipWaiting()]));

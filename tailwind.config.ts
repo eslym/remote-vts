@@ -9,18 +9,27 @@ export default {
         extend: {
             fontFamily: {
                 sans: [
+                    '"Twemoji"',
                     '"Noto Sans"',
+                    '"Noto Sans SC"',
+                    '"Noto Sans TC"',
+                    '"Noto Sans JP"',
+                    '"Noto Sans KR"',
                     'ui-sans-serif',
                     'system-ui',
                     'sans-serif',
-                    'Twemoji',
                     "'Apple Color Emoji'",
                     "'Segoe UI Emoji'",
                     "'Segoe UI Symbol'",
                     "'Noto Color Emoji'"
                 ],
                 mono: [
+                    '"Twemoji"',
                     '"Noto Sans Mono"',
+                    '"Noto Sans SC"',
+                    '"Noto Sans TC"',
+                    '"Noto Sans JP"',
+                    '"Noto Sans KR"',
                     'ui-monospace',
                     'SFMono-Regular',
                     'Menlo',
@@ -28,7 +37,6 @@ export default {
                     'Consolas',
                     "'Liberation Mono'",
                     "'Courier New'",
-                    '"Twemoji"',
                     'monospace'
                 ],
                 emoji: ['"Noto Emoji"']
