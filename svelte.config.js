@@ -28,6 +28,9 @@ const config = {
         },
         version: {
             name: version
+        },
+        paths: {
+            relative: false
         }
     }
 };
