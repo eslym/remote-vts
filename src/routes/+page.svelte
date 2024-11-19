@@ -3,7 +3,7 @@
     import { t } from '$lib/lang';
 </script>
 
-<div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-2" data-sveltekit-replacestate>
+<div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4" data-sveltekit-replacestate>
     <a href="/hotkeys" class="btn flex-col gap-2 p-6 h-auto">
         <DashboardSquare01Icon size={45} />
         <span>{$t.menu.hotkeys}</span>

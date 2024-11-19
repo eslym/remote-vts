@@ -34,7 +34,7 @@
     {#await promise}
         <div class="spinner"></div>
     {:then _}
-        <div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-2">
+        <div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
             {#each states.expressions as exp (`${states.modelID}/${exp.file}`)}
                 <button
                     class="btn btn-lg flex-col gap-2 p-6 h-auto"

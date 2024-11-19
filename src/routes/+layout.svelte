@@ -113,8 +113,8 @@
             </section>
         </aside>
     </div>
-    <div class="w-full">
-        <div class="navbar sticky top-0 z-40 md:pl-4">
+    <div class="w-full h-screen grid grid-rows-[auto_1fr]">
+        <div class="navbar z-40 md:pl-4">
             <div class="navbar-start">
                 <label
                     for="sidebar-mobile-fixed"
@@ -162,7 +162,7 @@
                 </div>
             </div>
         </div>
-        <div class="px-2 pb-12 md:pl-6 pt-8">
+        <div class="px-4 pb-12 md:pl-6 pt-6 overflow-auto">
             {@render children?.()}
         </div>
     </div>

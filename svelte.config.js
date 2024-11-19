@@ -31,7 +31,8 @@ const config = {
         },
         paths: {
             relative: false
-        }
+        },
+        appDir: 'sveltekit',
     }
 };
 
