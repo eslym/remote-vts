@@ -6,7 +6,7 @@ import { build, files, prerendered, version } from '$service-worker';
 
 const FALLBACK = '/404.html';
 
-const UNCACHEABLE = new Set(['/_app/version.json', '/_app/env.js']);
+const UNCACHEABLE = new Set(['/lib/version.json', '/lib/env.js']);
 
 // Create a unique cache name for this deployment
 const CACHE = `cache-${version}`;
