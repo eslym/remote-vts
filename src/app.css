@@ -7,7 +7,7 @@
         @apply scrollbar-thin scrollbar-track-inherit scrollbar-thumb-inherit;
     }
     body {
-        @apply select-none font-sans antialiased scrollbar-track-backgroundPrimary scrollbar-thumb-content3;
+        @apply select-none font-sans antialiased scrollbar-track-backgroundPrimary scrollbar-thumb-content3 font-normal;
     }
     code {
         @apply font-mono;
