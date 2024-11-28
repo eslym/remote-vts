@@ -23,7 +23,7 @@
         <div class="popover w-full">
             <button
                 id="lang"
-                class="select select-solid select-block text-left popover-trigger !block"
+                class="select select-solid select-block text-left popover-trigger block!"
             >
                 <span class="mr-2">{lang($lang).icon}</span>
                 {lang($lang).lang}

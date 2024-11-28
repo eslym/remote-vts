@@ -59,7 +59,7 @@
                     </span>
                 </div>
             </section>
-            <section class="sidebar-content flex-grow">
+            <section class="sidebar-content grow">
                 <nav class="menu rounded-md">
                     <section class="menu-section px-4">
                         <ul class="menu-items">
@@ -142,7 +142,7 @@
                     <div class="popover-content popover-bottom-left top-12">
                         <div class="popover-arrow"></div>
                         <div class="p-2 text-sm flex flex-row items-center">
-                            <span class="flex-grow">
+                            <span class="grow">
                                 {$connected
                                     ? $t.hint.status.connected
                                     : $t.hint.status.disconnected}

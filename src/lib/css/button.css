@@ -1,0 +1,112 @@
+@utility btn {
+    @apply inline-block bg-(--button-color) text-white shadow-md outline-0 outline-offset-0 outline-transparent transition-all outline-solid;
+    --button-color: var(--color-primary);
+    --button-spacing: 1;
+    --button-radius: var(--radius-lg);
+    --button-font-size: var(--text-base);
+
+    padding: calc(var(--spacing) * var(--button-spacing) * 1.5)
+        calc(var(--spacing) * var(--button-spacing) * 4);
+    border-radius: var(--button-radius);
+    font-size: var(--button-font-size);
+
+    &:not(:disabled):not(.disabled):not([inert] *):not(.disabled *) {
+        @apply cursor-pointer;
+        &:hover {
+            background-color: oklch(from var(--button-color) calc(l + 0.05) c h);
+        }
+
+        &:active {
+            @apply scale-95 shadow-none;
+        }
+
+        &:focus-visible,
+        &:has(:focus-visible) {
+            @apply outline-focus/50 outline-2 outline-offset-2 outline-solid;
+        }
+    }
+
+    &:disabled,
+    &.disabled,
+    &:where([inert] *),
+    &:where(.disabled *) {
+        @apply pointer-events-none bg-gray-300 shadow-none;
+    }
+}
+
+@utility btn-ghost {
+    @apply inline-block bg-(--button-ghost-bg)/65 text-(--button-color) shadow-none;
+    --button-ghost-bg: var(--color-primary-text-dark);
+
+    &:not(:disabled):not(.disabled):not([inert] *):not(.disabled *) {
+        @apply cursor-pointer;
+        &:hover {
+            @apply bg-(--button-ghost-bg)/80;
+        }
+
+        &:active {
+            @apply scale-95;
+        }
+    }
+
+    &:disabled,
+    &.disabled,
+    &:where([inert] *),
+    &:where(.disabled *) {
+        @apply pointer-events-none bg-gray-100/65 text-gray-400;
+    }
+}
+
+@utility btn-primary {
+    --button-color: var(--color-primary);
+    --button-ghost-bg: var(--color-primary-text-dark);
+}
+
+@utility btn-secondary {
+    --button-color: var(--color-secondary);
+    --button-ghost-bg: var(--color-secondary-text-dark);
+}
+
+@utility btn-positive {
+    --button-color: var(--color-positive);
+    --button-ghost-bg: var(--color-positive-text-dark);
+}
+
+@utility btn-negative {
+    --button-color: var(--color-negative);
+    --button-ghost-bg: var(--color-negative-text-dark);
+}
+
+@utility btn-warning {
+    --button-color: var(--color-warning);
+    --button-ghost-bg: var(--color-warning-text-dark);
+}
+
+@utility btn-info {
+    --button-color: var(--color-info);
+    --button-ghost-bg: var(--color-info-text-dark);
+}
+
+@utility btn-xs {
+    --button-spacing: 0.5;
+    --button-radius: var(--radius-sm);
+    --button-font-size: var(--text-xs);
+}
+
+@utility btn-sm {
+    --button-spacing: 0.75;
+    --button-radius: var(--radius-md);
+    --button-font-size: var(--text-sm);
+}
+
+@utility btn-lg {
+    --button-spacing: 1.25;
+    --button-radius: var(--radius-xl);
+    --button-font-size: var(--text-lg);
+}
+
+@utility btn-xl {
+    --button-spacing: 1.75;
+    --button-radius: var(--radius-2xl);
+    --button-font-size: var(--text-xl);
+}

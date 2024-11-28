@@ -1,13 +1,62 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@import 'tailwindcss';
+@import './lib/css/button.css';
+
+@theme {
+    --font-sans: 'Noto Sans', 'Noto Sans SC', 'Noto Sans TC', 'Noto Sans JP', Twemoji, ui-sans-serif,
+        system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+        'Noto Color Emoji';
+    --font-mono: 'Noto Sans Mono', 'Noto Sans Mono SC', 'Noto Sans Mono TC', 'Noto Sans Mono JP',
+        Twemoji, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+        'Courier New', monospace;
+
+    --color-primary: var(--color-indigo-500);
+    --color-secondary: var(--color-slate-500);
+    --color-positive: var(--color-green-500);
+    --color-negative: var(--color-red-500);
+    --color-warning: var(--color-yellow-500);
+    --color-info: var(--color-blue-500);
+
+    --color-primary-text-light: var(--color-indigo-900);
+    --color-secondary-text-light: var(--color-slate-900);
+    --color-positive-text-light: var(--color-green-900);
+    --color-negative-text-light: var(--color-red-900);
+    --color-warning-text-light: var(--color-yellow-900);
+    --color-info-text-light: var(--color-blue-900);
+
+    --color-primary-text-dark: var(--color-indigo-100);
+    --color-secondary-text-dark: var(--color-slate-100);
+    --color-positive-text-dark: var(--color-green-100);
+    --color-negative-text-dark: var(--color-red-100);
+    --color-warning-text-dark: var(--color-yellow-100);
+    --color-info-text-dark: var(--color-blue-100);
+
+    --color-background-1: var(--color-white);
+    --color-background-2: var(--color-gray-100);
+    --color-background-3: var(--color-gray-300);
+
+    --color-foreground-1: var(--color-black);
+    --color-foreground-2: var(--color-slate-900);
+    --color-foreground-3: var(--color-slate-700);
+
+    --color-focus: var(--color-blue-500);
+}
 
 @layer base {
-    * {
-        @apply scrollbar-thin scrollbar-track-inherit scrollbar-thumb-inherit;
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --color-background-1: var(--color-zinc-900);
+            --color-background-2: var(--color-zinc-800);
+            --color-background-3: var(--color-zinc-700);
+
+            --color-foreground-1: var(--color-slate-100);
+            --color-foreground-2: var(--color-slate-200);
+            --color-foreground-3: var(--color-slate-300);
+        }
     }
+
     body {
-        @apply select-none font-sans antialiased scrollbar-track-backgroundPrimary scrollbar-thumb-content3 font-normal;
+        @apply bg-background-1 text-foreground-1 font-sans font-normal antialiased select-none;
+        scrollbar-width: thin;
     }
     code {
         @apply font-mono;
