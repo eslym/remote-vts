@@ -45,6 +45,12 @@
   "name": "Remote VTS",
   "settings": {
     "endpoint": "VTS Plugin Endpoint",
-    "lang": "Language"
+    "lang": "Language",
+    "theme": "Theme",
+    "scheme": {
+      "system": "System Theme",
+      "dark": "Dark Theme",
+      "light": "Light Theme"
+    }
   }
 }

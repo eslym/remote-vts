@@ -3,6 +3,7 @@
     import { endpoint } from '$lib/config';
     import { lang, t, languages } from '$lib/lang';
     import { wsFromHttps } from '$lib/client';
+    import { theme } from '$lib/theme';
 
     let ep = $state($endpoint);
 
@@ -43,6 +44,38 @@
                     {/each}
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="form-field mb-2">
+        <span class="form-label">{$t.settings.theme}</span>
+        <div class="flex flex-row gap-2 justify-start items-start flex-wrap">
+            <label class="text-sm align-middle">
+                <input
+                    class="radio inline-flex mr-1"
+                    type="radio"
+                    value={null}
+                    bind:group={$theme}
+                />
+                {$t.settings.scheme.system}
+            </label>
+            <label class="text-sm align-middle">
+                <input
+                    class="radio inline-flex mr-1"
+                    type="radio"
+                    value="light"
+                    bind:group={$theme}
+                />
+                {$t.settings.scheme.light}
+            </label>
+            <label class="text-sm align-middle">
+                <input
+                    class="radio inline-flex mr-1"
+                    type="radio"
+                    value="dark"
+                    bind:group={$theme}
+                />
+                {$t.settings.scheme.dark}
+            </label>
         </div>
     </div>
     <div class="form-field">

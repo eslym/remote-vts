@@ -41,6 +41,12 @@
   "name": "VTS 遙控",
   "settings": {
     "endpoint": "VTS 插件端点",
-    "lang": "语言"
+    "lang": "语言",
+    "theme": "界面模式",
+    "scheme": {
+      "system": "系统设定",
+      "dark": "暗色模式",
+      "light": "亮色模式"
+    }
   }
 }

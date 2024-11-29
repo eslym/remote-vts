@@ -10,6 +10,7 @@
         Alert02Icon
     } from 'hugeicons-svelte';
     import { t } from '$lib/lang';
+    import { scheme } from '$lib/theme';
     interface Props {
         children?: import('svelte').Snippet;
     }
@@ -54,6 +55,11 @@
         <title>{$title} | {$t.name}</title>
     {:else}
         <title>{$t.name}</title>
+    {/if}
+    {#if $scheme === 'light'}
+        <meta name="theme-color" content="#fcfcfc" />
+    {:else}
+        <meta name="theme-color" content="#161616" />
     {/if}
 </svelte:head>
 
