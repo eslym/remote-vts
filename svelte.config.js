@@ -33,6 +33,9 @@ const config = {
             relative: false
         },
         appDir: 'lib',
+        serviceWorker: {
+            register: false
+        }
     }
 };
 

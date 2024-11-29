@@ -32,7 +32,7 @@ sw.addEventListener('install', (event: ExtendableEvent) => {
         );
     }
 
-    event.waitUntil(Promise.all([addFilesToCache(), sw.skipWaiting()]));
+    event.waitUntil(Promise.all([withRetry(addFilesToCache), sw.skipWaiting()]));
 });
 
 sw.addEventListener('activate', (event: ExtendableEvent) => {
@@ -61,4 +61,22 @@ sw.addEventListener('fetch', (event: FetchEvent) => {
 async function respond(pathname: string) {
     const cache = await caches.open(CACHE);
     return cache.match(pathname) as Promise<Response>;
+}
+
+async function withRetry(fn: () => Promise<void>) {
+    let attempts = 0;
+    while (true) {
+        try {
+            await fn();
+            break;
+        } catch (err) {
+            await sleep(5000 * 2 ** attempts);
+            attempts++;
+            if (attempts > 5) throw err;
+        }
+    }
+}
+
+function sleep(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
 }

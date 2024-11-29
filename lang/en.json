@@ -1,6 +1,8 @@
 {
   "actions": {
-    "save": "Save"
+    "cancel": "Cancel",
+    "save": "Save",
+    "reload": "Reload"
   },
   "code": "en",
   "hint": {
@@ -25,6 +27,10 @@
         "proxy": "Use a secure proxy server to connect to VTube Studio."
       },
       "title": "Connect WS from HTTPS"
+    },
+    "update": {
+      "description": "A new version of the app is available, please reload to take effect.",
+      "title": "Update Available"
     }
   },
   "icon": "🇺🇸",

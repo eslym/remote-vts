@@ -14,6 +14,7 @@
         children?: import('svelte').Snippet;
     }
     import { connected } from '$lib/client';
+    import { updateAvailable } from '$lib/sw';
 
     let { children }: Props = $props();
 
@@ -131,5 +132,25 @@
                 </a>
             </div>
         {/each}
+    </div>
+</div>
+
+<input class="modal-state" id="modal-update" type="checkbox" checked={$updateAvailable} />
+<div class="modal">
+    <label class="modal-overlay" for="modal-update"></label>
+    <div class="modal-content flex flex-col gap-5">
+        <label for="modal-update" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >✕</label
+        >
+        <h2 class="text-xl">{$t.hint.update.title}</h2>
+        <span>{$t.hint.update.description}</span>
+        <div class="flex gap-3">
+            <button class="btn btn-primary btn-block" onclick={() => window.location.reload()}>
+                {$t.actions.reload}
+            </button>
+            <label for="modal-update" class="btn btn-block btn-ghost">
+                {$t.actions.cancel}
+            </label>
+        </div>
     </div>
 </div>
