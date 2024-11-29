@@ -13,7 +13,7 @@
       "instruction": "Unable to connect to VTube Studio, please check the settings and connection status.",
       "warning": {
         "description": "Please check the <a href=\"/settings\" class=\"hover:underline\">settings</a> and your connection status.",
-        "title": "Not connecting to VTuber Studio"
+        "title": "Not connecting to Vtube Studio"
       }
     },
     "ws": {

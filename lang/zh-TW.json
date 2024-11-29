@@ -13,7 +13,7 @@
       "instruction": "無法連接到VTube Studio，請檢查設置和連接狀態。",
       "warning": {
         "description": "請檢查<a href=\"/settings\" class=\"hover:underline\">設置</a>和您的連接狀態。",
-        "title": "未連接到VTuber Studio"
+        "title": "未連接到Vtube Studio"
       }
     },
     "ws": {
