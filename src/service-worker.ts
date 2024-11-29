@@ -14,7 +14,7 @@ const ASSETS = [
     ...build, // the app itself
     ...files, // everything in `static`
     ...prerendered,
-    FALLBACK // the fallback page
+    ...(import.meta.env.DEV ? [] : [FALLBACK]) // the fallback page
 ];
 
 const sw = self as ServiceWorkerGlobalScope & typeof globalThis;
