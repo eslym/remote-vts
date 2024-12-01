@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.eslym.remotevts" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>Remote VTS</name>
+    <description>Control VTube Studio Remotely</description>
+    <author email="engshun.lim@gmail.com" href="https://0nepeop1e.com">
+        0nepeop1e
+    </author>
+    <content src="https://remote-vts.1ppl.me/" />
+    <allow-intent href="https://*/*" />
+    <allow-navigation href="https://remote-vts.1ppl.me/*" />
+    <platform name="android">
+      <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+        <application android:usesCleartextTraffic="true" android:icon="@drawable/icon" />
+      </edit-config>
+      <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application/activity">
+        <activity android:theme="@style/Theme.App.AppTheme" android:icon="@drawable/icon" />
+      </edit-config>
+      <config-file target="app/src/res/values/themes.xml" parent="/resources">
+        <style name="Theme.App.AppTheme" parent="Theme.AppCompat.NoActionBar">
+          <item name="android:scrollbarStyle">insideOverlay</item>
+          <item name="android:windowIsTranslucent">true</item>
+        </style>
+      </config-file>
+      <resource-file src="res/drawable/icon.xml" target="app/src/main/res/drawable/icon.xml" />
+    </platform>
+</widget>
