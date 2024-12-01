@@ -49,7 +49,9 @@ sw.addEventListener('activate', (event: ExtendableEvent) => {
 sw.addEventListener('fetch', (event: FetchEvent) => {
     // ignore POST requests etc
     if (event.request.method !== 'GET') return;
+
     const url = new URL(event.request.url);
+    if(url.origin !== location.origin) return;
 
     if (ASSETS.includes(url.pathname)) {
         event.respondWith(respond(url.pathname));
@@ -77,6 +79,6 @@ async function withRetry(fn: () => Promise<void>) {
     }
 }
 
-function sleep(ms: number) {
+export function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
