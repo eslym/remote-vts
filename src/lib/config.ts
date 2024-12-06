@@ -1,6 +1,9 @@
-import { writable, derived, type Writable } from 'svelte/store';
+import { derived, type Writable } from 'svelte/store';
+import local from '@eslym/svelte-utility-stores/local';
+import json from '@eslym/svelte-utility-stores/json';
+import { deval } from '$lib/stores';
 
-const endpoint_base = writable(import.meta.env.SSR ? null : localStorage.getItem('endpoint'));
+const endpoint_base = local('endpoint');
 const endpoint_reader = derived(endpoint_base, ($endpoint) => {
     return $endpoint ?? 'ws://127.0.0.1:8001';
 });
@@ -10,14 +13,15 @@ export const endpoint = {
     subscribe: endpoint_reader.subscribe
 } as Writable<string>;
 
-if (!import.meta.env.SSR) {
-    endpoint.subscribe((value) => {
-        if (value === localStorage.getItem('endpoint')) return;
-        localStorage.setItem('endpoint', value);
-    });
-    window.addEventListener('storage', (event) => {
-        if (event.key === 'endpoint') {
-            endpoint_base.set(event.newValue);
+export const history = json<string[]>(local('endpoint-history'), () => []);
+
+history.update(($history) => {
+    const $enpoint = endpoint_base.get();
+    if ($enpoint && $enpoint !== 'ws://127.0.0.1:8001' && !$history.includes($enpoint)) {
+        $history.unshift($enpoint);
+        if ($history.length > 20) {
+            $history.pop();
         }
-    });
-}
+    }
+    return $history;
+});

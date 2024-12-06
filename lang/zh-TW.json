@@ -1,8 +1,8 @@
 {
   "actions": {
     "cancel": "取消",
-    "save": "保存",
-    "reload": "刷新"
+    "reload": "刷新",
+    "save": "保存"
   },
   "code": "zh-Hant",
   "hint": {
@@ -18,19 +18,19 @@
         "title": "未連接到Vtube Studio"
       }
     },
-    "ws": {
-      "description": "此站點通過HTTPS訪問，由於瀏覽器安全策略，<code class=\"font-mono\">ws://</code>連接將無法運作。",
-      "suggestions": {
-        "title": "您可以：",
-        "http": "使用<code class=\"font-mono\">http://</code>而不是<code class=\"font-mono\">https://</code>。",
-        "portForwarding": "使用端口轉發，以便將連接視為本地連接。",
-        "proxy": "使用安全代理服務器連接到VTube Studio。"
-      },
-      "title": "從HTTPS連接WS"
-    },
     "update": {
       "description": "此應用有新版本，請刷新以生效。",
       "title": "更新"
+    },
+    "ws": {
+      "description": "此站點通過HTTPS訪問，由於瀏覽器安全策略，<code class=\"font-mono\">ws://</code>連接將無法運作。",
+      "suggestions": {
+        "http": "使用<code class=\"font-mono\">http://</code>而不是<code class=\"font-mono\">https://</code>。",
+        "portForwarding": "使用端口轉發，以便將連接視為本地連接。",
+        "proxy": "使用安全代理服務器連接到VTube Studio。",
+        "title": "您可以："
+      },
+      "title": "從HTTPS連接WS"
     }
   },
   "icon": "🇹🇼",
@@ -46,11 +46,11 @@
   "settings": {
     "endpoint": "VTS 插件端點",
     "lang": "語言",
-    "theme": "界面模式",
     "scheme": {
-      "system": "系統設定",
       "dark": "暗色模式",
-      "light": "亮色模式"
-    }
+      "light": "亮色模式",
+      "system": "系統設定"
+    },
+    "theme": "界面模式"
   }
 }

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Alert01Icon, FloppyDiskIcon } from 'hugeicons-svelte';
-    import { endpoint } from '$lib/config';
+    import { endpoint, history } from '$lib/config';
     import { lang, t, languages } from '$lib/lang';
     import { wsFromHttps } from '$lib/client';
     import { theme } from '$lib/theme';
@@ -80,25 +80,42 @@
     </div>
     <div class="form-field">
         <label for="endpoint" class="form-label">{$t.settings.endpoint}</label>
-        <div class="grid grid-cols-[1fr_auto] gap-2">
+        <form
+            class="grid grid-cols-[1fr_auto] gap-2"
+            onsubmit={(ev) => {
+                ev.preventDefault();
+                ep = ep.toLowerCase();
+                $endpoint = ep;
+                if (ep !== 'ws://127.0.0.1:8001' && !$history.includes(ep)) {
+                    $history = [ep, ...$history];
+                    if ($history.length > 20) {
+                        $history = $history.slice(0, 10);
+                    }
+                }
+            }}
+        >
             <input
                 id="endpoint"
                 type="url"
                 class="input input-solid input-block font-mono"
                 class:input-solid-error={invalid}
                 bind:value={ep}
+                autocomplete="on"
+                list="history"
             />
             <button
                 class="btn btn-solid-primary btn-circle"
-                onclick={() => {
-                    $endpoint = ep;
-                }}
                 title={$t.actions.save}
                 disabled={unChanged || invalid}
             >
                 <FloppyDiskIcon class="w-5 h-5" />
             </button>
-        </div>
+            <datalist id="history">
+                {#each [...$history, 'ws://127.0.0.1:8001'].toSorted() as h}
+                    <option value={h}></option>
+                {/each}
+            </datalist>
+        </form>
         <p class="text-sm text-content2">{@html $t.hint.settings.endpoint}</p>
     </div>
     {#if $wsFromHttps}

@@ -1,8 +1,8 @@
 {
   "actions": {
     "cancel": "Cancel",
-    "save": "Save",
-    "reload": "Reload"
+    "reload": "Reload",
+    "save": "Save"
   },
   "code": "en",
   "hint": {
@@ -18,19 +18,19 @@
         "title": "Not connecting to Vtube Studio"
       }
     },
-    "ws": {
-      "description": "This site is accessed via HTTPS, <code class=\"font-mono\">ws://</code> connection will not work due to browser security policy.",
-      "suggestions": {
-        "title": "You may:",
-        "http": "Use <code class=\"font-mono\">http://</code> instead of <code class=\"font-mono\">https://</code>.",
-        "portForwarding": "Use port forwarding so the connection can be treated as a local connection.",
-        "proxy": "Use a secure proxy server to connect to VTube Studio."
-      },
-      "title": "Connect WS from HTTPS"
-    },
     "update": {
       "description": "A new version of the app is available, please reload to take effect.",
       "title": "Update Available"
+    },
+    "ws": {
+      "description": "This site is accessed via HTTPS, <code class=\"font-mono\">ws://</code> connection will not work due to browser security policy.",
+      "suggestions": {
+        "http": "Use <code class=\"font-mono\">http://</code> instead of <code class=\"font-mono\">https://</code>.",
+        "portForwarding": "Use port forwarding so the connection can be treated as a local connection.",
+        "proxy": "Use a secure proxy server to connect to VTube Studio.",
+        "title": "You may:"
+      },
+      "title": "Connect WS from HTTPS"
     }
   },
   "icon": "🇺🇸",
@@ -46,11 +46,11 @@
   "settings": {
     "endpoint": "VTS Plugin Endpoint",
     "lang": "Language",
-    "theme": "Theme",
     "scheme": {
-      "system": "System Theme",
       "dark": "Dark Theme",
-      "light": "Light Theme"
-    }
+      "light": "Light Theme",
+      "system": "System Theme"
+    },
+    "theme": "Theme"
   }
 }

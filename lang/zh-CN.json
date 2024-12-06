@@ -1,8 +1,8 @@
 {
   "actions": {
     "cancel": "取消",
-    "save": "保存",
-    "reload": "刷新"
+    "reload": "刷新",
+    "save": "保存"
   },
   "code": "zh-Hans",
   "hint": {
@@ -12,21 +12,25 @@
     "status": {
       "connected": "已链接VTS",
       "disconnected": "VTS未链接",
-      "instruction": "无法连接到VTube Studio，请检查设置和连接状态。"
-    },
-    "ws": {
-      "description": "此站点通过HTTPS访问，由于浏览器安全策略，<code class=\"font-mono\">ws://</code>连接将无法运作。",
-      "suggestions": {
-        "title": "您可以：",
-        "http": "使用<code class=\"font-mono\">http://</code>而不是<code class=\"font-mono\">https://</code>。",
-        "portForwarding": "使用端口转发，以便将连接视为本地连接。",
-        "proxy": "使用安全代理服务器连接到VTube Studio。"
-      },
-      "title": "从HTTPS连接WS"
+      "instruction": "无法连接到VTube Studio，请检查设置和连接状态。",
+      "warning": {
+        "description": "请检查<a href=\"/settings\" class=\"hover:underline\">设置</a>和您的连接状态。",
+        "title": "未连接到Vtube Studio"
+      }
     },
     "update": {
       "description": "此应用有新版本，请刷新以生效。",
       "title": "更新"
+    },
+    "ws": {
+      "description": "此站点通过HTTPS访问，由于浏览器安全策略，<code class=\"font-mono\">ws://</code>连接将无法运作。",
+      "suggestions": {
+        "http": "使用<code class=\"font-mono\">http://</code>而不是<code class=\"font-mono\">https://</code>。",
+        "portForwarding": "使用端口转发，以便将连接视为本地连接。",
+        "proxy": "使用安全代理服务器连接到VTube Studio。",
+        "title": "您可以："
+      },
+      "title": "从HTTPS连接WS"
     }
   },
   "icon": "🇨🇳",
@@ -42,11 +46,11 @@
   "settings": {
     "endpoint": "VTS 插件端点",
     "lang": "语言",
-    "theme": "界面模式",
     "scheme": {
-      "system": "系统设定",
       "dark": "暗色模式",
-      "light": "亮色模式"
-    }
+      "light": "亮色模式",
+      "system": "系统设定"
+    },
+    "theme": "界面模式"
   }
 }
