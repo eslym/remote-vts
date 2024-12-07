@@ -1,5 +1,5 @@
 import { endpoint } from '$lib/config';
-import { sleep } from '$lib/utils';
+import { cordovaAvailable, CordovaWebsocket } from '$lib/cordova';
 import { derived, writable } from 'svelte/store';
 import { ApiClient } from 'vtubestudio';
 
@@ -44,10 +44,10 @@ export const client = derived(endpoint, ($endpoint) => {
             pluginDeveloper: '0nepeop1e',
             pluginIcon: icon,
             authTokenGetter() {
-                return localStorage.getItem('authToken');
+                return localStorage.getItem('vts-token');
             },
             async authTokenSetter(token) {
-                localStorage.setItem('authToken', token);
+                localStorage.setItem('vts-token', token);
             },
             webSocketFactory(url) {
                 return new WebsocketClass(url);
@@ -62,20 +62,10 @@ export const client = derived(endpoint, ($endpoint) => {
     return _client;
 });
 
-declare var android: any;
-
 if (!import.meta.env.SSR) {
     async function load() {
-        // NOTE: this is not really a safe way to detect cordova
-        if ('android' in window && android.constructor.name === 'Android') {
-            const script = document.createElement('script');
-            script.src = 'https://localhost/cordova.js';
-            document.head.appendChild(script);
-            while (!('CordovaWebsocketPlugin' in window)) {
-                console.log('waiting for cordova');
-                await sleep(50);
-            }
-            WebsocketClass = await import('$lib/cordova').then((m) => m.CordovaWebsocket);
+        if (await cordovaAvailable) {
+            WebsocketClass = CordovaWebsocket;
         }
         client.subscribe(() => {});
     }

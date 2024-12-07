@@ -4,6 +4,23 @@ import type { WebSocketReadyState } from 'vtubestudio/lib/ws';
 
 type IWebSocketLike = ReturnType<Exclude<IApiClientOptions['webSocketFactory'], undefined>>;
 
+const { promise: cordovaAvailable, resolve } = Promise.withResolvers<boolean>();
+
+export { cordovaAvailable };
+
+declare var _cordovaNative: any;
+
+if ('_cordovaNative' in window && typeof _cordovaNative.exec === 'function') {
+    document.addEventListener('deviceready', () => {
+        resolve(true);
+    });
+    const script = document.createElement('script');
+    script.src = 'https://localhost/cordova.js';
+    document.head.appendChild(script);
+} else {
+    resolve(false);
+}
+
 declare namespace CordovaWebsocketPlugin {
     export function wsConnect(
         options: {
@@ -83,9 +100,7 @@ export class CordovaWebsocket implements IWebSocketLike {
                         message: event.exception
                     })
                 );
-                this.dispatchEvent(
-                    new CloseEvent('close')
-                );
+                this.dispatchEvent(new CloseEvent('close'));
             }
         );
     }
