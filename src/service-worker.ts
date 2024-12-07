@@ -23,8 +23,22 @@ sw.addEventListener('install', (event: ExtendableEvent) => {
     // Create a new cache and add all files to it
     async function addFilesToCache() {
         const cache = await caches.open(CACHE);
+        const previousCache = await caches
+            .keys()
+            .then((keys) => keys.find((key) => key !== CACHE && key.startsWith('cache-')));
+        const oldFiles = new Set<string>();
+        if (previousCache) {
+            const oldCache = await caches.open(previousCache);
+            for (const path of ASSETS) {
+                if (!path.startsWith('/lib/immutable/')) continue;
+                const response = await oldCache.match(path);
+                if (!response) continue;
+                cache.put(path, response);
+                oldFiles.add(path);
+            }
+        }
         await cache.addAll(
-            ASSETS.map((u) => {
+            ASSETS.filter((p) => !oldFiles.has(p)).map((u) => {
                 return new Request(u, {
                     cache: u.startsWith('/lib/immutable/') ? 'default' : 'reload'
                 });
@@ -51,7 +65,7 @@ sw.addEventListener('fetch', (event: FetchEvent) => {
     if (event.request.method !== 'GET') return;
 
     const url = new URL(event.request.url);
-    if(url.origin !== location.origin) return;
+    if (url.origin !== location.origin) return;
 
     if (ASSETS.includes(url.pathname)) {
         event.respondWith(respond(url.pathname));
