@@ -1,4 +1,4 @@
-import { endpoint } from '$lib/config';
+import { currentModel, endpoint, expressions, hotkeys, models } from '$lib/config';
 import { cordovaAvailable, CordovaWebsocket } from '$lib/cordova';
 import { derived, writable } from 'svelte/store';
 import { ApiClient } from 'vtubestudio';
@@ -18,6 +18,33 @@ export const wsFromHttps = writable(false);
 
 function onConnect() {
     connected.set(true);
+    _client.availableModels().then((res) => {
+        models.set(res.availableModels);
+        for (const model of res.availableModels) {
+            if (model.modelLoaded) {
+                currentModel.set(model.modelID);
+            }
+        }
+    });
+    _client.hotkeysInCurrentModel({}).then((res) => {
+        hotkeys.set(res.availableHotkeys);
+    });
+    _client.expressionState({ details: true }).then((e) => expressions.set(e.expressions));
+    _client.events.modelLoaded.subscribe((ev) => {
+        models.update(($models) => {
+            for (const model of $models) {
+                if ((model.modelLoaded = model.modelID === ev.modelID)) {
+                    currentModel.set(model.modelID);
+                }
+            }
+            return $models;
+        });
+        _client.hotkeysInCurrentModel({}).then((res) => {
+            hotkeys.set(res.availableHotkeys);
+        });
+        _client.expressionState({ details: true }).then((e) => expressions.set(e.expressions));
+    }, {});
+    _client.events.hotkeyTriggered.subscribe((ev) => {}, {});
 }
 
 function onDisconnect() {
