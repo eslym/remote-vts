@@ -66,7 +66,11 @@ export const client = derived(endpoint, ($endpoint) => {
     try {
         _url = $endpoint;
         _client = new ApiClient({
-            pluginName: 'Remote VTS',
+            pluginName: import.meta.env.DEV
+                ? 'Remote VTS (DEV)'
+                : '_cordovaNative' in window
+                  ? 'Remote VTS'
+                  : 'Remote VTS (Web)',
             url: _url,
             pluginDeveloper: '0nepeop1e',
             pluginIcon: icon,
