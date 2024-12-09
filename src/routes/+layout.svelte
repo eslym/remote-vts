@@ -7,7 +7,8 @@
         UserIcon,
         ConnectIcon,
         CheckmarkCircle01Icon,
-        Alert02Icon
+        Alert02Icon,
+        LinkBackwardIcon
     } from 'hugeicons-svelte';
     import { t } from '$lib/lang';
     import { scheme } from '$lib/theme';
@@ -16,11 +17,39 @@
     }
     import { connected } from '$lib/client';
     import { updateAvailable } from '$lib/sw';
+    import { sineInOut } from 'svelte/easing';
 
     let { children }: Props = $props();
 
+    let canGoBack = $derived($page.state.canGoBack);
+
     let title = $derived($page.data.title);
     let group = $derived($page.data.group);
+    let back = $derived($page.data.back);
+
+    function handleBack(ev: MouseEvent) {
+        if (ev.button !== 0) return;
+        if (ev.ctrlKey || ev.metaKey || ev.shiftKey) return;
+        if (!canGoBack) return;
+        ev.preventDefault();
+        history.back();
+    }
+
+    function backButton(node: HTMLElement) {
+        const width = node.getBoundingClientRect().width;
+        const opacity = 0.6;
+
+        return {
+            duration: 150,
+            easing: sineInOut,
+            css: (t: number, u: number) => {
+                return `
+                    margin-left: -${width * u}px;
+                    opacity: ${t * opacity};
+                `;
+            }
+        };
+    }
 
     let menu = $derived([
         {
@@ -63,14 +92,29 @@
     {/if}
 </svelte:head>
 
-<div class="w-full h-screen grid grid-rows-[auto_1fr_auto]">
+<div class="w-full h-screen grid grid-rows-[auto_1fr_auto] overflow-hidden">
     <div class="navbar z-40 md:pl-4">
         <div class="navbar-start">
-            <span class="navbar-item pointer-events-none">
+            {#if back}
+                <a
+                    href={back}
+                    class="btn btn-ghost btn-circle popover-trigger transition-colors size-10 opacity-60"
+                    onclick={handleBack}
+                    transition:backButton
+                    title={$t.actions.back}
+                >
+                    <LinkBackwardIcon size={20} />
+                </a>
+            {/if}
+            <span class="navbar-item pointer-events-none transition-[padding]" class:pl-0={back}>
                 {$title ?? $t.name}
             </span>
         </div>
-        <div class="navbar-center hidden md:flex" data-sveltekit-replacestate>
+        <div
+            class="navbar-center hidden md:flex"
+            class:!hidden={!group}
+            data-sveltekit-replacestate
+        >
             {#each menu as Item}
                 <a
                     href={Item.href}
@@ -83,7 +127,7 @@
                 </a>
             {/each}
         </div>
-        <div class="navbar-end">
+        <div class="navbar-end w-max md:w-full">
             <div class="popover">
                 <button
                     class="btn btn-ghost btn-circle popover-trigger transition-colors"
@@ -121,7 +165,9 @@
         {@render children?.()}
     </div>
     <div
-        class="bg-gray-2 h-[60px] flex flex-row p-2.5 gap-1.5 md:hidden"
+        class="bg-gray-2 h-[60px] flex flex-row p-2.5 gap-1.5 md:hidden transition-[margin]"
+        class:-mb-[60px]={!group}
+        class:pointer-events-none={!group}
         data-sveltekit-replacestate
     >
         {#each menu as Item}

@@ -4,50 +4,26 @@ import type { WebSocketReadyState } from 'vtubestudio/lib/ws';
 
 type IWebSocketLike = ReturnType<Exclude<IApiClientOptions['webSocketFactory'], undefined>>;
 
-const { promise: cordovaAvailable, resolve } = Promise.withResolvers<boolean>();
+const { promise: cordovaAvailable, resolve: resolveCordova } = Promise.withResolvers<boolean>();
 
 export { cordovaAvailable };
 
 declare var _cordovaNative: any;
 
 if ('_cordovaNative' in window && typeof _cordovaNative.exec === 'function') {
-    document.addEventListener('deviceready', () => {
-        resolve(true);
-    });
+    document.addEventListener(
+        'deviceready',
+        () => {
+            resolveCordova(true);
+            (window as any).open = cordova.InAppBrowser.open;
+        },
+        { once: true }
+    );
     const script = document.createElement('script');
     script.src = 'https://localhost/cordova.js';
     document.head.appendChild(script);
 } else {
-    resolve(false);
-}
-
-declare namespace CordovaWebsocketPlugin {
-    export function wsConnect(
-        options: {
-            url: string;
-            timeout?: number;
-            pingInterval?: number;
-            headers?: Record<string, string>;
-        },
-        onEvent: (
-            event:
-                | {
-                      webSocketId: string;
-                      callbackMethod: 'onMessage';
-                      message: string;
-                  }
-                | {
-                      webSocketId: string;
-                      callbackMethod: 'onClose';
-                      code: number;
-                      reason: string;
-                  }
-        ) => void,
-        onConnect: (event: { code: number; webSocketId: string }) => void,
-        onError: (event: { code: number; webSocketId: string; exception: string }) => void
-    ): void;
-    export function wsSend(id: string, message: string): void;
-    export function wsClose(id: string, code?: number, reason?: string): void;
+    resolveCordova(false);
 }
 
 export class CordovaWebsocket implements IWebSocketLike {
@@ -126,4 +102,24 @@ export class CordovaWebsocket implements IWebSocketLike {
     addEventListener: IWebSocketLike['addEventListener'] = this.#eventTarget.addEventListener.bind(
         this.#eventTarget
     ) as any;
+}
+
+export function cordovaHttpGet(
+    url: string
+): Promise<{ status: number; headers?: Record<string, string> }> {
+    return new Promise((resolve) => {
+        cordova.plugin.http.setHeader('User-Agent', 'Remote VTS (Cordova)');
+        cordova.plugin.http.setConnectTimeout(0.1);
+        cordova.plugin.http.setReadTimeout(0.1);
+        cordova.plugin.http.sendRequest(
+            url,
+            { method: 'get' },
+            (response) => {
+                resolve(response);
+            },
+            (error) => {
+                resolve(error);
+            }
+        );
+    });
 }

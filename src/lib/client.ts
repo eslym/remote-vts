@@ -53,6 +53,15 @@ function onDisconnect() {
 
 let WebsocketClass: new (url: string) => IWebSocketLike = WebSocket;
 
+function getPluginName() {
+    if(import.meta.env.DEV) {
+        return '_cordovaNative' in window ? 'Remote VTS (DEV)' : 'Remote VTS (Web DEV)';
+    }
+    return '_cordovaNative' in window ? 'Remote VTS' : 'Remote VTS (Web)';
+}
+
+const pluginName = getPluginName();
+
 export const client = derived(endpoint, ($endpoint) => {
     if (import.meta.env.SSR) return undefined as any as ApiClient;
     if (_url === $endpoint) return _client!;
@@ -66,11 +75,7 @@ export const client = derived(endpoint, ($endpoint) => {
     try {
         _url = $endpoint;
         _client = new ApiClient({
-            pluginName: import.meta.env.DEV
-                ? 'Remote VTS (DEV)'
-                : '_cordovaNative' in window
-                  ? 'Remote VTS'
-                  : 'Remote VTS (Web)',
+            pluginName,
             url: _url,
             pluginDeveloper: '0nepeop1e',
             pluginIcon: icon,

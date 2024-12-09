@@ -2,7 +2,9 @@
   "actions": {
     "cancel": "Cancel",
     "reload": "Reload",
-    "save": "Save"
+    "save": "Save",
+    "scan": "Scan for Endpoint",
+    "back": "Back"
   },
   "code": "en",
   "hint": {
@@ -31,6 +33,10 @@
         "title": "You may:"
       },
       "title": "Connect WS from HTTPS"
+    },
+    "scan": {
+      "title": "Feature not Available",
+      "description": "This feature is not available on the web version, please use the app version instead."
     }
   },
   "icon": "🇺🇸",
@@ -43,6 +49,9 @@
     "settings": "Settings"
   },
   "name": "Remote VTS",
+  "page": {
+    "scan": "Scan for Endpoint"
+  },
   "settings": {
     "endpoint": "VTS Plugin Endpoint",
     "lang": "Language",
@@ -50,6 +59,13 @@
       "dark": "Dark Theme",
       "light": "Light Theme",
       "system": "System Theme"
+    },
+    "scan": {
+      "port": "Port",
+      "start": "Start Scanning",
+      "stop": "Stop Scanning",
+      "endpoints": "Possible Endpoints",
+      "empty": "No Endpoints Found"
     },
     "theme": "Theme"
   }

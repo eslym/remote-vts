@@ -1,9 +1,11 @@
 <script lang="ts">
-    import { Alert01Icon, FloppyDiskIcon } from 'hugeicons-svelte';
+    import { Alert01Icon, FloppyDiskIcon, SearchVisualIcon } from 'hugeicons-svelte';
     import { endpoint, history } from '$lib/config';
     import { lang, t, languages } from '$lib/lang';
     import { wsFromHttps } from '$lib/client';
     import { theme } from '$lib/theme';
+    import { canGoBack } from '$lib/state';
+    import Cordova from '$lib/coms/Cordova.svelte';
 
     let ep = $state($endpoint);
 
@@ -116,6 +118,12 @@
                 {/each}
             </datalist>
         </form>
+        <Cordova>
+            <a href="/settings/scan" onclick={canGoBack} class="btn btn-solid-secondary btn-block">
+                {$t.actions.scan}
+                <SearchVisualIcon class="size-5 ml-2" />
+            </a>
+        </Cordova>
         <p class="text-sm text-content2">{@html $t.hint.settings.endpoint}</p>
     </div>
     {#if $wsFromHttps}

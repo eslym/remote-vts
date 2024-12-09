@@ -8,8 +8,11 @@ declare global {
         interface PageData {
             title?: Readable<string>;
             group?: string;
+            back?: string;
         }
-        // interface PageState {}
+        interface PageState {
+            canGoBack?: boolean;
+        }
         // interface Platform {}
     }
 }
