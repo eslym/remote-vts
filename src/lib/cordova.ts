@@ -15,7 +15,22 @@ if ('_cordovaNative' in window && typeof _cordovaNative.exec === 'function') {
         'deviceready',
         () => {
             resolveCordova(true);
-            (window as any).open = cordova.InAppBrowser.open;
+            cordova.plugin.http.setHeader('User-Agent', 'Remote VTS (Cordova)');
+            cordova.plugin.http.setConnectTimeout(0.1);
+            cordova.plugin.http.setReadTimeout(0.1);
+            document.addEventListener('click', ((
+                ev: MouseEvent & { target: HTMLAnchorElement }
+            ) => {
+                if (ev.button !== 0) return;
+                if (ev.target.tagName !== 'A') return;
+                const target = ev.target.getAttribute('target');
+                if (target !== '_blank') return;
+                const href = ev.target.getAttribute('href');
+                if (!href) return;
+                ev.preventDefault();
+                const features = ev.target.getAttribute('data-inappbrowser-features') || 'zoom=no';
+                cordova.InAppBrowser.open(href, '_blank', features);
+            }) as any);
         },
         { once: true }
     );
@@ -108,9 +123,6 @@ export function cordovaHttpGet(
     url: string
 ): Promise<{ status: number; headers?: Record<string, string> }> {
     return new Promise((resolve) => {
-        cordova.plugin.http.setHeader('User-Agent', 'Remote VTS (Cordova)');
-        cordova.plugin.http.setConnectTimeout(0.1);
-        cordova.plugin.http.setReadTimeout(0.1);
         cordova.plugin.http.sendRequest(
             url,
             { method: 'get' },
