@@ -27,6 +27,7 @@ sw.addEventListener('install', (event: ExtendableEvent) => {
             .keys()
             .then((keys) => keys.find((key) => key !== CACHE && key.startsWith('cache-')));
         const oldCache = previousCache ? await caches.open(previousCache) : null;
+        const toFetch: string[] = [];
         for (const path of ASSETS) {
             const hit = await cache.match(path);
             if (hit) continue;
@@ -37,13 +38,21 @@ sw.addEventListener('install', (event: ExtendableEvent) => {
                     continue;
                 }
             }
-            const res = await enqueue(
-                new Request(path, {
-                    cache: path.startsWith('/lib/immutable/') ? 'default' : 'reload'
-                })
-            );
-            if (res.ok) cache.put(path, res);
+            toFetch.push(path);
         }
+        let progress = ASSETS.length - toFetch.length;
+        await Promise.all(
+            toFetch.map(async (path) => {
+                console.log(path);
+                const res = await enqueue(
+                    new Request(path, {
+                        cache: path.startsWith('/lib/immutable/') ? 'default' : 'reload'
+                    })
+                );
+                await cache.put(path, res);
+                progress++;
+            })
+        );
     }
 
     event.waitUntil(Promise.all([withRetry(addFilesToCache), sw.skipWaiting()]));

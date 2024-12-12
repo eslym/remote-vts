@@ -12,6 +12,9 @@
       "description": "This feature is not available on the web version, please use the app version instead.",
       "title": "Feature not Available"
     },
+    "service_worker": {
+      "installing": "Installing"
+    },
     "settings": {
       "endpoint": "The websocket endpoint for VTube Studio, starting with <code class=\"font-mono\">ws://</code> or <code class=\"font-mono\">wss://</code>, for more information please refer to <a href=\"https://github.com/DenchiSoft/VTubeStudio/wiki/Plugins#how-to-use-plugins\" target=\"_blank\" class=\"link link-secondary text-sm\">VTube Studio document</a>."
     },

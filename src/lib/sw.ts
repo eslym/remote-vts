@@ -1,20 +1,26 @@
+import '$lib/polyfill';
 import { writable } from 'svelte/store';
 
 export const updateAvailable = writable(false);
+export const swReady = writable(false);
+
+const sw_url = '/service-worker.js';
 
 if (!import.meta.env.SSR) {
     if ('navigator' in globalThis) {
-        const registration = globalThis.navigator.serviceWorker.register('/service-worker.js', {
-            type: import.meta.env.DEV ? 'module' : 'classic'
-        });
-
-        registration.then((reg) => {
+        (async () => {
+            const old_reg = await navigator.serviceWorker.getRegistration(sw_url);
+            swReady.set(Boolean(old_reg));
+            const reg = await navigator.serviceWorker.register(sw_url, {
+                type: import.meta.env.DEV ? 'module' : 'classic'
+            });
             reg.addEventListener('updatefound', () => {
                 const worker = reg.installing!;
                 worker.addEventListener('statechange', () => {
                     switch (worker.state) {
                         case 'installed':
-                            if (globalThis.navigator.serviceWorker.controller) {
+                            swReady.set(true);
+                            if (navigator.serviceWorker.controller) {
                                 // new update available
                                 updateAvailable.set(true);
                             } else {
@@ -25,6 +31,8 @@ if (!import.meta.env.SSR) {
                     }
                 });
             });
-        });
+        })();
+    } else {
+        swReady.set(true);
     }
 }
