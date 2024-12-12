@@ -10,10 +10,6 @@ export default {
             fontFamily: {
                 sans: [
                     '"Noto Sans"',
-                    '"Noto Sans SC"',
-                    '"Noto Sans TC"',
-                    '"Noto Sans JP"',
-                    '"Noto Sans KR"',
                     '"Twemoji"',
                     'ui-sans-serif',
                     'system-ui',
@@ -25,10 +21,6 @@ export default {
                 ],
                 mono: [
                     '"Noto Sans Mono"',
-                    '"Noto Sans SC"',
-                    '"Noto Sans TC"',
-                    '"Noto Sans JP"',
-                    '"Noto Sans KR"',
                     '"Twemoji"',
                     'ui-monospace',
                     'SFMono-Regular',
