@@ -1,13 +1,17 @@
 {
   "actions": {
+    "back": "返回",
     "cancel": "取消",
     "reload": "刷新",
     "save": "保存",
-    "scan": "扫描端口",
-    "back": "返回"
+    "scan": "扫描端口"
   },
   "code": "zh-Hans",
   "hint": {
+    "scan": {
+      "description": "此功能在Web版本中不可用，请改用App版本。",
+      "title": "功能不可用"
+    },
     "settings": {
       "endpoint": "VTube Studio的websocket端点，以<code class=\"font-mono\">ws://</code>或<code class=\"font-mono\">wss://</code>开头，更多信息请参考<a href=\"https://github.com/DenchiSoft/VTubeStudio/wiki/Plugins#how-to-use-plugins\" target=\"_blank\" class=\"link link-secondary text-sm\">VTube Studio文档</a>。"
     },
@@ -33,10 +37,6 @@
         "title": "您可以："
       },
       "title": "从HTTPS连接WS"
-    },
-    "scan": {
-      "title": "功能不可用",
-      "description": "此功能在Web版本中不可用，请改用App版本。"
     }
   },
   "icon": "🇨🇳",
@@ -55,17 +55,18 @@
   "settings": {
     "endpoint": "VTS 插件端点",
     "lang": "语言",
+    "scan": {
+      "empty": "未找到端点",
+      "endpoints": "可能的端点",
+      "ip": "当前IP",
+      "port": "端口",
+      "start": "开始扫描",
+      "stop": "停止扫描"
+    },
     "scheme": {
       "dark": "暗色模式",
       "light": "亮色模式",
       "system": "系统设定"
-    },
-    "scan": {
-      "port": "端口",
-      "start": "开始扫描",
-      "stop": "停止扫描",
-      "endpoints": "可能的端点",
-      "empty": "未找到端点"
     },
     "theme": "界面模式"
   }

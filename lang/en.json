@@ -1,13 +1,17 @@
 {
   "actions": {
+    "back": "Back",
     "cancel": "Cancel",
     "reload": "Reload",
     "save": "Save",
-    "scan": "Scan for Endpoint",
-    "back": "Back"
+    "scan": "Scan for Endpoint"
   },
   "code": "en",
   "hint": {
+    "scan": {
+      "description": "This feature is not available on the web version, please use the app version instead.",
+      "title": "Feature not Available"
+    },
     "settings": {
       "endpoint": "The websocket endpoint for VTube Studio, starting with <code class=\"font-mono\">ws://</code> or <code class=\"font-mono\">wss://</code>, for more information please refer to <a href=\"https://github.com/DenchiSoft/VTubeStudio/wiki/Plugins#how-to-use-plugins\" target=\"_blank\" class=\"link link-secondary text-sm\">VTube Studio document</a>."
     },
@@ -33,10 +37,6 @@
         "title": "You may:"
       },
       "title": "Connect WS from HTTPS"
-    },
-    "scan": {
-      "title": "Feature not Available",
-      "description": "This feature is not available on the web version, please use the app version instead."
     }
   },
   "icon": "🇺🇸",
@@ -55,17 +55,18 @@
   "settings": {
     "endpoint": "VTS Plugin Endpoint",
     "lang": "Language",
+    "scan": {
+      "empty": "No Endpoints Found",
+      "endpoints": "Possible Endpoints",
+      "ip": "Current IP",
+      "port": "Port",
+      "start": "Start Scanning",
+      "stop": "Stop Scanning"
+    },
     "scheme": {
       "dark": "Dark Theme",
       "light": "Light Theme",
       "system": "System Theme"
-    },
-    "scan": {
-      "port": "Port",
-      "start": "Start Scanning",
-      "stop": "Stop Scanning",
-      "endpoints": "Possible Endpoints",
-      "empty": "No Endpoints Found"
     },
     "theme": "Theme"
   }

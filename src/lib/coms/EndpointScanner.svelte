@@ -11,12 +11,13 @@
     import { parseIp, stringifyIp } from 'ip-bigint';
     import { endpoint, history as endpointHistory } from '$lib/config';
     import { goto } from '$app/navigation';
+    let currentIp: string = $state('');
     let ips: string[] = $state([]);
     let scanning = $state(false);
     let ipVersion: 4 | 6 = $state(4);
     let scanIndex = $state(0);
     let scanParallel = $state(10);
-    let progress = $state(0);
+    let progress = $state(undefined as any as number);
 
     function formatHost(ip: string, version: 4 | 6) {
         const hostname = version === 4 ? ip : `[${ip}]`;
@@ -79,7 +80,8 @@
                 .number.toString(2)
                 .split('')
                 .filter((c) => c === '1').length;
-            const cidr = parseCidr(`${addr.ip}/${mask}`);
+            currentIp = `${addr.ip}/${mask}`;
+            const cidr = parseCidr(currentIp);
             const ip = parseIp(addr.ip);
             for (let i = cidr.start; i <= cidr.end; i++) {
                 if (ip.number === i) continue;
@@ -101,11 +103,21 @@
 
 <form class="form-group" onsubmit={startScan}>
     <div class="form-field">
+        <label for="ip" class="form-label">{$t.settings.scan.ip}</label>
+        <input
+            id="ip"
+            type="text"
+            class="input input-solid input-block font-mono"
+            bind:value={currentIp}
+            disabled
+        />
+    </div>
+    <div class="form-field">
         <label for="port" class="form-label">{$t.settings.scan.port}</label>
         <input
             id="port"
             type="number"
-            class="input input-solid input-block"
+            class="input input-solid input-block font-mono"
             min="1"
             max="65535"
             bind:value={port}
@@ -122,7 +134,10 @@
         {/if}
         {$t.settings.scan[scanning ? 'stop' : 'start']}
     </button>
-    <progress class="progress progress-flat-success w-full" value={progress} max={ips.length}></progress>
+    {#if progress !== undefined}
+        <progress class="progress progress-flat-success w-full" value={progress} max={ips.length}
+        ></progress>
+    {/if}
 </form>
 <div class="form-field mt-8">
     <div class="form-label">{$t.settings.scan.endpoints}</div>
