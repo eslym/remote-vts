@@ -6,14 +6,17 @@
         0nepeop1e
     </author>
     <content src="https://remote-vts.1ppl.me/" />
-    <allow-intent href="https://*/*" />
     <allow-navigation href="https://remote-vts.1ppl.me/*" />
+    <access origin="https://remote-vts.1ppl.me" />
+    <allow-intent href="https://*/*" />
+    <hook type="before_prepare" src="hooks/before_prepare.js" />
+    <hook type="after_prepare" src="hooks/after_prepare.js" />
     <platform name="android">
       <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
-        <application android:usesCleartextTraffic="true" android:icon="@drawable/icon" />
+        <application android:usesCleartextTraffic="true" android:icon="@drawable/ic_launcher" />
       </edit-config>
       <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application/activity">
-        <activity android:theme="@style/Theme.App.AppTheme" android:icon="@drawable/icon" />
+        <activity android:theme="@style/Theme.App.AppTheme" android:icon="@drawable/ic_launcher" />
       </edit-config>
       <config-file target="app/src/res/values/themes.xml" parent="/resources">
         <style name="Theme.App.AppTheme" parent="Theme.AppCompat.NoActionBar">
@@ -21,6 +24,6 @@
           <item name="android:windowIsTranslucent">true</item>
         </style>
       </config-file>
-      <resource-file src="res/drawable/icon.xml" target="app/src/main/res/drawable/icon.xml" />
+      <resource-file src="res/drawable/ic_launcher.xml" target="app/src/main/res/drawable/ic_launcher.xml" />
     </platform>
 </widget>

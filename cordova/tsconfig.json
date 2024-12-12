@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    // Enable latest features
+    "lib": ["ESNext"],
+    "target": "ESNext",
+    "module": "CommonJS",
+    "moduleDetection": "force",
+    "allowJs": true,
+
+    // Bundler mode
+    "verbatimModuleSyntax": false,
+
+    // Best practices
+    "strict": true,
+    "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": true,
+
+    // Some stricter flags (disabled by default)
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noPropertyAccessFromIndexSignature": false,
+    "types": ["node"],
+
+    // Other
+    "esModuleInterop": true
+  },
+  "include": ["./hooks/*.ts", "./hooks/*.d.ts"],
+  "exclude": ["./hooks/*.js"]
+}
