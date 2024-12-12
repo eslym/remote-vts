@@ -16,6 +16,7 @@
     let ipVersion: 4 | 6 = $state(4);
     let scanIndex = $state(0);
     let scanParallel = $state(10);
+    let progress = $state(0);
 
     function formatHost(ip: string, version: 4 | 6) {
         const hostname = version === 4 ? ip : `[${ip}]`;
@@ -32,6 +33,7 @@
         scanning = true;
         scanIndex = 0;
         scanParallel = 10;
+        progress = 0;
     }
 
     $effect(() => {
@@ -64,6 +66,7 @@
                     endpoints.push(`ws://${toScan}`);
                 }
                 scanParallel++;
+                progress++;
             },
             () => {}
         );
@@ -119,6 +122,7 @@
         {/if}
         {$t.settings.scan[scanning ? 'stop' : 'start']}
     </button>
+    <progress class="progress progress-flat-success w-full" value={progress} max={ips.length}></progress>
 </form>
 <div class="form-field mt-8">
     <div class="form-label">{$t.settings.scan.endpoints}</div>

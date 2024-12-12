@@ -1,3 +1,4 @@
+import '$lib/polyfill';
 import '$lib/cordova';
 import '$lib/fonts';
 import './app.css';
