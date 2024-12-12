@@ -26,24 +26,24 @@ sw.addEventListener('install', (event: ExtendableEvent) => {
         const previousCache = await caches
             .keys()
             .then((keys) => keys.find((key) => key !== CACHE && key.startsWith('cache-')));
-        const oldFiles = new Set<string>();
-        if (previousCache) {
-            const oldCache = await caches.open(previousCache);
-            for (const path of ASSETS) {
-                if (!path.startsWith('/lib/immutable/')) continue;
-                const response = await oldCache.match(path);
-                if (!response) continue;
-                cache.put(path, response);
-                oldFiles.add(path);
+        const oldCache = previousCache ? await caches.open(previousCache) : null;
+        for (const path of ASSETS) {
+            const hit = await cache.match(path);
+            if (hit) continue;
+            if (oldCache) {
+                const old = await oldCache.match(path);
+                if (old) {
+                    cache.put(path, old);
+                    continue;
+                }
             }
+            const res = await enqueue(
+                new Request(path, {
+                    cache: path.startsWith('/lib/immutable/') ? 'default' : 'reload'
+                })
+            );
+            if (res.ok) cache.put(path, res);
         }
-        await cache.addAll(
-            ASSETS.filter((p) => !oldFiles.has(p)).map((u) => {
-                return new Request(u, {
-                    cache: u.startsWith('/lib/immutable/') ? 'default' : 'reload'
-                });
-            })
-        );
     }
 
     event.waitUntil(Promise.all([withRetry(addFilesToCache), sw.skipWaiting()]));
@@ -93,6 +93,38 @@ async function withRetry(fn: () => Promise<void>) {
     }
 }
 
-export function sleep(ms: number) {
+function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+const cacheQueue: { req: Request; resolve: (res: Response) => void; reject: (err: any) => void }[] =
+    [];
+
+function enqueue(req: Request) {
+    let shouldRun = cacheQueue.length === 0;
+    return new Promise<Response>((resolve, reject) => {
+        cacheQueue.push({ req, resolve, reject });
+        if (!shouldRun) return;
+        runQueue();
+        runQueue();
+        runQueue();
+        runQueue();
+    });
+}
+
+async function runQueue() {
+    if (cacheQueue.length === 0) return;
+    const { req, resolve, reject } = cacheQueue.shift()!;
+    try {
+        const res = await fetch(req);
+        if (res.ok || res.status === 404) {
+            resolve(res);
+        } else {
+            reject(new Error(res.statusText));
+        }
+    } catch (err) {
+        reject(err);
+    } finally {
+        await sleep(500);
+    }
 }
