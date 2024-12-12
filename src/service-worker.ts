@@ -31,7 +31,7 @@ sw.addEventListener('install', (event: ExtendableEvent) => {
         for (const path of ASSETS) {
             const hit = await cache.match(path);
             if (hit) continue;
-            if (oldCache) {
+            if (path.startsWith('/lib/immutable/') && oldCache) {
                 const old = await oldCache.match(path);
                 if (old) {
                     cache.put(path, old);
