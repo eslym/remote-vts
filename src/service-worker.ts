@@ -43,7 +43,6 @@ sw.addEventListener('install', (event: ExtendableEvent) => {
         let progress = ASSETS.length - toFetch.length;
         await Promise.all(
             toFetch.map(async (path) => {
-                console.log(path);
                 const res = await enqueue(
                     new Request(path, {
                         cache: path.startsWith('/lib/immutable/') ? 'default' : 'reload'
