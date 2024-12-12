@@ -1,3 +1,4 @@
+import '$lib/polyfill';
 import { debug } from '$lib/utils';
 import type { IApiClientOptions } from 'vtubestudio';
 import type { WebSocketReadyState } from 'vtubestudio/lib/ws';

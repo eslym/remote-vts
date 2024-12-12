@@ -1,4 +1,5 @@
 <script lang="ts">
+    import '$lib/polyfill';
     import { Alert01Icon, FloppyDiskIcon, SearchVisualIcon } from 'hugeicons-svelte';
     import { endpoint, history } from '$lib/config';
     import { lang, t, languages } from '$lib/lang';
