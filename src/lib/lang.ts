@@ -43,7 +43,7 @@ function determineLang(lang: string): keyof typeof langs {
 const _lang = writable(import.meta.env.SSR ? null : localStorage.getItem('lang'));
 const _temp = writable(Date.now());
 const _getLang = derived([_lang, _temp], ([$lang]) => {
-    return determineLang(($lang ?? import.meta.env.SSR) ? 'en' : navigator.language);
+    return determineLang($lang ?? (import.meta.env.SSR ? 'en' : navigator.language));
 });
 
 export const lang = Object.assign(
