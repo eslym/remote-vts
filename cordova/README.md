@@ -2,5 +2,5 @@
 
 ```bash
 npm install
-npx cordova prepare
+npx cordova prepare android
 ```

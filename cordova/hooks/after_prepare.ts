@@ -37,13 +37,36 @@ async function remove_cordova_icon(root: string) {
 }
 
 async function update_config(root: string) {
+    const app_url = process.env.APP_URL ?? 'https://remote-vts.1ppl.me';
     const config_xml = join(root, 'platforms/android/app/src/main/res/xml/config.xml');
     const config_content = await readFile(config_xml, 'utf8');
-    const config = convert(config_content, { format: 'object' }) as any;
-    config.widget['allow-navigation']['@href'] = `${process.env.APP_URL}/*`;
-    config.widget['access']['@origin'] = process.env.APP_URL;
-    config.widget['content']['@src'] = process.env.APP_URL;
-    const new_config_content = create(config).end({ prettyPrint: true });
+    const config = create(config_content);
+    const widget = config.first();
+    const whitelist = widget.find((node) => {
+        if(node.node.nodeName !== 'allow-navigation') {
+            return false;
+        }
+        const obj = node.toObject() as any;
+        return obj['allow-navigation']['@href'].match(/^https?:\/\//);
+    });
+    if(whitelist) {
+        whitelist.att('href', `${app_url}/*`);
+    } else {
+        widget.ele('allow-navigation', { href: `${app_url}/*` });
+    }
+    const access = widget.find((node) => node.node.nodeName === 'access');
+    if(access) {
+        access.att('origin', app_url);
+    } else {
+        widget.ele('access', { origin: app_url });
+    }
+    const content = widget.find((node) => node.node.nodeName === 'content');
+    if(content) {
+        content.att('src', app_url);
+    } else {
+        widget.ele('content', { src: app_url });
+    }
+    const new_config_content = config.end({ prettyPrint: true });
     await writeFile(config_xml, new_config_content);
     console.log('Updated config.xml');
 }

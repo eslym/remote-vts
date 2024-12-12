@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     // Enable latest features
-    "lib": ["ESNext"],
+    "lib": ["ESNext", "DOM"],
     "target": "ESNext",
     "module": "CommonJS",
     "moduleDetection": "force",
@@ -22,7 +22,8 @@
     "types": ["node"],
 
     // Other
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "sourceMap": true,
   },
   "include": ["./hooks/*.ts", "./hooks/*.d.ts"],
   "exclude": ["./hooks/*.js"]
