@@ -8,7 +8,7 @@
 </script>
 
 {#if !$connected}
-    <div class="alert alert-warning mb-12" data-sveltekit-replacestate>
+    <div class="alert alert-warning mb-8 sticky z-40 top-0" data-sveltekit-replacestate>
         <Alert01Icon size={35} class="text-warning min-w-max" />
         <div class="flex flex-col">
             <span>{$t.hint.status.warning.title}</span>
