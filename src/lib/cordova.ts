@@ -29,7 +29,9 @@ if ('_cordovaNative' in window && typeof _cordovaNative.exec === 'function') {
                 const href = ev.target.getAttribute('href');
                 if (!href) return;
                 ev.preventDefault();
-                const features = ev.target.getAttribute('data-inappbrowser-features') || 'zoom=no';
+                const features =
+                    ev.target.getAttribute('data-inappbrowser-features') ||
+                    'zoom=no,location=yes,toolbarcolor=#000000,navigationbuttoncolor=#cccccc,closebuttoncolor=#cccccc';
                 cordova.InAppBrowser.open(href, '_blank', features);
             }) as any);
         },

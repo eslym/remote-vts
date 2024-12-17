@@ -11,7 +11,7 @@
         LinkBackwardIcon
     } from 'hugeicons-svelte';
     import { t } from '$lib/lang';
-    import { scheme } from '$lib/theme';
+    import { DARK_ACTION_BAR, LIGHT_ACTION_BAR, scheme } from '$lib/theme';
     interface Props {
         children?: import('svelte').Snippet;
     }
@@ -87,9 +87,9 @@
         <title>{$t.name}</title>
     {/if}
     {#if $scheme === 'light'}
-        <meta name="theme-color" content="#fcfcfc" />
+        <meta name="theme-color" content={DARK_ACTION_BAR} />
     {:else}
-        <meta name="theme-color" content="#161616" />
+        <meta name="theme-color" content={LIGHT_ACTION_BAR} />
     {/if}
 </svelte:head>
 

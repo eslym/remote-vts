@@ -83,6 +83,14 @@ declare namespace cordova {
             export function setHeader(host: string, name: string, value: string): void;
         }
     }
+
+    export function exec(
+        success: (result: any) => void,
+        failure: (error: any) => void,
+        service: string,
+        action: string,
+        args: any[]
+    ): void;
 }
 
 declare namespace networkinterface {
@@ -94,4 +102,22 @@ declare namespace networkinterface {
         callback: (ip: { ip: string; subnet: string }) => void,
         errorCallback: (err: any) => void
     ): void;
+}
+
+declare namespace StatusBar {
+    export function styleDefault(): void;
+    export function styleLightContent(): void;
+    export function styleBlackTranslucent(): void;
+    export function styleBlackOpaque(): void;
+    export function backgroundColorByName(color: string): void;
+    export function backgroundColorByHexString(color: string): void;
+    export function hide(): void;
+    export function show(): void;
+}
+
+declare namespace NavigationBar {
+    export function backgroundColorByName(color: string, light?: boolean): void;
+    export function backgroundColorByHexString(color: string, light?: boolean): void;
+    export function hide(): void;
+    export function show(): void;
 }
