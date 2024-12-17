@@ -1,12 +1,14 @@
 import { convert, create } from 'xmlbuilder2';
 import { config as dotenv } from 'dotenv';
 import { join } from 'path';
-import { readFile, writeFile, unlink } from 'fs/promises';
+import { readFile, writeFile, unlink, copyFile, mkdir } from 'fs/promises';
+import { existsSync, constants as fsConst } from 'fs';
 const glob = require('tiny-glob') as typeof import('tiny-glob');
 
 dotenv();
 
 export = async function ({ opts }: Cordova.HookContext) {
+    const d = join.bind(null, opts.projectRoot);
     try {
         await remove_splashscreen_theme(opts.projectRoot);
         await remove_cordova_icon(opts.projectRoot);

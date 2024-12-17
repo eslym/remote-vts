@@ -58,6 +58,7 @@ async function update_config(root) {
     console.log('Updated config.xml');
 }
 module.exports = async function ({ opts }) {
+    const d = path_1.join.bind(null, opts.projectRoot);
     try {
         await remove_splashscreen_theme(opts.projectRoot);
         await remove_cordova_icon(opts.projectRoot);
