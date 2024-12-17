@@ -1,5 +1,4 @@
 import '$lib/polyfill';
-import { debug } from '$lib/utils';
 import type { IApiClientOptions } from 'vtubestudio';
 import type { WebSocketReadyState } from 'vtubestudio/lib/ws';
 
@@ -12,6 +11,9 @@ export { cordovaAvailable };
 declare var _cordovaNative: any;
 
 if ('_cordovaNative' in window && typeof _cordovaNative.exec === 'function') {
+    const inAppBrowserDefaultColor = window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'toolbarcolor=#000000,navigationbuttoncolor=#cccccc,closebuttoncolor=#cccccc'
+        : 'toolbarcolor=#ffffff,navigationbuttoncolor=#333333,closebuttoncolor=#333333';
     document.addEventListener(
         'deviceready',
         () => {
@@ -31,7 +33,7 @@ if ('_cordovaNative' in window && typeof _cordovaNative.exec === 'function') {
                 ev.preventDefault();
                 const features =
                     ev.target.getAttribute('data-inappbrowser-features') ||
-                    'zoom=no,location=yes,toolbarcolor=#000000,navigationbuttoncolor=#cccccc,closebuttoncolor=#cccccc';
+                    'zoom=no,location=yes,' + inAppBrowserDefaultColor;
                 cordova.InAppBrowser.open(href, '_blank', features);
             }) as any);
         },
@@ -58,7 +60,6 @@ export class CordovaWebsocket implements IWebSocketLike {
             throw new Error('CordovaWebsocketPlugin not found');
         }
         this.#readyState = 0;
-        debug(this);
         CordovaWebsocketPlugin.wsConnect(
             {
                 url,
@@ -69,7 +70,6 @@ export class CordovaWebsocket implements IWebSocketLike {
                 }
             },
             (event) => {
-                debug('recv', event);
                 if (event.callbackMethod === 'onMessage') {
                     this.dispatchEvent(new MessageEvent('message', { data: event.message }));
                 } else if (event.callbackMethod === 'onClose') {
@@ -80,13 +80,11 @@ export class CordovaWebsocket implements IWebSocketLike {
                 }
             },
             (event) => {
-                debug('conn', event);
                 this.#readyState = 1;
                 this.#webSocketId = event.webSocketId;
                 this.dispatchEvent(new Event('open'));
             },
             (event) => {
-                debug('err', event);
                 this.#readyState = 3;
                 this.dispatchEvent(
                     new ErrorEvent('error', {

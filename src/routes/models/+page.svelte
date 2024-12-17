@@ -3,11 +3,15 @@
     import Button from '$lib/coms/Button.svelte';
     import Connection from '$lib/coms/Connected.svelte';
     import { currentModel, modelConfigs, models, type VTSModel } from '$lib/config';
+    import { t } from '$lib/lang';
     import { onMount } from 'svelte';
+    import { ErrorCode, VTubeStudioError } from 'vtubestudio';
 
     let displayModels = $derived(calculateSortedOrders($models));
 
     let buttons: Record<string, HTMLButtonElement> = $state({});
+
+    let tooFast = $state(false);
 
     function calculateSortedOrders(models: VTSModel[]) {
         return models.sort((a, b) => {
@@ -40,9 +44,22 @@
             {#if !cfg.hidden}
                 <Button
                     icon={cfg.icon}
-                    label={cfg.displayName ?? model.modelName}
+                    label={cfg.displayName || model.modelName}
                     active={model.modelID === $currentModel}
-                    onclick={() => $client.modelLoad(model)}
+                    onclick={async () => {
+                        try {
+                            await $client.modelLoad(model);
+                        } catch (e) {
+                            if (
+                                e instanceof VTubeStudioError &&
+                                e.data.errorID === ErrorCode.ModelLoadCooldownNotOver
+                            ) {
+                                tooFast = true;
+                                return;
+                            }
+                            throw e;
+                        }
+                    }}
                     disabled={!$connected}
                     bind:element={buttons[model.modelID]}
                 />
@@ -50,3 +67,20 @@
         {/each}
     </div>
 </Connection>
+
+<input class="modal-state" id="model-cooldown" type="checkbox" bind:checked={tooFast} />
+<div class="modal">
+    <label class="modal-overlay" for="model-cooldown"></label>
+    <div class="modal-content flex flex-col gap-5">
+        <label for="model-cooldown" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >✕</label
+        >
+        <h2 class="text-xl">{$t.hint.model_cooldown.title}</h2>
+        <span>{$t.hint.model_cooldown.description}</span>
+        <div class="flex gap-3">
+            <label for="model-cooldown" class="btn btn-block">
+                {$t.hint.model_cooldown.confirm}
+            </label>
+        </div>
+    </div>
+</div>

@@ -7,7 +7,7 @@ export const LIGHT_ACTION_BAR = '#fcfcfc';
 export const DARK_NAVIGATION_BAR = '#1c1c1c';
 export const LIGHT_NAVIGATION_BAR = '#f8f8f8';
 
-const systemDark = writable(
+export const systemDark = writable(
     import.meta.env.SSR ? false : window.matchMedia('(prefers-color-scheme: dark)').matches
 );
 

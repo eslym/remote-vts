@@ -8,6 +8,11 @@
   },
   "code": "zh-Hans",
   "hint": {
+    "model_cooldown": {
+      "confirm": "了解了",
+      "description": "模型加载仍在冷却中。每 2 秒只能更换一次模型。",
+      "title": "太快了！"
+    },
     "scan": {
       "description": "此功能在Web版本中不可用，请改用App版本。",
       "title": "功能不可用"

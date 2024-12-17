@@ -8,6 +8,11 @@
   },
   "code": "en",
   "hint": {
+    "model_cooldown": {
+      "confirm": "OK",
+      "description": "The model load cooldown is still active. You can only change model once every 2 seconds.",
+      "title": "Too Fast!"
+    },
     "scan": {
       "description": "This feature is not available on the web version, please use the app version instead.",
       "title": "Feature not Available"

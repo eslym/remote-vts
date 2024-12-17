@@ -9,7 +9,9 @@ export type VTSModel = Awaited<ReturnType<ApiClient['availableModels']>>['availa
 export type VTSHotkey = Awaited<
     ReturnType<ApiClient['hotkeysInCurrentModel']>
 >['availableHotkeys'][number];
-export type VTSExpression = Awaited<ReturnType<ApiClient['expressionState']>>['expressions'][number];
+export type VTSExpression = Awaited<
+    ReturnType<ApiClient['expressionState']>
+>['expressions'][number];
 
 type Subscriber = ReturnType<typeof createSubscriber>;
 
@@ -131,6 +133,8 @@ class CustomConfig {
         this.#hiddenSubscriber = createSubscriber(this.#hidden.subscribe);
     }
 }
+
+export type { CustomConfig };
 
 const configInstances = new Map<string, CustomConfig>();
 
