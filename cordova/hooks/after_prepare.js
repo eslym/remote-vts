@@ -16,8 +16,8 @@ async function remove_splashscreen_theme(root) {
     console.log('Removed Theme.App.SplashScreen');
 }
 async function remove_cordova_icon(root) {
-    const files = await glob((0, path_1.join)(root, 'platforms/android/app/src/main/res/mipmap*/ic_launcher*'));
-    await Promise.all(files.map((file) => (0, promises_1.unlink)(file)));
+    const files = await glob('platforms/android/app/src/main/res/mipmap*/ic_launcher*', { cwd: root });
+    await Promise.all(files.map((file) => (0, promises_1.unlink)((0, path_1.join)(root, file))));
     console.log('Removed cordova icon');
 }
 async function update_config(root) {
