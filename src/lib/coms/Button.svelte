@@ -26,6 +26,6 @@
     {onclick}
     {oncontextmenu}
 >
-    <span class="font-emoji text-5xl">{icon ?? '❔'}</span>
+    <span class="font-emoji text-5xl">{icon || '❔'}</span>
     <span class="text-sm">{label}</span>
 </button>

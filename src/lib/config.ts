@@ -67,10 +67,7 @@ function base64toBase62(base64: string) {
     return hexToBase62(n.toString(16));
 }
 
-class CustomConfig {
-    #prefix: string;
-    #keys: string[];
-
+class CustomConfig implements Config {
     #icon: StorageStore;
     #displayName: StorageStore;
     #index: StorageStore;
@@ -83,7 +80,7 @@ class CustomConfig {
 
     get icon() {
         this.#iconSubscriber();
-        return this.#icon.get();
+        return this.#icon.get() ?? '';
     }
 
     set icon(value: string | null) {
@@ -92,7 +89,7 @@ class CustomConfig {
 
     get displayName() {
         this.#displayNameSubscriber();
-        return this.#displayName.get();
+        return this.#displayName.get() ?? '';
     }
 
     set displayName(value: string | null) {
@@ -119,9 +116,6 @@ class CustomConfig {
     }
 
     constructor(prefix: string, ...keys: string[]) {
-        this.#prefix = prefix;
-        this.#keys = keys;
-
         this.#icon = local(`vts-${prefix}-${keys.join('-')}-icon`);
         this.#displayName = local(`vts-${prefix}-${keys.join('-')}-display-name`);
         this.#index = local(`vts-${prefix}-${keys.join('-')}-index`);
@@ -134,7 +128,14 @@ class CustomConfig {
     }
 }
 
-export type { CustomConfig };
+interface Config {
+    icon: string | null;
+    displayName: string | null;
+    index: number | null;
+    hidden: boolean;
+}
+
+export type { Config as CustomConfig };
 
 const configInstances = new Map<string, CustomConfig>();
 

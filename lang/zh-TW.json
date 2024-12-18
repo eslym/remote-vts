@@ -8,6 +8,15 @@
   },
   "code": "zh-Hant",
   "hint": {
+    "modal_edit": {
+      "display_name": "顯示名稱",
+      "hidden": "隱藏",
+      "icon": "圖標",
+      "no_icon": "找不到表情符號",
+      "pick_icon": "選擇一個圖標",
+      "search_emoji": "搜索表情",
+      "title": "編輯"
+    },
     "model_cooldown": {
       "confirm": "瞭解了",
       "title": "太快了！"
@@ -22,9 +31,8 @@
     "settings": {
       "endpoint": "VTube Studio的websocket端點，以<code class=\"font-mono\">ws://</code>或<code class=\"font-mono\">wss://</code>開頭，更多信息請參考<a href=\"https://github.com/DenchiSoft/VTubeStudio/wiki/Plugins#how-to-use-plugins\" target=\"_blank\" class=\"link link-secondary text-sm\">VTube Studio文檔</a>。"
     },
+    "show_hidden": "顯示隱藏",
     "status": {
-      "connected": "已鏈接VTS",
-      "disconnected": "VTS未連接",
       "instruction": "無法連接到VTube Studio，請檢查設置和連接狀態。",
       "warning": {
         "description": "請檢查<a href=\"/settings\" class=\"hover:underline\">設置</a>和您的連接狀態。",

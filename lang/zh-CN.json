@@ -8,6 +8,15 @@
   },
   "code": "zh-Hans",
   "hint": {
+    "modal_edit": {
+      "display_name": "显示名称",
+      "hidden": "隐藏",
+      "icon": "图标",
+      "no_icon": "找不到表情符号",
+      "pick_icon": "选择一个图标",
+      "search_emoji": "搜索表情",
+      "title": "编辑"
+    },
     "model_cooldown": {
       "confirm": "了解了",
       "description": "模型加载仍在冷却中。每 2 秒只能更换一次模型。",
@@ -23,9 +32,8 @@
     "settings": {
       "endpoint": "VTube Studio的websocket端点，以<code class=\"font-mono\">ws://</code>或<code class=\"font-mono\">wss://</code>开头，更多信息请参考<a href=\"https://github.com/DenchiSoft/VTubeStudio/wiki/Plugins#how-to-use-plugins\" target=\"_blank\" class=\"link link-secondary text-sm\">VTube Studio文档</a>。"
     },
+    "show_hidden": "显示隐藏",
     "status": {
-      "connected": "已链接VTS",
-      "disconnected": "VTS未链接",
       "instruction": "无法连接到VTube Studio，请检查设置和连接状态。",
       "warning": {
         "description": "请检查<a href=\"/settings\" class=\"hover:underline\">设置</a>和您的连接状态。",

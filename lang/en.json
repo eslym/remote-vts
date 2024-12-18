@@ -8,6 +8,15 @@
   },
   "code": "en",
   "hint": {
+    "modal_edit": {
+      "display_name": "Display Name",
+      "hidden": "Hidden",
+      "icon": "Icon",
+      "no_icon": "No Emoji Found",
+      "pick_icon": "Pick an Icon",
+      "search_emoji": "Search for Emoji",
+      "title": "Edit"
+    },
     "model_cooldown": {
       "confirm": "OK",
       "description": "The model load cooldown is still active. You can only change model once every 2 seconds.",
@@ -23,9 +32,8 @@
     "settings": {
       "endpoint": "The websocket endpoint for VTube Studio, starting with <code class=\"font-mono\">ws://</code> or <code class=\"font-mono\">wss://</code>, for more information please refer to <a href=\"https://github.com/DenchiSoft/VTubeStudio/wiki/Plugins#how-to-use-plugins\" target=\"_blank\" class=\"link link-secondary text-sm\">VTube Studio document</a>."
     },
+    "show_hidden": "Show Hidden",
     "status": {
-      "connected": "Connected to VTS",
-      "disconnected": "Disconnected from VTS",
       "instruction": "Unable to connect to VTube Studio, please check the settings and connection status.",
       "warning": {
         "description": "Please check the <a href=\"/settings\" class=\"hover:underline\">settings</a> and your connection status.",

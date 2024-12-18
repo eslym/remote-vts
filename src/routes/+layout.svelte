@@ -1,3 +1,19 @@
+<script lang="ts" module>
+    const kActBtn = Symbol('actionButtons');
+    const kClear = Symbol('clearActionBar');
+
+    export function getActionBar() {
+        const bar = getContext(kActBtn) as any;
+        onDestroy(() => {
+            bar[kClear]();
+        });
+        return bar as {
+            snippet: Snippet<[]> | undefined;
+            onContextMenu: (handler: (ev: MouseEvent) => void) => void;
+        };
+    }
+</script>
+
 <script lang="ts">
     import { page } from '$app/stores';
     import {
@@ -5,9 +21,6 @@
         DashboardSquare01Icon,
         SmileIcon,
         UserIcon,
-        ConnectIcon,
-        CheckmarkCircle01Icon,
-        Alert02Icon,
         LinkBackwardIcon
     } from 'hugeicons-svelte';
     import { t } from '$lib/lang';
@@ -15,12 +28,30 @@
     interface Props {
         children?: import('svelte').Snippet;
     }
-    import { connected } from '$lib/client';
     import { swReady, updateAvailable } from '$lib/sw';
     import { sineInOut } from 'svelte/easing';
     import { fade } from 'svelte/transition';
+    import { getContext, onDestroy, setContext, type Snippet } from 'svelte';
 
     let { children }: Props = $props();
+    let actionButtons: Snippet<[]> | undefined = $state(undefined);
+    let onContextMenu: ((ev: MouseEvent) => void) | undefined = $state(undefined);
+
+    setContext(kActBtn, {
+        get snippet() {
+            return actionButtons;
+        },
+        set snippet(value) {
+            actionButtons = value;
+        },
+        onContextMenu: (handler: (ev: MouseEvent) => void) => {
+            onContextMenu = handler;
+        },
+        [kClear]: () => {
+            actionButtons = undefined;
+            onContextMenu = undefined;
+        }
+    });
 
     let canGoBack = $derived($page.state.canGoBack);
 
@@ -133,42 +164,11 @@
                 {/each}
             </div>
             <div class="navbar-end w-max md:w-full">
-                <div class="popover">
-                    <button
-                        class="btn btn-ghost btn-circle popover-trigger transition-colors"
-                        class:text-success={$connected}
-                        class:text-error={!$connected}
-                    >
-                        {#if $connected}
-                            <ConnectIcon size={16} />
-                        {:else}
-                            <Alert02Icon size={16} />
-                        {/if}
-                    </button>
-                    <div class="popover-content popover-bottom-left top-12">
-                        <div class="popover-arrow"></div>
-                        <div class="p-2 text-sm flex flex-row items-center">
-                            <span class="flex-grow">
-                                {$connected
-                                    ? $t.hint.status.connected
-                                    : $t.hint.status.disconnected}
-                            </span>
-                            {#if $connected}
-                                <CheckmarkCircle01Icon size={16} class="text-success" />
-                            {:else}
-                                <Alert02Icon size={16} class="text-error" />
-                            {/if}
-                        </div>
-                        {#if !$connected}
-                            <p class="px-2 pb-2 text-xs text-content3 text-justify">
-                                {$t.hint.status.instruction}
-                            </p>
-                        {/if}
-                    </div>
-                </div>
+                {@render actionButtons?.()}
             </div>
         </div>
-        <div class="px-4 pb-12 md:pl-6 pt-6 overflow-auto">
+        <!-- svelte-ignore a11y_no_static_element_interactions -->
+        <div class="px-4 pb-12 md:pl-6 pt-6 overflow-auto" oncontextmenu={onContextMenu}>
             {@render children?.()}
         </div>
         <div
@@ -201,7 +201,7 @@
             <label for="modal-update" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
                 >✕</label
             >
-            <h2 class="text-xl">{$t.hint.update.title}</h2>
+            <h2 class="text-sm font-semibold">{$t.hint.update.title}</h2>
             <span>{$t.hint.update.description}</span>
             <div class="flex gap-3">
                 <button class="btn btn-primary btn-block" onclick={() => window.location.reload()}>
