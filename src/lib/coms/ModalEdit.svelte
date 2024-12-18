@@ -77,10 +77,9 @@
     $effect(() => {
         if (!emojiPicker) {
             emojiSearch = '';
+            emojiGroup = 0;
         }
     });
-
-    $inspect(emojiGroup);
 </script>
 
 <input class="modal-state" {id} type="checkbox" bind:checked={shown} />
@@ -104,7 +103,7 @@
                 <label class="form-label" for="{id}-emoji-picker">{$t.hint.modal_edit.icon}</label>
                 <label
                     for="{id}-emoji-picker"
-                    class="input input-xl input-block input-solid font-emoji flex items-center justify-center"
+                    class="textarea text-5xl w-full textarea-solid font-emoji flex items-center justify-center"
                 >
                     {config.icon || fallbackIcon}
                 </label>
@@ -121,16 +120,17 @@
 
 {#snippet emojiButton(unicode: string, meta?: EmojiMeta)}
     {@const m = meta ?? emojiMeta.get(unicode)!}
-    <button
-        class="btn btn-sm btn-circle btn-ghost"
-        class:btn-primary={config.icon === unicode}
-        onclick={() => {
-            config.icon = unicode;
-            emojiPicker = false;
-        }}
-    >
-        {unicode}
-    </button>
+    <div>
+        <button
+            class="btn btn-lg btn-circle btn-ghost"
+            onclick={() => {
+                config.icon = unicode;
+                emojiPicker = false;
+            }}
+        >
+            {unicode}
+        </button>
+    </div>
 {/snippet}
 
 <input class="modal-state" id="{id}-emoji-picker" type="checkbox" bind:checked={emojiPicker} />
@@ -148,7 +148,15 @@
             placeholder={$t.hint.modal_edit.search_emoji}
             bind:value={emojiSearch}
         />
-        {#if emojiSearch}{:else}
+        {#if emojiSearch}
+            <div
+                class="overflow-y-auto flex-grow gap-0.5 grid grid-cols-[repeat(auto-fill,minmax(2.5rem,1fr))] h-0"
+            >
+                {#each searchResult as emoji}
+                    {@render emojiButton(emoji.unicode, emoji.meta)}
+                {/each}
+            </div>
+        {:else}
             <div class="w-full">
                 <div
                     class="tabs tabs-boxed grid grid-cols-[repeat(9,1fr)] gap-0 overflow-auto w-full"
@@ -164,7 +172,9 @@
                     {/each}
                 </div>
             </div>
-            <div class="overflow-y-auto gap-0.5 flex flex-row flex-wrap flex-grow h-0">
+            <div
+                class="overflow-y-auto flex-grow gap-0.5 grid grid-cols-[repeat(auto-fill,minmax(2.5rem,1fr))] h-0"
+            >
                 {#each groups[emojiGroup].emojis as emoji}
                     {@render emojiButton(emoji)}
                 {/each}

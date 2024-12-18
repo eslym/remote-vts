@@ -175,46 +175,60 @@ function updateIndex(keyword: string, emoji: string, type: number) {
     emojiIndex.set(keyword, index);
 }
 
-for (const emoji of data) {
-    let shortcode = shortcodes[emoji.hexcode];
-    if (typeof emoji.group === 'number') {
-        emojiGroups[emoji.group].emojis.push(emoji.emoji);
-        for (const g of messages.groups[emoji.group].key.split('-'))
-            updateIndex(g, emoji.emoji, keyWeightGroup);
-    }
-    if (typeof shortcode === 'string') shortcode = [shortcode];
-    if (emoji.emoticon) {
-        const emoticons = typeof emoji.emoticon === 'string' ? [emoji.emoticon] : emoji.emoticon;
-        shortcode.push(...emoticons);
-    }
-    const meta: EmojiMeta = {
-        name: emoji.label,
-        slug: shortcode[0],
-        version: emoji.version
-    };
-    if (emoji.skins) {
-        meta.variants = emoji.skins.map((s) => s.emoji);
-    }
-    emojiMeta.set(emoji.emoji, meta);
-    if (emoji.tags && emoji.tags.length) {
-        for (const tag of emoji.tags) {
-            for (const t of tag.split(/[\s_]+/)) {
-                if (!t) continue;
-                updateIndex(t, emoji.emoji, keyWeightTag);
+if (!import.meta.env.SSR) {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d')!;
+    ctx.font = "16px 'Twemoji'";
+    for (const emoji of data) {
+        const metrics = ctx.measureText(emoji.emoji);
+        if (metrics.width !== 16) continue;
+        let shortcode = shortcodes[emoji.hexcode];
+        if (typeof emoji.group === 'number') {
+            emojiGroups[emoji.group].emojis.push(emoji.emoji);
+            for (const g of messages.groups[emoji.group].key.split('-'))
+                updateIndex(g, emoji.emoji, keyWeightGroup);
+        }
+        if (typeof shortcode === 'string') shortcode = [shortcode];
+        if (emoji.emoticon) {
+            const emoticons =
+                typeof emoji.emoticon === 'string' ? [emoji.emoticon] : emoji.emoticon;
+            shortcode.push(...emoticons);
+        }
+        const meta: EmojiMeta = {
+            name: emoji.label,
+            slug: shortcode[0],
+            version: emoji.version
+        };
+        if (emoji.skins) {
+            const variants = emoji.skins
+                .map((s) => s.emoji)
+                .filter((v) => {
+                    const metrics = ctx.measureText(v);
+                    return metrics.width === 16;
+                });
+            if (variants.length) meta.variants = variants;
+        }
+        emojiMeta.set(emoji.emoji, meta);
+        if (emoji.tags && emoji.tags.length) {
+            for (const tag of emoji.tags) {
+                for (const t of tag.split(/[\s_]+/)) {
+                    if (!t) continue;
+                    updateIndex(t, emoji.emoji, keyWeightTag);
+                }
             }
         }
-    }
-    for (const code of shortcode) {
-        updateIndex(code, emoji.emoji, keyWeightShortcode);
-        if (code.includes('_')) {
-            for (const part of code.split('_')) {
-                updateIndex(part, emoji.emoji, keyWeightPart);
+        for (const code of shortcode) {
+            updateIndex(code, emoji.emoji, keyWeightShortcode);
+            if (code.includes('_')) {
+                for (const part of code.split('_')) {
+                    updateIndex(part, emoji.emoji, keyWeightPart);
+                }
             }
         }
-    }
-    const regex = /[a-z0-9]+/gi;
-    let matches: RegExpExecArray | null;
-    while ((matches = regex.exec(emoji.label))) {
-        updateIndex(matches[0], emoji.emoji, keyWeightName);
+        const regex = /[a-z0-9]+/gi;
+        let matches: RegExpExecArray | null;
+        while ((matches = regex.exec(emoji.label))) {
+            updateIndex(matches[0], emoji.emoji, keyWeightName);
+        }
     }
 }
