@@ -21,7 +21,7 @@
     "@sveltejs/vite-plugin-svelte": "^4.0.2",
     "autoprefixer": "^10.4.20",
     "cidr-tools": "^11.0.2",
-    "emojibase-data": "15.0.0",
+    "emojibase-data": "^15",
     "hugeicons-svelte": "^0.0.1",
     "ip-bigint": "^8.2.0",
     "prettier-plugin-svelte": "^3.3.2",

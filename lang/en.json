@@ -2,6 +2,7 @@
   "actions": {
     "back": "Back",
     "cancel": "Cancel",
+    "done_edit": "Done Edit",
     "reload": "Reload",
     "save": "Save",
     "scan": "Scan for Endpoint"
