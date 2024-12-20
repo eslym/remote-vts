@@ -297,6 +297,8 @@
     }
 
     const dragHandleAction: Action<HTMLElement> = (node) => {
+        const old = node.style.touchAction;
+        node.style.touchAction = 'none';
         const offmousedown = on(node, 'mousedown', (ev: MouseEvent) => {
             if (ev.button !== 0) return;
             dragStart(targetNode ?? node);
@@ -308,6 +310,7 @@
             destroy() {
                 offmousedown();
                 offtouchstart();
+                node.style.touchAction = old;
             }
         };
     };
