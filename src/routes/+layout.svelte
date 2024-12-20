@@ -3,7 +3,7 @@
     const kClear = Symbol('clearActionBar');
 
     export function getActionBar() {
-        const bar = getContext(kActBtn) as any;
+        const bar = (getContext(kActBtn) as any)();
         onDestroy(() => {
             bar[kClear]();
         });
@@ -32,25 +32,32 @@
     import { sineInOut } from 'svelte/easing';
     import { fade } from 'svelte/transition';
     import { getContext, onDestroy, setContext, type Snippet } from 'svelte';
+    import { SvelteSet } from 'svelte/reactivity';
 
     let { children }: Props = $props();
-    let actionButtons: Snippet<[]> | undefined = $state(undefined);
-    let onContextMenu: ((ev: MouseEvent) => void) | undefined = $state(undefined);
+    let snippets: Set<Snippet<[]>> = $state(new SvelteSet());
+    let handlers: Set<(ev: MouseEvent) => void> = $state(new SvelteSet());
 
-    setContext(kActBtn, {
-        get snippet() {
-            return actionButtons;
-        },
-        set snippet(value) {
-            actionButtons = value;
-        },
-        onContextMenu: (handler: (ev: MouseEvent) => void) => {
-            onContextMenu = handler;
-        },
-        [kClear]: () => {
-            actionButtons = undefined;
-            onContextMenu = undefined;
-        }
+    setContext(kActBtn, () => {
+        let snippet: Snippet<[]> | undefined = undefined;
+        let onContextMenu: ((ev: MouseEvent) => void) | undefined = undefined;
+        return {
+            get snippet() {
+                return snippet;
+            },
+            set snippet(value) {
+                if (snippet) snippets.delete(snippet);
+                snippets.add((snippet = value!));
+            },
+            onContextMenu: (handler: (ev: MouseEvent) => void) => {
+                if (onContextMenu) handlers.delete(onContextMenu);
+                handlers.add((onContextMenu = handler));
+            },
+            [kClear]: () => {
+                snippets.delete(snippet!);
+                handlers.delete(onContextMenu!);
+            }
+        };
     });
 
     let canGoBack = $derived($page.state.canGoBack);
@@ -135,6 +142,7 @@
                         onclick={handleBack}
                         transition:backButton
                         title={$t.actions.back}
+                        data-sveltekit-replacestate
                     >
                         <LinkBackwardIcon size={20} />
                     </a>
@@ -164,11 +172,20 @@
                 {/each}
             </div>
             <div class="navbar-end w-max md:w-full">
-                {@render actionButtons?.()}
+                {#each snippets as btn}
+                    {@render btn()}
+                {/each}
             </div>
         </div>
         <!-- svelte-ignore a11y_no_static_element_interactions -->
-        <div class="px-4 pb-12 md:pl-6 pt-6 overflow-auto" oncontextmenu={onContextMenu}>
+        <div
+            class="px-4 pb-12 md:pl-6 pt-6 overflow-auto"
+            oncontextmenu={(ev) => {
+                for (const handler of handlers) {
+                    handler(ev);
+                }
+            }}
+        >
             {@render children?.()}
         </div>
         <div

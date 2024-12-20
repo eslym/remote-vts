@@ -16,10 +16,8 @@
     import ModalEdit from '$lib/coms/ModalEdit.svelte';
     import Draggable, { dragEffects, dragState } from '$lib/coms/Draggable.svelte';
 
-    let sortTrigger = $state(false);
-
     let configs = $derived($currentModel ? hotkeyConfigs[$currentModel] : {});
-    let displayHotkeys = $derived(calculateOrder($currentModel ? $hotkeys : [], sortTrigger));
+    let displayHotkeys = $state(calculateOrder($currentModel ? $hotkeys : []));
 
     let editMode = $state(false);
     let showHidden = $state(false);
@@ -46,7 +44,7 @@
         showHidden = false;
     });
 
-    function calculateOrder(hotkeys: VTSHotkey[], _: boolean) {
+    function calculateOrder(hotkeys: VTSHotkey[]) {
         return hotkeys.sort((a, b) => {
             const aindex = configs[a.hotkeyID].index;
             const bindex = configs[b.hotkeyID].index;
@@ -150,7 +148,7 @@
                             const i = src.index;
                             src.index = cfg.index;
                             cfg.index = i;
-                            sortTrigger = !sortTrigger;
+                            displayHotkeys = calculateOrder($hotkeys);
                         }}
                     >
                         <Button
@@ -158,29 +156,28 @@
                             label={cfg.displayName || hotkey.name || hotkey.description}
                             active={hotkey.hotkeyID === $currentModel}
                             onclick={() => $client.hotkeyTrigger({ hotkeyID: hotkey.hotkeyID })}
-                            disabled={!$connected}
+                            disabled={!editMode && !$connected}
                             clickable={!editMode}
-                        >
-                            {#if (editMode && !dragState.dragging) || isDragging}
-                                <div
-                                    class="absolute -left-1 -top-1 size-10 bg-gray-6 rounded-full flex items-center justify-center"
-                                    class:opacity-0={isDragging}
-                                    use:dragHandle
-                                >
-                                    <Move02Icon size={20} />
-                                </div>
-                                <button
-                                    class="btn btn-circle btn-secondary absolute -right-1 -bottom-1"
-                                    class:opacity-0={isDragging}
-                                    onclick={() => {
-                                        currentEdit = hotkey;
-                                        editModal = true;
-                                    }}
-                                >
-                                    <PencilEdit01Icon size={20} />
-                                </button>
-                            {/if}
-                        </Button>
+                        />
+                        {#if (editMode && !dragState.dragging) || isDragging}
+                            <div
+                                class="absolute -left-1 -top-1 size-10 bg-gray-6 rounded-full flex items-center justify-center"
+                                class:opacity-0={isDragging}
+                                use:dragHandle
+                            >
+                                <Move02Icon size={20} />
+                            </div>
+                            <button
+                                class="btn btn-circle btn-secondary absolute -right-1 -bottom-1"
+                                class:opacity-0={isDragging}
+                                onclick={() => {
+                                    currentEdit = hotkey;
+                                    editModal = true;
+                                }}
+                            >
+                                <PencilEdit01Icon size={20} />
+                            </button>
+                        {/if}
                     </div>
                 {/snippet}
             </Draggable>
