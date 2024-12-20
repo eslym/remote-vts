@@ -21,7 +21,7 @@
     }
 </script>
 
-<div class="form-group mx-auto max-w-sm">
+<div class="form-group mx-auto max-w-sm min-h-full">
     <div class="form-field">
         <label for="lang" class="form-label">{$t.settings.lang}</label>
         <div class="popover w-full">
@@ -120,7 +120,12 @@
             </datalist>
         </form>
         <Cordova>
-            <a href="/settings/scan" onclick={canGoBack} class="btn btn-solid-secondary btn-block">
+            <a
+                href="/settings/scan"
+                onclick={canGoBack}
+                class="btn btn-solid-secondary btn-block"
+                data-sveltekit-replacestate
+            >
                 {$t.actions.scan}
                 <SearchVisualIcon class="size-5 ml-2" />
             </a>
@@ -146,4 +151,9 @@
             </div>
         </div>
     {/if}
+    <div class="form-field mt-auto">
+        <a href="/privacy" class="btn" onclick={canGoBack} data-sveltekit-replacestate>
+            {$t.privacy.title}
+        </a>
+    </div>
 </div>

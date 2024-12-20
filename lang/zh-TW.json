@@ -68,6 +68,10 @@
   "page": {
     "scan": "掃描端口"
   },
+  "privacy": {
+    "description": "此應用不會收集您的任何信息。",
+    "title": "隱私政策"
+  },
   "settings": {
     "endpoint": "VTS 插件端點",
     "lang": "語言",

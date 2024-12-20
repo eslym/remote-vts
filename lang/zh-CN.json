@@ -69,6 +69,10 @@
   "page": {
     "scan": "扫描端口"
   },
+  "privacy": {
+    "description": "此应用程序不会收集您的任何信息。",
+    "title": "隐私政策"
+  },
   "settings": {
     "endpoint": "VTS 插件端点",
     "lang": "语言",

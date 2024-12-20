@@ -69,6 +69,10 @@
   "page": {
     "scan": "Scan for Endpoint"
   },
+  "privacy": {
+    "description": "This app does not collect anything from you.",
+    "title": "Privacy Policy"
+  },
   "settings": {
     "endpoint": "VTS Plugin Endpoint",
     "lang": "Language",
