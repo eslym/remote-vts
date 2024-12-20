@@ -9,11 +9,44 @@
         type CustomConfig
     } from '$lib/config';
     import Button from '$lib/coms/Button.svelte';
+    import { getActionBar } from '../+layout.svelte';
+    import { Hold04Icon, Move02Icon, PencilEdit01Icon, Tick04Icon } from 'hugeicons-svelte';
+    import { t } from '$lib/lang';
+    import { waitForEmoji } from '$lib/emoji';
+    import ModalEdit from '$lib/coms/ModalEdit.svelte';
+    import Draggable, { dragEffects, dragState } from '$lib/coms/Draggable.svelte';
+
+    let sortTrigger = $state(false);
 
     let configs = $derived($currentModel ? hotkeyConfigs[$currentModel] : {});
-    let displayHotkeys = $derived(calculateOrder($currentModel ? $hotkeys : [], configs));
+    let displayHotkeys = $derived(calculateOrder($currentModel ? $hotkeys : [], sortTrigger));
 
-    function calculateOrder(hotkeys: VTSHotkey[], configs: Record<string, CustomConfig>) {
+    let editMode = $state(false);
+    let showHidden = $state(false);
+
+    let editModal = $state(false);
+    let currentEdit: VTSHotkey | undefined = $state(undefined as any);
+
+    let editing = $derived(
+        currentEdit
+            ? configs[currentEdit.hotkeyID]
+            : {
+                  displayName: '',
+                  icon: '',
+                  hidden: false,
+                  index: null
+              }
+    );
+
+    const actionBar = getActionBar();
+    actionBar.snippet = actionBtns;
+    actionBar.onContextMenu((ev) => {
+        ev.preventDefault();
+        editMode = true;
+        showHidden = false;
+    });
+
+    function calculateOrder(hotkeys: VTSHotkey[], _: boolean) {
         return hotkeys.sort((a, b) => {
             const aindex = configs[a.hotkeyID].index;
             const bindex = configs[b.hotkeyID].index;
@@ -29,21 +62,137 @@
             return a.name.localeCompare(b.name);
         });
     }
+
+    $effect(() => {
+        for (let i = 0; i < displayHotkeys.length; i++) {
+            const cfg = configs[displayHotkeys[i].hotkeyID];
+            if (cfg.index !== i) {
+                cfg.index = i;
+            }
+        }
+    });
 </script>
 
-<Connection>
-    <div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
-        {#each displayHotkeys as hotkey (hotkey.hotkeyID)}
-            {@const cfg = configs[hotkey.hotkeyID]}
-            {#if !cfg.hidden}
-                <Button
-                    icon={cfg.icon}
-                    label={cfg.displayName || hotkey.name || hotkey.description}
-                    active={hotkey.hotkeyID === $currentModel}
-                    onclick={() => $client.hotkeyTrigger({ hotkeyID: hotkey.hotkeyID })}
-                    disabled={!$connected}
-                />
-            {/if}
-        {/each}
-    </div>
-</Connection>
+{#snippet actionBtns()}
+    {#if editMode}
+        <div class="dropdown-container">
+            <div class="dropdown">
+                <button
+                    class="btn btn-solid-success btn-circle popover-trigger transition-colors size-10 opacity-60"
+                >
+                    <Tick04Icon size={20} />
+                </button>
+                <div class="dropdown-menu dropdown-menu-bottom-left">
+                    <button class="dropdown-item text-sm" onclick={() => (editMode = false)}>
+                        {$t.actions.done_edit}
+                    </button>
+                    <label
+                        tabindex="-1"
+                        class="dropdown-item text-sm flex flex-row justify-between"
+                    >
+                        {$t.hint.show_hidden}
+                        <input
+                            tabindex="-1"
+                            type="checkbox"
+                            class="switch"
+                            bind:checked={showHidden}
+                        />
+                    </label>
+                </div>
+            </div>
+        </div>
+    {/if}
+{/snippet}
+
+{#if !editMode}
+    <Connection />
+{/if}
+
+<div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
+    {#each displayHotkeys as hotkey (hotkey.hotkeyID)}
+        {@const cfg = configs[hotkey.hotkeyID]}
+        {#if cfg.hidden === showHidden}
+            <Draggable dragValue={cfg}>
+                {#snippet draggingView(state)}
+                    <div
+                        class="absolute pointer-events-none"
+                        style:left="{state.cursor.x}px"
+                        style:top="{state.cursor.y}px"
+                        style:margin-left="-{state.offset.x}px"
+                        style:margin-top="-{state.offset.y}px"
+                        style:width="{state.dimensions.width}px"
+                        style:height="{state.dimensions.height}px"
+                    >
+                        <Button
+                            icon={cfg.icon}
+                            label={cfg.displayName || hotkey.name || hotkey.description}
+                            active={hotkey.hotkeyID === $currentModel}
+                            disabled={false}
+                            clickable={false}
+                        >
+                            <div
+                                class="absolute -left-1 -top-1 size-10 bg-gray-6 rounded-full flex items-center justify-center"
+                            >
+                                <Hold04Icon size={20} />
+                            </div>
+                        </Button>
+                    </div>
+                {/snippet}
+                {#snippet children({ dragHandle, dragTarget, isDragging })}
+                    <div
+                        class="relative"
+                        class:opacity-40={isDragging}
+                        use:dragEffects
+                        use:dragTarget
+                        ondraggingover={() => {
+                            const src = dragState.dragValue as CustomConfig;
+                            if (src.index === cfg.index) return;
+                            const i = src.index;
+                            src.index = cfg.index;
+                            cfg.index = i;
+                            sortTrigger = !sortTrigger;
+                        }}
+                    >
+                        <Button
+                            icon={cfg.icon}
+                            label={cfg.displayName || hotkey.name || hotkey.description}
+                            active={hotkey.hotkeyID === $currentModel}
+                            onclick={() => $client.hotkeyTrigger({ hotkeyID: hotkey.hotkeyID })}
+                            disabled={!$connected}
+                            clickable={!editMode}
+                        >
+                            {#if (editMode && !dragState.dragging) || isDragging}
+                                <div
+                                    class="absolute -left-1 -top-1 size-10 bg-gray-6 rounded-full flex items-center justify-center"
+                                    class:opacity-0={isDragging}
+                                    use:dragHandle
+                                >
+                                    <Move02Icon size={20} />
+                                </div>
+                                <button
+                                    class="btn btn-circle btn-secondary absolute -right-1 -bottom-1"
+                                    class:opacity-0={isDragging}
+                                    onclick={() => {
+                                        currentEdit = hotkey;
+                                        editModal = true;
+                                    }}
+                                >
+                                    <PencilEdit01Icon size={20} />
+                                </button>
+                            {/if}
+                        </Button>
+                    </div>
+                {/snippet}
+            </Draggable>
+        {/if}
+    {/each}
+</div>
+
+{#await waitForEmoji() then _}
+    <ModalEdit
+        bind:shown={editModal}
+        config={editing}
+        fallbackName={editing.displayName || currentEdit?.name || currentEdit?.description}
+        fallbackIcon="❔"
+    />
+{/await}

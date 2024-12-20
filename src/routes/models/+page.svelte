@@ -18,7 +18,7 @@
     import { waitForEmoji } from '$lib/emoji';
     import Draggable, { dragEffects, dragState } from '$lib/coms/Draggable.svelte';
 
-    let sortTrigger = $state(0);
+    let sortTrigger = $state(false);
     let displayModels = $derived(calculateSortedOrders($models, sortTrigger));
 
     let buttons: Record<string, HTMLButtonElement> = $state({});
@@ -50,7 +50,7 @@
         showHidden = false;
     });
 
-    function calculateSortedOrders(models: VTSModel[], _: number) {
+    function calculateSortedOrders(models: VTSModel[], _: boolean) {
         return models.toSorted((a, b) => {
             const aindex = modelConfigs[a.modelID].index;
             const bindex = modelConfigs[b.modelID].index;
@@ -175,7 +175,7 @@
                             const i = src.index;
                             src.index = cfg.index;
                             cfg.index = i;
-                            sortTrigger++;
+                            sortTrigger = !sortTrigger;
                         }}
                     >
                         <Button
