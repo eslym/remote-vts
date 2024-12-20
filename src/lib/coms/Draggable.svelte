@@ -1,246 +1,336 @@
 <script lang="ts" module>
-    interface DropzoneConfig {
-        canDrop?: (event: DragEvent, data: any) => boolean;
-        drop: (event: DragEvent, data: any) => void;
-        enter?: (event: DragEvent, data: any) => void;
-        leave?: (event: DragEvent, data: any) => void;
-        over?: (event: DragEvent, data: any) => void;
-        dropzoneClass: string;
-        dropEffect: 'move' | 'copy' | 'link' | 'none';
+    interface ViewProps {
+        readonly dimensions: DOMRect;
+        readonly offset: { readonly x: number; readonly y: number };
+        readonly cursor: { readonly x: number; readonly y: number };
     }
 
-    interface DraggableConfig {
-        data: any;
-        drag?: (event: DragEvent) => void;
-        end?: (event: DragEvent) => void;
-        dragstart?: (event: DragEvent) => void;
-        draggingClass: string;
-        dataTransfer?: Record<string, string>;
+    let dragTarget: string | undefined = $state(undefined);
+    let dragValue: unknown = $state(undefined);
+
+    let domDragState:
+        | {
+              container: HTMLDivElement;
+              component: {};
+              cleanup?: () => void;
+          }
+        | undefined = undefined;
+
+    let cursorX = $state(0);
+    let cursorY = $state(0);
+
+    const cursorPos = {
+        get x() {
+            return cursorX;
+        },
+        get y() {
+            return cursorY;
+        }
+    };
+
+    function dragfinished() {
+        if (dragTarget === undefined) return;
+        unmount(domDragState!.component);
+        domDragState!.container.remove();
+        domDragState!.cleanup?.();
+        domDragState = undefined;
+        dragTarget = undefined;
+        dragValue = undefined;
     }
 
-    const defaultDraggableOpts = {
-        draggingClass: 'dragging'
-    };
+    on(
+        window,
+        'mousedown',
+        (ev) => {
+            cursorX = ev.clientX;
+            cursorY = ev.clientY;
+        },
+        { capture: true, passive: false }
+    );
 
-    const defaultDropzoneOpts = {
-        dropzoneClass: 'dropzone',
-        dropEffect: 'move'
-    };
-
-    const dragData = new WeakMap<HTMLElement, any>();
-
-    let draggedNode: HTMLElement | undefined = undefined;
-
-    export function dropzone(
-        node: HTMLElement,
-        options: Partial<DropzoneConfig> | string | ((event: DragEvent, data: any) => void)
-    ) {
-        let state: DropzoneConfig;
-
-        function update(
-            options: Partial<DropzoneConfig> | string | ((event: DragEvent, data: any) => void)
-        ) {
-            if (typeof options === 'function') {
-                options = {
-                    drop: options
-                } as any;
-            } else if (typeof options === 'string') {
-                options = {
-                    ...defaultDropzoneOpts,
-                    dropzoneClass: options
-                } as any;
-            } else if (typeof options !== 'object') {
-                options = {
-                    ...defaultDropzoneOpts
-                } as any;
+    on(
+        window,
+        'touchstart',
+        (ev) => {
+            const touch = ev.touches[0];
+            if (touch) {
+                cursorX = touch.clientX;
+                cursorY = touch.clientY;
             }
-            state = {
-                ...defaultDropzoneOpts,
-                ...(options as any)
-            };
+        },
+        { capture: true, passive: false }
+    );
+
+    on(
+        window,
+        'touchmove',
+        (ev) => {
+            const touch = ev.touches[0];
+            if (touch) {
+                cursorX = touch.clientX;
+                cursorY = touch.clientY;
+            }
+        },
+        { capture: true, passive: false }
+    );
+
+    on(
+        window,
+        'mousemove',
+        (ev) => {
+            cursorX = ev.clientX;
+            cursorY = ev.clientY;
+        },
+        { capture: true, passive: false }
+    );
+
+    on(window, 'mouseup', dragfinished);
+    on(window, 'touchend', dragfinished);
+
+    function createDragView(snippet: Snippet<[ViewProps]>, props: ViewProps) {
+        const container = document.createElement('div');
+        container.style.position = 'fixed';
+        container.style.zIndex = '9999999';
+        container.style.inset = '0';
+        container.style.pointerEvents = 'none';
+        document.body.appendChild(container);
+        const component = mount<{ children: Snippet<[ViewProps]>; arg: ViewProps }, {}>(
+            SnippetRenderer,
+            {
+                target: container,
+                props: {
+                    children: snippet,
+                    arg: props
+                }
+            }
+        );
+        return { container, component };
+    }
+
+    function overlaped(node: HTMLElement, event: { clientX: number; clientY: number }) {
+        const rect = node.getBoundingClientRect();
+        return (
+            event.clientX >= rect.left &&
+            event.clientX <= rect.right &&
+            event.clientY >= rect.top &&
+            event.clientY <= rect.bottom
+        );
+    }
+
+    export const dragState = {
+        get dragging() {
+            return Boolean(dragTarget);
+        },
+        get dragValue() {
+            return dragValue;
+        }
+    } as
+        | { readonly dragging: false; readonly dragValue: undefined }
+        | { readonly dragging: true; readonly dragValue: unknown };
+
+    export const dragEffects: Action<
+        HTMLElement,
+        undefined,
+        {
+            ondraggingover: (event: CustomEvent<undefined>) => void;
+            ondraggingout: (event: CustomEvent<undefined>) => void;
+            ondraggingdrop: (event: CustomEvent<undefined>) => void;
+        }
+    > = (node) => {
+        let dragOver = false;
+        let touchOver = false;
+        function mouseOver() {
+            if (dragTarget === undefined) return;
+            dragOver = true;
+            node.dispatchEvent(
+                new CustomEvent('draggingover', {
+                    detail: dragValue
+                })
+            );
+        }
+        function mouseOut() {
+            if (dragTarget === undefined) return;
+            dragOver = false;
+            node.dispatchEvent(
+                new CustomEvent('draggingout', {
+                    detail: dragValue
+                })
+            );
+        }
+        function mouseDrop() {
+            if (dragTarget === undefined) return;
+            if (dragOver) {
+                node.dispatchEvent(
+                    new CustomEvent('draggingdrop', {
+                        detail: dragValue
+                    })
+                );
+            }
+        }
+        function windowTouchMove(ev: TouchEvent) {
+            if (dragTarget === undefined) return;
+            const touch = ev.touches[0];
+            if (touch) {
+                cursorX = touch.clientX;
+                cursorY = touch.clientY;
+                const overlap = overlaped(node, touch);
+                if (overlap !== touchOver) {
+                    touchOver = overlap;
+                    if (overlap) {
+                        mouseOver();
+                    } else {
+                        mouseOut();
+                    }
+                }
+            }
         }
 
-        update(options);
-
-        function dragEnter(event: DragEvent) {
-            let data = dragData.get(draggedNode!);
-            if (state.canDrop && !state.canDrop.call(undefined, event, data)) {
-                return;
-            }
-            node.classList.add(state.dropzoneClass);
-            if (state.enter) {
-                state.enter.call(undefined, event, data);
-            }
+        function reset() {
+            dragOver = false;
+            touchOver = false;
+            mouseOut();
         }
 
-        function dragLeave(event: DragEvent) {
-            let data = dragData.get(draggedNode!);
-            node.classList.remove(state.dropzoneClass);
-            if (state.leave) {
-                state.leave.call(undefined, event, data);
+        function documentTouchEnd(ev: TouchEvent) {
+            if (dragTarget !== undefined && touchOver) {
+                const touch = ev.touches[0];
+                if (touch && overlaped(node, touch)) {
+                    mouseDrop();
+                }
             }
+            dragOver = false;
+            touchOver = false;
         }
 
-        function dragOver(event: DragEvent) {
-            let data = dragData.get(draggedNode!);
-            if (state.canDrop && !state.canDrop.call(undefined, event, data)) {
-                return;
-            }
-            event.preventDefault();
-            event.dataTransfer!.dropEffect = state.dropEffect;
-            if (state.over) {
-                state.over.call(undefined, event, data);
-            }
-        }
+        const cleanups = new Set<() => void>();
+        cleanups.add(on(node, 'mouseover', mouseOver));
+        cleanups.add(on(node, 'mouseout', mouseOut));
 
-        function drop(event: DragEvent) {
-            node.classList.remove(state.dropzoneClass);
-            let data = dragData.get(draggedNode!);
-            if (state.canDrop && !state.canDrop.call(undefined, event, data)) {
-                return;
-            }
-            event.preventDefault();
-            if (state.drop) {
-                state.drop.call(undefined, event, data);
-            }
-        }
+        cleanups.add(
+            on(window, 'mouseup', () => {
+                if (dragTarget !== undefined && dragOver) {
+                    mouseDrop();
+                }
+                dragOver = false;
+                touchOver = false;
+            })
+        );
 
-        node.addEventListener('dragenter', dragEnter);
-        node.addEventListener('dragleave', dragLeave);
-        node.addEventListener('dragover', dragOver);
-        node.addEventListener('drop', drop);
+        cleanups.add(on(document, 'touchmove', windowTouchMove));
+        cleanups.add(on(document, 'touchend', documentTouchEnd));
+        cleanups.add(on(document, 'touchcancel', documentTouchEnd));
+
+        cleanups.add(on(document, 'blur', reset));
+        cleanups.add(on(document, 'mouseout', reset));
 
         return {
-            update,
             destroy() {
-                node.removeEventListener('dragenter', dragEnter);
-                node.removeEventListener('dragleave', dragLeave);
-                node.removeEventListener('dragover', dragOver);
-                node.removeEventListener('drop', drop);
+                for (const cleanup of cleanups) {
+                    cleanup();
+                }
             }
         };
-    }
+    };
 </script>
 
 <script lang="ts">
-    import type { Snippet } from 'svelte';
+    import { mount, onDestroy, unmount, type Snippet } from 'svelte';
+    import type { Action } from 'svelte/action';
+    import SnippetRenderer from './SnippetRenderer.svelte';
+    import { on } from 'svelte/events';
 
-    let targetNode: HTMLElement | undefined = undefined;
-    let handleNode: HTMLElement | undefined = undefined;
-
-    let mouseOffset = { x: 0, y: 0 };
-
-    function dragTarget(node: HTMLElement) {
-        if (targetNode) {
-            throw new Error('Target node already set.');
-        }
-        targetNode = node;
-        if (handleNode) handleNode.draggable = true;
-        return {
-            destroy() {
-                if (handleNode) handleNode.draggable = false;
-                targetNode = undefined;
-            }
-        };
+    interface SlotProps {
+        dragHandle: Action<HTMLElement>;
+        dragTarget: Action<HTMLElement>;
+        isDragging: boolean;
     }
 
-    function dragHandle(
-        node: HTMLElement,
-        options:
-            | Partial<DraggableConfig>
-            | ((event: DragEvent) => void)
-            | number
-            | string
-            | any[]
-            | boolean
-            | symbol
-            | null
-            | undefined
-    ) {
-        if (handleNode) {
-            throw new Error('Drag handle already set.');
-        }
-        handleNode = node;
-        let state: DraggableConfig;
-        let oldDraggable = node.draggable;
-        if (targetNode) node.draggable = true;
-
-        function update(options: Partial<DraggableConfig> | any) {
-            if (typeof options === 'function') {
-                options = {
-                    dragstart: options
-                } as any;
-            } else if (typeof options !== 'object') {
-                options = {
-                    ...defaultDraggableOpts,
-                    data: options
-                };
-            }
-            state = {
-                ...defaultDraggableOpts,
-                ...options
-            };
-            dragData.set(node, state.data);
-        }
-
-        update(options);
-
-        function mouseDown(event: MouseEvent) {
-            mouseOffset = {
-                x: event.offsetX,
-                y: event.offsetY
-            };
-        }
-
-        function dragStart(event: DragEvent) {
-            if (!targetNode) return;
-            draggedNode = node;
-            targetNode.classList.add(state.draggingClass);
-            if (state.dataTransfer) {
-                for (let [type, val] of Object.entries(state.dataTransfer)) {
-                    event.dataTransfer!.setData(type, val);
-                }
-            }
-            const handleRect = node.getBoundingClientRect();
-            const targetRect = targetNode.getBoundingClientRect();
-            const offsetX = handleRect.x - targetRect.x + mouseOffset.x;
-            const offsetY = handleRect.y - targetRect.y + mouseOffset.y;
-            event.dataTransfer!.setDragImage(targetNode, offsetX, offsetY);
-            if (state.drag) {
-                state.drag.call(undefined, event);
-            }
-        }
-
-        function dragEnd(event: DragEvent) {
-            draggedNode = undefined;
-            targetNode!.classList.remove(state.draggingClass);
-            if (state.end) {
-                state.end.call(undefined, event);
-            }
-        }
-
-        node.addEventListener('mousedown', mouseDown);
-        node.addEventListener('dragstart', dragStart);
-        window.addEventListener('dragend', dragEnd);
-
-        return {
-            update,
-            destroy() {
-                handleNode = undefined;
-                draggedNode = undefined;
-                node.removeEventListener('mousedown', mouseDown);
-                node.removeEventListener('dragstart', dragStart);
-                window.removeEventListener('dragend', dragEnd);
-                node.draggable = oldDraggable;
-                if (targetNode) targetNode.classList.remove(state.draggingClass);
-            }
-        };
+    interface Props {
+        children: Snippet<[SlotProps]>;
+        draggingView: Snippet<[ViewProps]>;
+        dragValue?: unknown;
+        ondraggingstart?: (event: CustomEvent<undefined>) => void;
+        ondraggingend?: (event: CustomEvent<undefined>) => void;
     }
 
     let {
-        children
-    }: { children: Snippet<[dragTarget: typeof dragTarget, dragHandle: typeof dragHandle]> } =
-        $props();
+        children,
+        draggingView,
+        dragValue: value = undefined,
+        ondraggingstart,
+        ondraggingend
+    }: Props = $props();
+
+    const dragId = crypto.randomUUID();
+
+    let targetNode: HTMLElement | undefined = undefined;
+    let isDragging = $derived(dragTarget === dragId);
+
+    function dragStart(node: HTMLElement) {
+        if (dragTarget !== undefined) return;
+        dragTarget = dragId;
+        dragValue = value;
+        const rect = node.getBoundingClientRect();
+        const offset = {
+            x: cursorPos.x - rect.left,
+            y: cursorPos.y - rect.top
+        };
+        const el = createDragView(draggingView, {
+            dimensions: rect,
+            offset,
+            cursor: cursorPos
+        });
+        domDragState = {
+            ...el,
+            cleanup: () => {
+                dragEnd();
+            }
+        };
+        ondraggingstart?.(new CustomEvent('draggingstart'));
+    }
+
+    function dragEnd() {
+        if (dragTarget !== dragId) return;
+        dragTarget = undefined;
+        dragValue = undefined;
+        ondraggingend?.(new CustomEvent('draggingend'));
+    }
+
+    const dragHandleAction: Action<HTMLElement> = (node) => {
+        const offmousedown = on(node, 'mousedown', (ev: MouseEvent) => {
+            if (ev.button !== 0) return;
+            dragStart(targetNode ?? node);
+        });
+        const offtouchstart = on(node, 'touchstart', (ev: TouchEvent) => {
+            dragStart(targetNode ?? node);
+        });
+        return {
+            destroy() {
+                offmousedown();
+                offtouchstart();
+            }
+        };
+    };
+
+    const dragTargetAction: Action<HTMLElement> = (node) => {
+        targetNode = node;
+        return {
+            destroy() {
+                targetNode = undefined;
+            }
+        };
+    };
+
+    onDestroy(() => {
+        if (dragTarget !== dragId) return;
+        dragfinished();
+    });
 </script>
 
-{@render children(dragTarget, dragHandle)}
+{@render children({
+    dragHandle: dragHandleAction,
+    dragTarget: dragTargetAction,
+    get isDragging() {
+        return isDragging;
+    }
+})}

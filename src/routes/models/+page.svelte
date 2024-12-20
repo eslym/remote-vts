@@ -10,13 +10,13 @@
         type VTSModel
     } from '$lib/config';
     import { t } from '$lib/lang';
-    import { ArrowDown01Icon, PencilEdit01Icon, Menu09Icon } from 'hugeicons-svelte';
+    import { Tick04Icon, PencilEdit01Icon, Move02Icon, Hold04Icon } from 'hugeicons-svelte';
     import { onMount } from 'svelte';
     import { ErrorCode, VTubeStudioError } from 'vtubestudio';
     import { getActionBar } from '../+layout.svelte';
     import ModalEdit from '$lib/coms/ModalEdit.svelte';
     import { waitForEmoji } from '$lib/emoji';
-    import Draggable, { dropzone } from '$lib/coms/Draggable.svelte';
+    import Draggable, { dragEffects, dragState } from '$lib/coms/Draggable.svelte';
 
     let sortTrigger = $state(0);
     let displayModels = $derived(calculateSortedOrders($models, sortTrigger));
@@ -105,7 +105,7 @@
                 <button
                     class="btn btn-solid-success btn-circle popover-trigger transition-colors size-10 opacity-60"
                 >
-                    <ArrowDown01Icon size={20} />
+                    <Tick04Icon size={20} />
                 </button>
                 <div class="dropdown-menu dropdown-menu-bottom-left">
                     <button class="dropdown-item text-sm" onclick={() => (editMode = false)}>
@@ -137,19 +137,45 @@
     {#each displayModels as model (model.modelID)}
         {@const cfg = modelConfigs[model.modelID]}
         {#if cfg.hidden === showHidden}
-            <Draggable>
-                {#snippet children(dragTarget, dragHandle)}
+            <Draggable dragValue={cfg}>
+                {#snippet draggingView(state)}
+                    <div
+                        class="absolute pointer-events-none"
+                        style:left="{state.cursor.x}px"
+                        style:top="{state.cursor.y}px"
+                        style:margin-left="-{state.offset.x}px"
+                        style:margin-top="-{state.offset.y}px"
+                        style:width="{state.dimensions.width}px"
+                        style:height="{state.dimensions.height}px"
+                    >
+                        <Button
+                            icon={cfg.icon}
+                            label={cfg.displayName || model.modelName}
+                            active={model.modelID === $currentModel}
+                            disabled={false}
+                            clickable={false}
+                        >
+                            <div
+                                class="absolute -left-1 -top-1 size-10 bg-gray-6 rounded-full flex items-center justify-center"
+                            >
+                                <Hold04Icon size={20} />
+                            </div>
+                        </Button>
+                    </div>
+                {/snippet}
+                {#snippet children({ dragHandle, dragTarget, isDragging })}
                     <div
                         class="relative"
+                        class:opacity-40={isDragging}
+                        use:dragEffects
                         use:dragTarget
-                        use:dropzone={{
-                            enter(_, src: CustomConfig) {
-                                if (src.index === cfg.index) return;
-                                const i = src.index;
-                                src.index = cfg.index;
-                                cfg.index = i;
-                                sortTrigger++;
-                            }
+                        ondraggingover={() => {
+                            const src = dragState.dragValue as CustomConfig;
+                            if (src.index === cfg.index) return;
+                            const i = src.index;
+                            src.index = cfg.index;
+                            cfg.index = i;
+                            sortTrigger++;
                         }}
                     >
                         <Button
@@ -161,15 +187,17 @@
                             clickable={!editMode}
                             bind:element={buttons[model.modelID]}
                         />
-                        {#if editMode}
+                        {#if (editMode && !dragState.dragging) || isDragging}
                             <div
                                 class="absolute -left-1 -top-1 size-10 bg-gray-6 rounded-full flex items-center justify-center"
-                                use:dragHandle={{ data: cfg }}
+                                class:opacity-0={isDragging}
+                                use:dragHandle
                             >
-                                <Menu09Icon size={20} />
+                                <Move02Icon size={20} />
                             </div>
                             <button
                                 class="btn btn-circle btn-secondary absolute -right-1 -bottom-1"
+                                class:opacity-0={isDragging}
                                 onclick={() => {
                                     currentEdit = model;
                                     editModal = true;
