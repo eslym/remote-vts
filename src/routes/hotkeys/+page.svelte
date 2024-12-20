@@ -10,7 +10,14 @@
     } from '$lib/config';
     import Button from '$lib/coms/Button.svelte';
     import { getActionBar } from '../+layout.svelte';
-    import { Hold04Icon, Move02Icon, PencilEdit01Icon, Tick04Icon } from 'hugeicons-svelte';
+    import {
+        Hold04Icon,
+        Move02Icon,
+        PencilEdit01Icon,
+        Tick04Icon,
+        ViewIcon,
+        ViewOffSlashIcon
+    } from 'hugeicons-svelte';
     import { t } from '$lib/lang';
     import { waitForEmoji } from '$lib/emoji';
     import ModalEdit from '$lib/coms/ModalEdit.svelte';
@@ -140,6 +147,7 @@
                     <div
                         class="relative"
                         class:opacity-40={isDragging}
+                        class:scale-90={isDragging}
                         use:dragEffects
                         use:dragTarget
                         ondraggingover={() => {
@@ -148,34 +156,44 @@
                             const i = src.index;
                             src.index = cfg.index;
                             cfg.index = i;
-                            displayHotkeys = calculateOrder($hotkeys);
+                            displayHotkeys = calculateOrder($currentModel ? $hotkeys : []);
                         }}
                     >
                         <Button
                             icon={cfg.icon}
                             label={cfg.displayName || hotkey.name || hotkey.description}
                             active={hotkey.hotkeyID === $currentModel}
-                            onclick={() => $client.hotkeyTrigger({ hotkeyID: hotkey.hotkeyID })}
+                            onclick={() => {
+                                if (editMode) {
+                                    currentEdit = hotkey;
+                                    editModal = true;
+                                    return;
+                                }
+                                $client.hotkeyTrigger({ hotkeyID: hotkey.hotkeyID });
+                            }}
                             disabled={!editMode && !$connected}
                             clickable={!editMode}
                         />
                         {#if (editMode && !dragState.dragging) || isDragging}
-                            <div
-                                class="absolute -left-1 -top-1 size-10 bg-gray-6 rounded-full flex items-center justify-center"
-                                class:opacity-0={isDragging}
-                                use:dragHandle
-                            >
-                                <Move02Icon size={20} />
-                            </div>
+                            {@const HideIcon = cfg.hidden ? ViewIcon : ViewOffSlashIcon}
+                            {#if !showHidden}
+                                <div
+                                    class="absolute -left-1 -top-1 size-10 bg-gray-6 rounded-full flex items-center justify-center"
+                                    class:opacity-0={isDragging}
+                                    use:dragHandle
+                                >
+                                    <Move02Icon size={20} />
+                                </div>
+                            {/if}
                             <button
-                                class="btn btn-circle btn-secondary absolute -right-1 -bottom-1"
+                                class="btn btn-circle btn-secondary absolute -right-1 -top-1"
                                 class:opacity-0={isDragging}
                                 onclick={() => {
-                                    currentEdit = hotkey;
-                                    editModal = true;
+                                    cfg.hidden = !cfg.hidden;
+                                    displayHotkeys = calculateOrder($currentModel ? $hotkeys : []);
                                 }}
                             >
-                                <PencilEdit01Icon size={20} />
+                                <HideIcon size={20} />
                             </button>
                         {/if}
                     </div>

@@ -121,12 +121,6 @@
                     {config.icon || fallbackIcon}
                 </label>
             </div>
-            <div class="form-field">
-                <label class="form-label">
-                    {$t.hint.modal_edit.hidden}
-                    <input type="checkbox" class="switch" bind:checked={config.hidden} />
-                </label>
-            </div>
         </div>
     </div>
 </div>

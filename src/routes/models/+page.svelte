@@ -10,7 +10,13 @@
         type VTSModel
     } from '$lib/config';
     import { t } from '$lib/lang';
-    import { Tick04Icon, PencilEdit01Icon, Move02Icon, Hold04Icon } from 'hugeicons-svelte';
+    import {
+        Tick04Icon,
+        Move02Icon,
+        Hold04Icon,
+        ViewOffSlashIcon,
+        ViewIcon
+    } from 'hugeicons-svelte';
     import { onMount } from 'svelte';
     import { ErrorCode, VTubeStudioError } from 'vtubestudio';
     import { getActionBar } from '../+layout.svelte';
@@ -67,6 +73,10 @@
     }
 
     async function modelClicked(model: VTSModel) {
+        if (editMode) {
+            currentEdit = model;
+            editModal = true;
+        }
         try {
             await $client.modelLoad(model);
         } catch (e) {
@@ -84,6 +94,7 @@
     $effect(() => {
         for (let i = 0; i < displayModels.length; i++) {
             const cfg = modelConfigs[displayModels[i].modelID];
+            if (cfg.hidden) continue;
             if (cfg.index !== i) {
                 cfg.index = i;
             }
@@ -166,6 +177,7 @@
                     <div
                         class="relative"
                         class:opacity-40={isDragging}
+                        class:scale-90={isDragging}
                         use:dragEffects
                         use:dragTarget
                         ondraggingover={() => {
@@ -174,7 +186,7 @@
                             const i = src.index;
                             src.index = cfg.index;
                             cfg.index = i;
-                            displayModels = calculateSortedOrders(displayModels);
+                            displayModels = calculateSortedOrders($models);
                         }}
                     >
                         <Button
@@ -183,26 +195,29 @@
                             active={model.modelID === $currentModel}
                             onclick={modelClicked.bind(null, model)}
                             disabled={!editMode && !$connected}
-                            clickable={!editMode}
+                            clickable={!isDragging}
                             bind:element={buttons[model.modelID]}
                         />
                         {#if (editMode && !dragState.dragging) || isDragging}
-                            <div
-                                class="absolute -left-1 -top-1 size-10 bg-gray-6 rounded-full flex items-center justify-center"
-                                class:opacity-0={isDragging}
-                                use:dragHandle
-                            >
-                                <Move02Icon size={20} />
-                            </div>
+                            {@const HideIcon = cfg.hidden ? ViewIcon : ViewOffSlashIcon}
+                            {#if !showHidden}
+                                <div
+                                    class="absolute -left-1 -top-1 size-10 bg-gray-6 rounded-full flex items-center justify-center"
+                                    class:opacity-0={isDragging}
+                                    use:dragHandle
+                                >
+                                    <Move02Icon size={20} />
+                                </div>
+                            {/if}
                             <button
-                                class="btn btn-circle btn-secondary absolute -right-1 -bottom-1"
+                                class="btn btn-circle btn-secondary absolute -right-1 -top-1"
                                 class:opacity-0={isDragging}
                                 onclick={() => {
-                                    currentEdit = model;
-                                    editModal = true;
+                                    cfg.hidden = !cfg.hidden;
+                                    displayModels = calculateSortedOrders($models);
                                 }}
                             >
-                                <PencilEdit01Icon size={20} />
+                                <HideIcon size={20} />
                             </button>
                         {/if}
                     </div>

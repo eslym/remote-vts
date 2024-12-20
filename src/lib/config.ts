@@ -98,6 +98,8 @@ class CustomConfig implements Config {
 
     get index() {
         this.#indexSubscriber();
+        const hidden = this.#hidden.get();
+        if (hidden === 'true') return null;
         const val = this.#index.get();
         return val ? parseInt(val) : null;
     }
@@ -113,6 +115,9 @@ class CustomConfig implements Config {
 
     set hidden(value: boolean) {
         this.#hidden.set(value ? 'true' : null);
+        if (!value) {
+            this.index = null;
+        }
     }
 
     constructor(prefix: string, ...keys: string[]) {

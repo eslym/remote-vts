@@ -10,7 +10,7 @@
     } from '$lib/config';
     import Button from '$lib/coms/Button.svelte';
     import { getActionBar } from '../+layout.svelte';
-    import { Tick04Icon, PencilEdit01Icon, Move02Icon, Hold04Icon } from 'hugeicons-svelte';
+    import { Tick04Icon, PencilEdit01Icon, Move02Icon, Hold04Icon, ViewIcon, ViewOffSlashIcon } from 'hugeicons-svelte';
     import { t } from '$lib/lang';
     import { waitForEmoji } from '$lib/emoji';
     import ModalEdit from '$lib/coms/ModalEdit.svelte';
@@ -139,6 +139,7 @@
                     <div
                         class="relative"
                         class:opacity-40={isDragging}
+                        class:scale-90={isDragging}
                         use:dragEffects
                         use:dragTarget
                         ondraggingover={() => {
@@ -147,7 +148,7 @@
                             const i = src.index;
                             src.index = cfg.index;
                             cfg.index = i;
-                            displayExpressions = calculateOrder(displayExpressions);
+                            displayExpressions = calculateOrder($currentModel ? $expressions : []);
                         }}
                     >
                         <Button
@@ -155,6 +156,11 @@
                             label={cfg.displayName || expression.name || expression.file}
                             active={expression.active}
                             onclick={async () => {
+                                if (editMode) {
+                                    currentEdit = expression;
+                                    editModal = true;
+                                    return;
+                                }
                                 await $client.expressionActivation({
                                     expressionFile: expression.file,
                                     active: !expression.active
@@ -164,26 +170,28 @@
                                     .then((e) => ($expressions = e.expressions));
                             }}
                             disabled={!editMode && !$connected}
-                            clickable={!editMode}
+                            clickable={!isDragging}
                         />
-
                         {#if (editMode && !dragState.dragging) || isDragging}
-                            <div
-                                class="absolute -left-1 -top-1 size-10 bg-gray-6 rounded-full flex items-center justify-center"
-                                class:opacity-0={isDragging}
-                                use:dragHandle
-                            >
-                                <Move02Icon size={20} />
-                            </div>
+                            {@const HideIcon = cfg.hidden ? ViewIcon : ViewOffSlashIcon}
+                            {#if !showHidden}
+                                <div
+                                    class="absolute -left-1 -top-1 size-10 bg-gray-6 rounded-full flex items-center justify-center"
+                                    class:opacity-0={isDragging}
+                                    use:dragHandle
+                                >
+                                    <Move02Icon size={20} />
+                                </div>
+                            {/if}
                             <button
-                                class="btn btn-circle btn-secondary absolute -right-1 -bottom-1"
+                                class="btn btn-circle btn-secondary absolute -right-1 -top-1"
                                 class:opacity-0={isDragging}
                                 onclick={() => {
-                                    currentEdit = expression;
-                                    editModal = true;
+                                    cfg.hidden = !cfg.hidden;
+                                    displayExpressions = calculateOrder($currentModel ? $expressions : []);
                                 }}
                             >
-                                <PencilEdit01Icon size={20} />
+                                <HideIcon size={20} />
                             </button>
                         {/if}
                     </div>
