@@ -108,6 +108,7 @@
             id="ip"
             type="text"
             class="input input-solid input-block font-mono"
+            placeholder={$t.settings.scan.no_ip}
             bind:value={currentIp}
             disabled
         />
@@ -124,7 +125,12 @@
             disabled={scanning}
         />
     </div>
-    <button class="btn" class:btn-solid-primary={!scanning} class:btn-solid-error={scanning}>
+    <button
+        disabled={!currentIp}
+        class="btn"
+        class:btn-solid-primary={!scanning}
+        class:btn-solid-error={scanning}
+    >
         {#if scanning}
             <div class="mr-2 size-4">
                 <div

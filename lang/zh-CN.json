@@ -76,6 +76,7 @@
       "empty": "未找到端点",
       "endpoints": "可能的端点",
       "ip": "当前IP",
+      "no_ip": "无法活得IP地址",
       "port": "端口",
       "start": "开始扫描",
       "stop": "停止扫描"

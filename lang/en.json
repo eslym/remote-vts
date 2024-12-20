@@ -76,6 +76,7 @@
       "empty": "No Endpoints Found",
       "endpoints": "Possible Endpoints",
       "ip": "Current IP",
+      "no_ip": "Unable to get IP",
       "port": "Port",
       "start": "Start Scanning",
       "stop": "Stop Scanning"
