@@ -25,7 +25,8 @@ jobs:
 
       - name: Asset Links
         run: |
-          echo $ASSETLINKS_JSON > build/.well-known/assetlinks.json
+          mkdir -p build/.well-known
+          echo $ASSETLINKS_JSON | jq -c > build/.well-known/assetlinks.json
         env:
           ASSETLINKS_JSON: ${{ secrets.ASSETLINKS_JSON }}
 
