@@ -27,7 +27,7 @@
       "title": "功能不可用"
     },
     "service_worker": {
-      "installing": "安裝中"
+      "installing": "初始化中"
     },
     "settings": {
       "endpoint": "VTube Studio的websocket端點，以<code class=\"font-mono\">ws://</code>或<code class=\"font-mono\">wss://</code>開頭，更多信息請參考<a href=\"https://github.com/DenchiSoft/VTubeStudio/wiki/Plugins#how-to-use-plugins\" target=\"_blank\" class=\"link link-secondary text-sm\">VTube Studio文檔</a>。"
