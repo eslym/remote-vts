@@ -10,7 +10,13 @@
     } from '$lib/config';
     import Button from '$lib/coms/Button.svelte';
     import { getActionBar } from '../+layout.svelte';
-    import { Tick04Icon, PencilEdit01Icon, Move02Icon, Hold04Icon, ViewIcon, ViewOffSlashIcon } from 'hugeicons-svelte';
+    import {
+        Tick04Icon,
+        Move02Icon,
+        Hold04Icon,
+        ViewIcon,
+        ViewOffSlashIcon
+    } from 'hugeicons-svelte';
     import { t } from '$lib/lang';
     import { waitForEmoji } from '$lib/emoji';
     import ModalEdit from '$lib/coms/ModalEdit.svelte';
@@ -165,9 +171,11 @@
                                     expressionFile: expression.file,
                                     active: !expression.active
                                 });
-                                $client
-                                    .expressionState({ details: true })
-                                    .then((e) => ($expressions = e.expressions));
+                                const res = await $client.expressionState({ details: true });
+                                $expressions = res.expressions;
+                                displayExpressions = calculateOrder(
+                                    $currentModel ? $expressions : []
+                                );
                             }}
                             disabled={!editMode && !$connected}
                             clickable={!isDragging}
@@ -188,7 +196,9 @@
                                 class:opacity-0={isDragging}
                                 onclick={() => {
                                     cfg.hidden = !cfg.hidden;
-                                    displayExpressions = calculateOrder($currentModel ? $expressions : []);
+                                    displayExpressions = calculateOrder(
+                                        $currentModel ? $expressions : []
+                                    );
                                 }}
                             >
                                 <HideIcon size={20} />

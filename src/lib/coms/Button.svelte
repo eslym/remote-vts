@@ -26,7 +26,7 @@
 
 <button
     bind:this={element}
-    class="btn btn-lg flex-col gap-2.5 p-6 h-auto w-full"
+    class="btn btn-lg flex-col gap-2.5 p-6 w-full h-full"
     class:btn-primary={active}
     class:pointer-events-none={!clickable}
     {disabled}
