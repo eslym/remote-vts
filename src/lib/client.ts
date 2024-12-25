@@ -45,10 +45,9 @@ function onConnect() {
         _client.expressionState({ details: true }).then((e) => expressions.set(e.expressions));
     }, {});
     _client.events.hotkeyTriggered.subscribe((ev) => {
-        if (ev.hotkeyAction !== HotkeyType.ToggleExpression) {
-            return;
+        if (ev.hotkeyAction == HotkeyType.ToggleExpression || ev.hotkeyAction == HotkeyType.RemoveAllExpressions) {
+            _client.expressionState({ details: true }).then((e) => expressions.set(e.expressions));
         }
-        _client.expressionState({ details: true }).then((e) => expressions.set(e.expressions));
     }, {});
 }
 
