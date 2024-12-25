@@ -7,6 +7,7 @@
     import { theme } from '$lib/theme';
     import { canGoBack } from '$lib/state';
     import Cordova from '$lib/coms/Cordova.svelte';
+    import { PUBLIC_REPO_URL } from '$env/static/public';
 
     let ep = $state($endpoint);
 
@@ -154,6 +155,11 @@
     <div class="form-field mt-auto">
         <a href="/privacy" class="btn" onclick={canGoBack} data-sveltekit-replacestate>
             {$t.privacy.title}
+        </a>
+    </div>
+    <div class="form-field">
+        <a href={PUBLIC_REPO_URL} target="_blank" class="btn" onclick={canGoBack}>
+            {$t.settings.source_code}
         </a>
     </div>
 </div>
