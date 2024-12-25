@@ -76,6 +76,7 @@
         if (editMode) {
             currentEdit = model;
             editModal = true;
+            return;
         }
         try {
             await $client.modelLoad(model);
