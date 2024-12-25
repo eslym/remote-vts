@@ -1,7 +1,7 @@
 import { currentModel, endpoint, expressions, hotkeys, models } from '$lib/config';
 import { cordovaAvailable, CordovaWebsocket } from '$lib/cordova';
 import { derived, writable } from 'svelte/store';
-import { ApiClient } from 'vtubestudio';
+import { ApiClient, HotkeyType } from 'vtubestudio';
 
 import type { IApiClientOptions } from 'vtubestudio';
 
@@ -44,7 +44,12 @@ function onConnect() {
         });
         _client.expressionState({ details: true }).then((e) => expressions.set(e.expressions));
     }, {});
-    _client.events.hotkeyTriggered.subscribe((ev) => {}, {});
+    _client.events.hotkeyTriggered.subscribe((ev) => {
+        if (ev.hotkeyAction !== HotkeyType.ToggleExpression) {
+            return;
+        }
+        _client.expressionState({ details: true }).then((e) => expressions.set(e.expressions));
+    }, {});
 }
 
 function onDisconnect() {
@@ -54,7 +59,7 @@ function onDisconnect() {
 let WebsocketClass: new (url: string) => IWebSocketLike = WebSocket;
 
 function getPluginName() {
-    if(import.meta.env.DEV) {
+    if (import.meta.env.DEV) {
         return '_cordovaNative' in window ? 'Remote VTS (DEV)' : 'Remote VTS (Web DEV)';
     }
     return '_cordovaNative' in window ? 'Remote VTS' : 'Remote VTS (Web)';
