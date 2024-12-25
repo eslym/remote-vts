@@ -172,7 +172,6 @@
                                 $client.hotkeyTrigger({ hotkeyID: hotkey.hotkeyID });
                             }}
                             disabled={!editMode && !$connected}
-                            clickable={!editMode}
                         />
                         {#if (editMode && !dragState.dragging) || isDragging}
                             {@const HideIcon = cfg.hidden ? ViewIcon : ViewOffSlashIcon}
