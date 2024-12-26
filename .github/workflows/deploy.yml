@@ -23,7 +23,7 @@ jobs:
         run: |
           bun run build
         env:
-          PUBLIC_REPO_URL: ${{ github.repositoryUrl }}
+          PUBLIC_REPO_URL: https://github.com/${{ github.repository }}
 
       - name: Asset Links
         run: |
