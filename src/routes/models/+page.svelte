@@ -1,4 +1,5 @@
 <script lang="ts">
+    import '$lib/polyfill';
     import { client, connected } from '$lib/client';
     import Button from '$lib/coms/Button.svelte';
     import Connection from '$lib/coms/Connected.svelte';
