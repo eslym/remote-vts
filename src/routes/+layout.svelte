@@ -179,7 +179,7 @@
         </div>
         <!-- svelte-ignore a11y_no_static_element_interactions -->
         <div
-            class="px-4 pb-12 md:pl-6 pt-6 overflow-auto"
+            class="px-4 py-6 md:pl-6 overflow-auto"
             oncontextmenu={(ev) => {
                 for (const handler of handlers) {
                     handler(ev);

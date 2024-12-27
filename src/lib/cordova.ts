@@ -31,10 +31,23 @@ if ('_cordovaNative' in window && typeof _cordovaNative.exec === 'function') {
                 const href = ev.target.getAttribute('href');
                 if (!href) return;
                 ev.preventDefault();
-                const features =
-                    ev.target.getAttribute('data-inappbrowser-features') ||
-                    'zoom=no,location=yes,' + inAppBrowserDefaultColor;
-                cordova.InAppBrowser.open(href, '_blank', features);
+                function fallback() {
+                    const features =
+                        ev.target.getAttribute('data-inappbrowser-features') ||
+                        'zoom=no,location=yes,' + inAppBrowserDefaultColor;
+                    cordova.InAppBrowser.open(href!, '_blank', features);
+                }
+                if (!cordova.plugins?.browsertab) {
+                    fallback();
+                    return;
+                }
+                cordova.plugins.browsertab.isAvailable((res) => {
+                    if (res) {
+                        cordova.plugins.browsertab.openUrl(href!, () => {}, fallback);
+                    } else {
+                        fallback();
+                    }
+                }, fallback);
             }) as any);
         },
         { once: true }

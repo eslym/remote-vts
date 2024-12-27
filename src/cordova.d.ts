@@ -84,6 +84,20 @@ declare namespace cordova {
         }
     }
 
+    export namespace plugins {
+        export namespace browsertab {
+            export function openUrl(
+                url: string,
+                success?: () => void,
+                error?: (err: any) => void
+            ): void;
+            export function isAvailable(
+                success: (result: boolean) => void,
+                error?: (err: any) => void
+            ): void;
+        }
+    }
+
     export function exec(
         success: (result: any) => void,
         failure: (error: any) => void,
