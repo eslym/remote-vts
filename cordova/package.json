@@ -24,7 +24,8 @@
         "ANDROIDBLACKLISTSECURESOCKETPROTOCOLS": "SSLv3,TLSv1"
       },
       "cordova-plugin-statusbar": {},
-      "cordova-plugin-navigationbar-color": {}
+      "cordova-plugin-navigationbar-color": {},
+      "cordova-plugin-browsertab": {}
     }
   },
   "devDependencies": {
@@ -32,6 +33,8 @@
     "cordova-android": "^13.0.0",
     "cordova-plugin-advanced-http": "^3.3.1",
     "cordova-plugin-advanced-websocket": "^1.1.8",
+    "cordova-plugin-browsertab": "^0.2.0",
+    "cordova-plugin-compat": "^1.2.0",
     "cordova-plugin-file": "^8.1.3",
     "cordova-plugin-inappbrowser": "^6.0.0",
     "cordova-plugin-navigationbar-color": "^0.1.0",

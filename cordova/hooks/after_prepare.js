@@ -57,12 +57,33 @@ async function update_config(root) {
     await (0, promises_1.writeFile)(config_xml, new_config_content);
     console.log('Updated config.xml');
 }
+async function set_gradle_properties(root) {
+    const gradle_properties = (0, path_1.join)(root, 'platforms/android/gradle.properties');
+    let gradle_properties_content = await (0, promises_1.readFile)(gradle_properties, 'utf8');
+    const pattern = /^cdvMinSdkVersion=.+$/m;
+    if (!pattern.test(gradle_properties_content)) {
+        gradle_properties_content += '\ncdvMinSdkVersion=31\n';
+    }
+    else {
+        gradle_properties_content = gradle_properties_content.replace(pattern, 'cdvMinSdkVersion=31');
+    }
+    await (0, promises_1.writeFile)(gradle_properties, gradle_properties_content);
+    console.log('Updated gradle.properties');
+}
+async function patch_browsertab(root) {
+    const java_file = (0, path_1.join)(root, 'platforms/android/app/src/main/java/com/google/cordova/plugin/BrowserTab.java');
+    const content = await (0, promises_1.readFile)(java_file, 'utf8');
+    await (0, promises_1.writeFile)(java_file, content.replace('import android.support.customtabs.CustomTabsIntent;', 'import androidx.browser.customtabs.CustomTabsIntent;'));
+    console.log('Patched BrowserTab.java');
+}
 module.exports = async function ({ opts }) {
     const d = path_1.join.bind(null, opts.projectRoot);
     try {
         await remove_splashscreen_theme(opts.projectRoot);
         await remove_cordova_icon(opts.projectRoot);
         await update_config(opts.projectRoot);
+        await set_gradle_properties(opts.projectRoot);
+        await patch_browsertab(opts.projectRoot);
     }
     catch (error) {
         console.error(error);
