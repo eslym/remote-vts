@@ -24,6 +24,7 @@ if ('_cordovaNative' in window && typeof _cordovaNative.exec === 'function') {
             document.addEventListener('click', ((
                 ev: MouseEvent & { target: HTMLAnchorElement }
             ) => {
+                if (ev.defaultPrevented) return;
                 if (ev.button !== 0) return;
                 if (ev.target.tagName !== 'A') return;
                 const target = ev.target.getAttribute('target');
@@ -31,7 +32,8 @@ if ('_cordovaNative' in window && typeof _cordovaNative.exec === 'function') {
                 const href = ev.target.getAttribute('href');
                 if (!href) return;
                 ev.preventDefault();
-                function fallback() {
+                function fallback(err?: unknown) {
+                    if (err) console.error(err);
                     const features =
                         ev.target.getAttribute('data-inappbrowser-features') ||
                         'zoom=no,location=yes,' + inAppBrowserDefaultColor;
@@ -45,6 +47,7 @@ if ('_cordovaNative' in window && typeof _cordovaNative.exec === 'function') {
                     if (res) {
                         cordova.plugins.browsertab.openUrl(href!, () => {}, fallback);
                     } else {
+                        console.warn('BrowserTab is not available');
                         fallback();
                     }
                 }, fallback);
