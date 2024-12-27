@@ -1,7 +1,7 @@
 {
   "name": "io.cordova.hellocordova",
   "displayName": "HelloCordova",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A sample Apache Cordova application that responds to the deviceready event.",
   "main": "index.js",
   "scripts": {
@@ -25,7 +25,8 @@
       },
       "cordova-plugin-statusbar": {},
       "cordova-plugin-navigationbar-color": {},
-      "cordova-plugin-browsertab": {}
+      "cordova-plugin-browsertab": {},
+      "cordova-plugin-app-version": {}
     }
   },
   "devDependencies": {
@@ -33,6 +34,7 @@
     "cordova-android": "^13.0.0",
     "cordova-plugin-advanced-http": "^3.3.1",
     "cordova-plugin-advanced-websocket": "^1.1.8",
+    "cordova-plugin-app-version": "^0.1.14",
     "cordova-plugin-browsertab": "^0.2.0",
     "cordova-plugin-compat": "^1.2.0",
     "cordova-plugin-file": "^8.1.3",
