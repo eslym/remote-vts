@@ -49,6 +49,11 @@
       "title": "从HTTPS连接WS"
     }
   },
+  "how": {
+    "connect": "如何链接VTube Studio",
+    "customize": "如何自定义",
+    "title": "如何使用"
+  },
   "icon": "🇨🇳",
   "lang": "简体中文",
   "menu": {

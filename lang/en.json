@@ -49,6 +49,11 @@
       "title": "Connect WS from HTTPS"
     }
   },
+  "how": {
+    "connect": "How to connect VTube Studio",
+    "customize": "How to customize",
+    "title": "How to Use"
+  },
   "icon": "🇺🇸",
   "lang": "English",
   "menu": {

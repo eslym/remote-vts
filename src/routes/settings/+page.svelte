@@ -172,7 +172,13 @@
             </div>
         </div>
     {/if}
+    <div class="h-6"></div>
     <div class="form-field mt-auto">
+        <a href="/how" class="btn" onclick={canGoBack} data-sveltekit-replacestate>
+            {$t.how.title}
+        </a>
+    </div>
+    <div class="form-field">
         <a href="/privacy" class="btn" onclick={canGoBack} data-sveltekit-replacestate>
             {$t.privacy.title}
         </a>

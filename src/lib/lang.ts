@@ -11,7 +11,8 @@ const langs = {
 
 const fallbacks: Record<string, string> = {
     en: 'en',
-    zh: 'zh-CN'
+    zh: 'zh-CN',
+    'zh-HK': 'zh-TW'
 };
 
 function langProxy(lang: string, src: Record<string, any>) {
@@ -37,7 +38,13 @@ function langProxy(lang: string, src: Record<string, any>) {
 }
 
 function determineLang(lang: string): keyof typeof langs {
-    return (lang in langs ? lang : fallbacks[lang.split('-')[0]] || 'en') as any;
+    if (lang in langs) {
+        return lang as any;
+    }
+    if (lang in fallbacks) {
+        return fallbacks[lang] as any;
+    }
+    return (fallbacks[lang.split('-')[0]] as any) || 'en';
 }
 
 const _lang = writable(import.meta.env.SSR ? null : localStorage.getItem('lang'));
