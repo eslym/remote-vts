@@ -1,6 +1,7 @@
 import { currentModel, endpoint, expressions, hotkeys, models } from '$lib/config';
 import { cordovaAvailable, CordovaWebsocket } from '$lib/cordova';
-import { derived, writable } from 'svelte/store';
+import { sleep } from '$lib/utils';
+import { derived, get, writable } from 'svelte/store';
 import { ApiClient, HotkeyType } from 'vtubestudio';
 
 import type { IApiClientOptions } from 'vtubestudio';
@@ -14,6 +15,7 @@ let _client: ApiClient;
 let _url: string = '';
 
 export const connected = writable(false);
+export const authenticated = writable(false);
 export const wsFromHttps = writable(false);
 
 function onConnect() {
@@ -45,14 +47,32 @@ function onConnect() {
         _client.expressionState({ details: true }).then((e) => expressions.set(e.expressions));
     }, {});
     _client.events.hotkeyTriggered.subscribe((ev) => {
-        if (ev.hotkeyAction == HotkeyType.ToggleExpression || ev.hotkeyAction == HotkeyType.RemoveAllExpressions) {
+        if (
+            ev.hotkeyAction == HotkeyType.ToggleExpression ||
+            ev.hotkeyAction == HotkeyType.RemoveAllExpressions
+        ) {
             _client.expressionState({ details: true }).then((e) => expressions.set(e.expressions));
         }
     }, {});
+    (async () => {
+        while (get(connected)) {
+            try {
+                const ping = await _client.apiState();
+                if (ping.currentSessionAuthenticated) {
+                    authenticated.set(true);
+                }
+                await sleep(2500);
+            } catch (_) {
+                reconnect(get(endpoint));
+                break;
+            }
+        }
+    })();
 }
 
 function onDisconnect() {
     connected.set(false);
+    authenticated.set(false);
 }
 
 let WebsocketClass: new (url: string) => IWebSocketLike = WebSocket;
@@ -66,18 +86,17 @@ function getPluginName() {
 
 const pluginName = getPluginName();
 
-export const client = derived(endpoint, ($endpoint) => {
-    if (import.meta.env.SSR) return undefined as any as ApiClient;
-    if (_url === $endpoint) return _client!;
+function reconnect(endpoint: string) {
     if (_client) {
         _client.off('connect', onConnect);
         _client.off('disconnect', onDisconnect);
         _client.disconnect();
     }
     connected.set(false);
+    authenticated.set(false);
     wsFromHttps.set(false);
     try {
-        _url = $endpoint;
+        _url = endpoint;
         _client = new ApiClient({
             pluginName,
             url: _url,
@@ -99,6 +118,12 @@ export const client = derived(endpoint, ($endpoint) => {
         wsFromHttps.set(true);
         console.error(e);
     }
+}
+
+export const client = derived(endpoint, ($endpoint) => {
+    if (import.meta.env.SSR) return undefined as any as ApiClient;
+    if (_client && _url === $endpoint) return _client!;
+    reconnect($endpoint);
     return _client;
 });
 
