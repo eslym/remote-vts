@@ -18,6 +18,8 @@ export const connected = writable(false);
 export const authenticated = writable(false);
 export const wsFromHttps = writable(false);
 
+let shouldPing = false;
+
 function onConnect() {
     connected.set(true);
     _client.availableModels().then((res) => {
@@ -55,7 +57,7 @@ function onConnect() {
         }
     }, {});
     (async () => {
-        while (get(connected)) {
+        while (shouldPing) {
             try {
                 const ping = await _client.apiState();
                 if (ping.currentSessionAuthenticated) {
@@ -73,6 +75,7 @@ function onConnect() {
 function onDisconnect() {
     connected.set(false);
     authenticated.set(false);
+    shouldPing = false;
 }
 
 let WebsocketClass: new (url: string) => IWebSocketLike = WebSocket;
@@ -114,6 +117,7 @@ function reconnect(endpoint: string) {
         });
         _client.on('connect', onConnect);
         _client.on('disconnect', onDisconnect);
+        shouldPing = true;
     } catch (e) {
         wsFromHttps.set(true);
         console.error(e);
