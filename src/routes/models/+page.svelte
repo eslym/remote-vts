@@ -1,8 +1,8 @@
 <script lang="ts">
     import '$lib/polyfill';
-    import { client, connected } from '$lib/client';
+    import { client, connectionState } from '$lib/client';
     import Button from '$lib/coms/Button.svelte';
-    import Connection from '$lib/coms/Connected.svelte';
+    import ConnectionState from '$lib/coms/ConnectionState.svelte';
     import {
         currentModel,
         modelConfigs,
@@ -142,7 +142,7 @@
 {/snippet}
 
 {#if !editMode}
-    <Connection />
+    <ConnectionState />
 {/if}
 
 <div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
@@ -196,7 +196,7 @@
                             label={cfg.displayName || model.modelName}
                             active={model.modelID === $currentModel}
                             onclick={modelClicked.bind(null, model)}
-                            disabled={!editMode && !$connected}
+                            disabled={!editMode && !connectionState.authenticated}
                             clickable={!isDragging}
                             bind:element={buttons[model.modelID]}
                         />

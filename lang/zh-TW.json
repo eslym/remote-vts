@@ -33,13 +33,6 @@
       "endpoint": "VTube Studio的websocket端點，以<code class=\"font-mono\">ws://</code>或<code class=\"font-mono\">wss://</code>開頭，更多信息請參考<a href=\"https://github.com/DenchiSoft/VTubeStudio/wiki/Plugins#how-to-use-plugins\" target=\"_blank\" class=\"link link-secondary text-sm\">VTube Studio文檔</a>。"
     },
     "show_hidden": "顯示隱藏",
-    "status": {
-      "instruction": "無法連接到VTube Studio，請檢查設置和連接狀態。",
-      "warning": {
-        "description": "請檢查<a href=\"/settings\" class=\"hover:underline\">設置</a>和您的連接狀態。",
-        "title": "未連接到Vtube Studio"
-      }
-    },
     "update": {
       "description": "此應用有新版本，請刷新以生效。",
       "title": "更新"
@@ -69,6 +62,18 @@
     "scan": "掃描端口"
   },
   "privacy": {
+    "data_collection": {
+      "description": "此應用程式不會從您收集任何信息。",
+      "title": "數據收集"
+    },
+    "data_sharing": {
+      "description": "此應用程式不會與任何人分享您的任何信息。",
+      "title": "數據分享"
+    },
+    "data_usage": {
+      "description": "此應用程式不會使用您的任何信息。",
+      "title": "數據使用"
+    },
     "title": "隱私政策"
   },
   "settings": {
@@ -90,5 +95,15 @@
     },
     "source_code": "源代碼",
     "theme": "界面模式"
+  },
+  "status": {
+    "disconnected": {
+      "description": "請檢查您的設定和網路連線。",
+      "title": "無法鏈接VTube Studio"
+    },
+    "unauthenticated": {
+      "description": "請在VTube Studio上允許Remote VTS插件。",
+      "title": "插件未被允許"
+    }
   }
 }

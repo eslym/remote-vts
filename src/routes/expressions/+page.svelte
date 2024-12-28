@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { client, connected } from '$lib/client';
-    import Connection from '$lib/coms/Connected.svelte';
+    import { client, connectionState } from '$lib/client';
+    import ConnectionState from '$lib/coms/ConnectionState.svelte';
     import {
         currentModel,
         expressions,
@@ -108,7 +108,7 @@
 {/snippet}
 
 {#if !editMode}
-    <Connection />
+    <ConnectionState />
 {/if}
 
 <div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
@@ -177,7 +177,7 @@
                                     $currentModel ? $expressions : []
                                 );
                             }}
-                            disabled={!editMode && !$connected}
+                            disabled={!editMode && !connectionState.authenticated}
                             clickable={!isDragging}
                         />
                         {#if (editMode && !dragState.dragging) || isDragging}

@@ -34,13 +34,6 @@
       "endpoint": "The websocket endpoint for VTube Studio, starting with <code class=\"font-mono\">ws://</code> or <code class=\"font-mono\">wss://</code>, for more information please refer to <a href=\"https://github.com/DenchiSoft/VTubeStudio/wiki/Plugins#how-to-use-plugins\" target=\"_blank\" class=\"link link-secondary text-sm\">VTube Studio document</a>."
     },
     "show_hidden": "Show Hidden",
-    "status": {
-      "instruction": "Unable to connect to VTube Studio, please check the settings and connection status.",
-      "warning": {
-        "description": "Please check the <a href=\"/settings\" class=\"hover:underline\">settings</a> and your connection status.",
-        "title": "Not connecting to Vtube Studio"
-      }
-    },
     "update": {
       "description": "A new version of the app is available, please reload to take effect.",
       "title": "Update Available"
@@ -70,6 +63,18 @@
     "scan": "Scan for Endpoint"
   },
   "privacy": {
+    "data_collection": {
+      "description": "This app does not collect anything from you.",
+      "title": "Data Collection"
+    },
+    "data_sharing": {
+      "description": "This app does not share anything from you.",
+      "title": "Data Sharing"
+    },
+    "data_usage": {
+      "description": "This app does not use anything from you.",
+      "title": "Data Usage"
+    },
     "title": "Privacy Policy"
   },
   "settings": {
@@ -91,5 +96,15 @@
     },
     "source_code": "Source Code",
     "theme": "Theme"
+  },
+  "status": {
+    "disconnected": {
+      "description": "Please check your settings and the network connectivity.",
+      "title": "Unable to connect VTube Studio"
+    },
+    "unauthenticated": {
+      "description": "Please allow the Remote VTS Plugin on your VTube Studio",
+      "title": "Plugin not Authenticated"
+    }
   }
 }

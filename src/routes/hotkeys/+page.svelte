@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { client, connected } from '$lib/client';
-    import Connection from '$lib/coms/Connected.svelte';
+    import { client, connectionState } from '$lib/client';
+    import ConnectionState from '$lib/coms/ConnectionState.svelte';
     import {
         currentModel,
         hotkeys,
@@ -110,7 +110,7 @@
 {/snippet}
 
 {#if !editMode}
-    <Connection />
+    <ConnectionState />
 {/if}
 
 <div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
@@ -171,7 +171,7 @@
                                 }
                                 $client.hotkeyTrigger({ hotkeyID: hotkey.hotkeyID });
                             }}
-                            disabled={!editMode && !$connected}
+                            disabled={!editMode && !connectionState.authenticated}
                         />
                         {#if (editMode && !dragState.dragging) || isDragging}
                             {@const HideIcon = cfg.hidden ? ViewIcon : ViewOffSlashIcon}

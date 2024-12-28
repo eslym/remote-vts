@@ -3,11 +3,11 @@
     import { Alert01Icon, FloppyDiskIcon, SearchVisualIcon } from 'hugeicons-svelte';
     import { endpoint, history } from '$lib/config';
     import { lang, t, languages } from '$lib/lang';
-    import { wsFromHttps } from '$lib/client';
     import { theme } from '$lib/theme';
     import { canGoBack } from '$lib/state';
     import Cordova from '$lib/coms/Cordova.svelte';
     import { PUBLIC_REPO_URL } from '$env/static/public';
+    import { connectionState } from '$lib/client';
 
     let ep = $state($endpoint);
 
@@ -133,7 +133,7 @@
         </Cordova>
         <p class="text-sm text-content2">{@html $t.hint.settings.endpoint}</p>
     </div>
-    {#if $wsFromHttps}
+    {#if connectionState.wsFromHttps}
         <div class="alert alert-warning items-start" data-sveltekit-replacestate>
             <Alert01Icon size={35} class="text-warning min-w-max mt-2" />
             <div class="flex flex-col">
@@ -151,6 +151,26 @@
                 </ul>
             </div>
         </div>
+    {:else if !connectionState.connected}
+        <div class="alert alert-warning" data-sveltekit-replacestate>
+            <Alert01Icon size={35} class="text-warning min-w-max" />
+            <div class="flex flex-col">
+                <span>{$t.status.disconnected.title}</span>
+                <span class="text-content2 text-sm text-justify">
+                    {@html $t.status.disconnected.description}
+                </span>
+            </div>
+        </div>
+    {:else if !connectionState.authenticated}
+        <div class="alert alert-warning" data-sveltekit-replacestate>
+            <Alert01Icon size={35} class="text-warning min-w-max" />
+            <div class="flex flex-col">
+                <span>{$t.status.unauthenticated.title}</span>
+                <span class="text-content2 text-sm text-justify">
+                    {@html $t.status.unauthenticated.description}
+                </span>
+            </div>
+        </div>
     {/if}
     <div class="form-field mt-auto">
         <a href="/privacy" class="btn" onclick={canGoBack} data-sveltekit-replacestate>
@@ -158,7 +178,7 @@
         </a>
     </div>
     <div class="form-field">
-        <a href={PUBLIC_REPO_URL} target="_blank" class="btn" onclick={canGoBack}>
+        <a href={PUBLIC_REPO_URL} target="_blank" class="btn">
             {$t.settings.source_code}
         </a>
     </div>

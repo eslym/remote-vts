@@ -1,6 +1,7 @@
+import '$lib/polyfill';
 import { currentModel, endpoint, expressions, hotkeys, models } from '$lib/config';
 import { cordovaAvailable, CordovaWebsocket } from '$lib/cordova';
-import { sleep } from '$lib/utils';
+import { sleep, wrapReactive } from '$lib/utils';
 import { derived, get, writable } from 'svelte/store';
 import { ApiClient, HotkeyType } from 'vtubestudio';
 
@@ -14,14 +15,23 @@ type IWebSocketLike = ReturnType<Exclude<IApiClientOptions['webSocketFactory'], 
 let _client: ApiClient;
 let _url: string = '';
 
-export const connected = writable(false);
-export const authenticated = writable(false);
-export const wsFromHttps = writable(false);
+export const connectionState: {
+    connected: boolean;
+    authenticated: boolean;
+    wsFromHttps: boolean;
+} = Object.defineProperties(
+    {},
+    {
+        connected: wrapReactive(false),
+        authenticated: wrapReactive(false),
+        wsFromHttps: wrapReactive(false)
+    }
+) as any;
 
 let shouldPing = false;
 
 function onConnect() {
-    connected.set(true);
+    connectionState.connected = true;
     _client.availableModels().then((res) => {
         models.set(res.availableModels);
         for (const model of res.availableModels) {
@@ -61,7 +71,7 @@ function onConnect() {
             try {
                 const ping = await _client.apiState();
                 if (ping.currentSessionAuthenticated) {
-                    authenticated.set(true);
+                    connectionState.authenticated = true;
                 }
                 await sleep(2500);
             } catch (_) {
@@ -73,8 +83,8 @@ function onConnect() {
 }
 
 function onDisconnect() {
-    connected.set(false);
-    authenticated.set(false);
+    connectionState.connected = false;
+    connectionState.authenticated = false;
     shouldPing = false;
 }
 
@@ -95,9 +105,9 @@ function reconnect(endpoint: string) {
         _client.off('disconnect', onDisconnect);
         _client.disconnect();
     }
-    connected.set(false);
-    authenticated.set(false);
-    wsFromHttps.set(false);
+    connectionState.connected = false;
+    connectionState.authenticated = false;
+    connectionState.wsFromHttps = false;
     try {
         _url = endpoint;
         _client = new ApiClient({
@@ -112,14 +122,18 @@ function reconnect(endpoint: string) {
                 localStorage.setItem('vts-token', token);
             },
             webSocketFactory(url) {
-                return new WebsocketClass(url);
+                const socket = new WebsocketClass(url);
+                socket.addEventListener('open', () => {
+                    connectionState.connected = true;
+                });
+                return socket;
             }
         });
         _client.on('connect', onConnect);
         _client.on('disconnect', onDisconnect);
         shouldPing = true;
     } catch (e) {
-        wsFromHttps.set(true);
+        connectionState.wsFromHttps = true;
         console.error(e);
     }
 }
