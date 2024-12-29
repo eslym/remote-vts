@@ -50,8 +50,24 @@
     }
   },
   "how": {
-    "connect": "How to connect VTube Studio",
-    "customize": "How to customize",
+    "connect": {
+      "authenticate": "Click allow plugin in VTube Studio on your pc.",
+      "endpoint": {
+        "desciption": "Enter the VTube Studio endpoint to connect.",
+        "manual": "${ bold(\"Find endpoint manually:\") } the endpoint address is usually ${ code(\"ws://{YOUR_PC_IP}:8001\") }, ${ local_ip(\"learn how to find your pc ip\") }.",
+        "scan": "${ bold(\"Use built-in scanner:\") } click ${ scan_button() } and search for endpoint automatically.",
+        "wss": "${ bold(\"Precaution:\") } web version of the app will not able to connect VTube Studio via ${ code(\"ws://\") } protocol."
+      },
+      "network": "Ensure both of your devices are connecting to the same network, ex: connect to same WiFi.",
+      "title": "How to connect VTube Studio"
+    },
+    "customize": {
+      "done": "Tap ${ ok_button() } to exit edit mode or show hidden items.",
+      "drag": "Hold ${ drag_button() } to drag.",
+      "edit_mode": "Long press to enter edit mode.",
+      "hide": "Tap ${ hide_button() } to hide an item.",
+      "title": "How to customize"
+    },
     "title": "How to Use"
   },
   "icon": "🇺🇸",

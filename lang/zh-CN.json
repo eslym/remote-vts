@@ -50,8 +50,24 @@
     }
   },
   "how": {
-    "connect": "如何链接VTube Studio",
-    "customize": "如何自定义",
+    "connect": {
+      "authenticate": "在您电脑上的 VTube Studio 中的点击允许插件。",
+      "endpoint": {
+        "desciption": "输入 VTube Studio 端点进行连接。",
+        "manual": "${ bold(\"手动查找端点：\") } 端点地址通常是${ code(\"ws://{您的电脑IP}:8001\") }, ${ local_ip(\"了解如何查找您的电脑 ip\") }。",
+        "scan": "${ bold(\"使用内置扫描仪：\") } 点击 ${ scan_button() } 并自动搜索端点。",
+        "wss": "${ bold(\"注意事项：\") } 网页版本将无法通过 ${ code(\"ws://\") } 协议连接 VTube Studio。"
+      },
+      "network": "确保您的两个设备都连接到同一个网络，例如：连接到同一个 WiFi。",
+      "title": "如何链接VTube Studio"
+    },
+    "customize": {
+      "done": "点击${ ok_button() }退出编辑模式或显示隐藏项目。",
+      "drag": "按住 ${ drag_button() } 进行拖动。",
+      "edit_mode": "长按进入编辑模式。",
+      "hide": "点击 ${ hide_button() } 即可隐藏项目。",
+      "title": "如何自定义"
+    },
     "title": "如何使用"
   },
   "icon": "🇨🇳",
