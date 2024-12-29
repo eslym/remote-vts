@@ -31,7 +31,7 @@
       "installing": "初始化中"
     },
     "settings": {
-      "endpoint": "VTube Studio的websocket端点，以<code class=\"font-mono\">ws://</code>或<code class=\"font-mono\">wss://</code>开头，更多信息请参考<a href=\"https://github.com/DenchiSoft/VTubeStudio/wiki/Plugins#how-to-use-plugins\" target=\"_blank\" class=\"link link-secondary text-sm\">VTube Studio文档</a>。"
+      "endpoint": "VTube Studio的websocket端点，以${ code(\"ws://\") }或${ code(\"wss://\") }开头，更多信息请参考${ vts_doc(\"VTube Studio文档\") }。"
     },
     "show_hidden": "显示隐藏",
     "update": {
@@ -39,9 +39,9 @@
       "title": "更新"
     },
     "ws": {
-      "description": "此站点通过HTTPS访问，由于浏览器安全策略，<code class=\"font-mono\">ws://</code>连接将无法运作。",
+      "description": "此站点通过HTTPS访问，由于浏览器安全策略，${ code(\"ws://\") }连接将无法运作。",
       "suggestions": {
-        "http": "使用<code class=\"font-mono\">http://</code>而不是<code class=\"font-mono\">https://</code>。",
+        "http": "使用${ code(\"http://\") }而不是${ code(\"https://\") }。",
         "portForwarding": "使用端口转发，以便将连接视为本地连接。",
         "proxy": "使用安全代理服务器连接到VTube Studio。",
         "title": "您可以："

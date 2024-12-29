@@ -21,7 +21,7 @@ if (!('canParse' in URL)) {
     };
 }
 
-if(!('toSorted' in Array.prototype)) {
+if (!('toSorted' in Array.prototype)) {
     Object.defineProperty(Array.prototype, 'toSorted', {
         value: function <T>(this: T[], compareFn?: (a: T, b: T) => number) {
             return [...this].sort(compareFn);

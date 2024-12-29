@@ -1,12 +1,15 @@
-"use strict";
-const xmlbuilder2_1 = require("xmlbuilder2");
-const dotenv_1 = require("dotenv");
-const path_1 = require("path");
-const promises_1 = require("fs/promises");
-const fs_1 = require("fs");
+'use strict';
+const xmlbuilder2_1 = require('xmlbuilder2');
+const dotenv_1 = require('dotenv');
+const path_1 = require('path');
+const promises_1 = require('fs/promises');
+const fs_1 = require('fs');
 (0, dotenv_1.config)();
 async function add_splashscreen_theme(root) {
-    const theme_xml = (0, path_1.join)(root, 'platforms/android/app/src/main/res/values/themes.xml');
+    const theme_xml = (0, path_1.join)(
+        root,
+        'platforms/android/app/src/main/res/values/themes.xml'
+    );
     if (!(0, fs_1.existsSync)(theme_xml)) {
         console.log('No themes.xml found, skipping');
         return;
@@ -50,8 +53,7 @@ async function add_splashscreen_theme(root) {
 module.exports = async function ({ opts }) {
     try {
         await add_splashscreen_theme(opts.projectRoot);
-    }
-    catch (error) {
+    } catch (error) {
         console.error(error);
         process.exit(1);
     }

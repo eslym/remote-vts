@@ -4,7 +4,7 @@
 
 @layer base {
     body {
-        @apply select-none font-sans antialiased font-normal;
+        @apply select-none font-sans font-normal antialiased;
     }
     code {
         @apply font-mono;

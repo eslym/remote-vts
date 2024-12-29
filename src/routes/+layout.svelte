@@ -23,7 +23,7 @@
         UserIcon,
         LinkBackwardIcon
     } from 'hugeicons-svelte';
-    import { t } from '$lib/lang';
+    import { Locale, t } from '$lib/lang';
     import { DARK_ACTION_BAR, LIGHT_ACTION_BAR, scheme } from '$lib/theme';
     interface Props {
         children?: import('svelte').Snippet;
@@ -92,25 +92,25 @@
 
     let menu = $derived([
         {
-            title: $t.menu.hotkeys,
+            title: t.menu.hotkeys,
             href: '/hotkeys',
             Icon: DashboardSquare01Icon,
             group: 'hotkeys'
         },
         {
-            title: $t.menu.expressions,
+            title: t.menu.expressions,
             href: '/expressions',
             Icon: SmileIcon,
             group: 'expressions'
         },
         {
-            title: $t.menu.models,
+            title: t.menu.models,
             href: '/models',
             Icon: UserIcon,
             group: 'models'
         },
         {
-            title: $t.menu.settings,
+            title: t.menu.settings,
             href: '/settings',
             Icon: Settings01Icon,
             group: 'settings'
@@ -120,9 +120,9 @@
 
 <svelte:head>
     {#if title}
-        <title>{$title} | {$t.name}</title>
+        <title>{Locale.get(title)} | {t.name}</title>
     {:else}
-        <title>{$t.name}</title>
+        <title>{t.name}</title>
     {/if}
     {#if $scheme === 'light'}
         <meta name="theme-color" content={DARK_ACTION_BAR} />
@@ -141,7 +141,7 @@
                         class="btn btn-ghost btn-circle popover-trigger transition-colors size-10 opacity-60"
                         onclick={handleBack}
                         transition:backButton
-                        title={$t.actions.back}
+                        title={t.actions.back}
                         data-sveltekit-replacestate
                     >
                         <LinkBackwardIcon size={20} />
@@ -151,7 +151,7 @@
                     class="navbar-item pointer-events-none transition-[padding]"
                     class:pl-0={back}
                 >
-                    {$title ?? $t.name}
+                    {title ? Locale.get(title) : t.name}
                 </span>
             </div>
             <div
@@ -218,14 +218,14 @@
             <label for="modal-update" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
                 >✕</label
             >
-            <h2 class="text-sm font-semibold">{$t.hint.update.title}</h2>
-            <span>{$t.hint.update.description}</span>
+            <h2 class="text-sm font-semibold">{t.hint.update.title}</h2>
+            <span>{t.hint.update.description}</span>
             <div class="flex gap-3">
                 <button class="btn btn-primary btn-block" onclick={() => window.location.reload()}>
-                    {$t.actions.reload}
+                    {t.actions.reload}
                 </button>
                 <label for="modal-update" class="btn btn-block btn-ghost">
-                    {$t.actions.cancel}
+                    {t.actions.cancel}
                 </label>
             </div>
         </div>
@@ -237,6 +237,6 @@
     >
         <img src="/icon.svg" class="size-64" alt="Logo" />
         <progress class="progress progress-flat-primary progress-indeterminate"></progress>
-        <h1 class="text-xl">{$t.hint.service_worker.installing}</h1>
+        <h1 class="text-xl">{t.hint.service_worker.installing}</h1>
     </div>
 {/if}

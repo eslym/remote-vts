@@ -1,11 +1,10 @@
-import { t } from '$lib/lang';
-import { derived } from 'svelte/store';
+import type { TranslationKeys } from '$lang';
 
 export const prerender = true;
 
 export function load() {
     return {
-        title: derived(t, ($t) => $t.privacy.title),
+        title: 'privacy.title' satisfies TranslationKeys,
         back: '/settings'
     };
 }

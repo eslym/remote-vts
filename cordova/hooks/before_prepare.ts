@@ -17,7 +17,7 @@ export = async function ({ opts }: Cordova.HookContext) {
 
 async function add_splashscreen_theme(root: string) {
     const theme_xml = join(root, 'platforms/android/app/src/main/res/values/themes.xml');
-    if(!existsSync(theme_xml)) {
+    if (!existsSync(theme_xml)) {
         console.log('No themes.xml found, skipping');
         return;
     }

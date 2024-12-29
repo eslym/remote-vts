@@ -100,10 +100,10 @@
     <label class="modal-overlay" for={id}></label>
     <div class="modal-content flex flex-col gap-5 w-[90vw]">
         <label for={id} class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-        <h2 class="text-sm font-semibold">{$t.hint.modal_edit.title} {fallbackName}</h2>
+        <h2 class="text-sm font-semibold">{t.hint.modal_edit.title} {fallbackName}</h2>
         <div class="form-group">
             <div class="form-field">
-                <label class="form-label" for="{id}-name">{$t.hint.modal_edit.display_name}</label>
+                <label class="form-label" for="{id}-name">{t.hint.modal_edit.display_name}</label>
                 <input
                     type="text"
                     id="{id}-name"
@@ -113,7 +113,7 @@
                 />
             </div>
             <div class="form-field">
-                <label class="form-label" for="{id}-emoji-picker">{$t.hint.modal_edit.icon}</label>
+                <label class="form-label" for="{id}-emoji-picker">{t.hint.modal_edit.icon}</label>
                 <label
                     for="{id}-emoji-picker"
                     class="textarea text-5xl textarea-block textarea-solid font-emoji flex items-center justify-center"
@@ -174,11 +174,11 @@
             for="{id}-emoji-picker"
             class="btn btn-xs btn-circle btn-ghost absolute right-2 top-2">✕</label
         >
-        <h2 class="text-sm font-semibold">{$t.hint.modal_edit.pick_icon}</h2>
+        <h2 class="text-sm font-semibold">{t.hint.modal_edit.pick_icon}</h2>
         <input
             type="text"
             class="input input-sm input-block input-solid"
-            placeholder={$t.hint.modal_edit.search_emoji}
+            placeholder={t.hint.modal_edit.search_emoji}
             bind:value={emojiSearch}
         />
         {#if emojiSearch}
@@ -197,7 +197,7 @@
                 </div>
             {:else}
                 <div class="flex-grow flex items-center justify-center">
-                    <p class="text-lg text-content3">{$t.hint.modal_edit.no_icon}</p>
+                    <p class="text-lg text-content3">{t.hint.modal_edit.no_icon}</p>
                 </div>
             {/if}
         {:else}

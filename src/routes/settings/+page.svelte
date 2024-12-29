@@ -2,12 +2,13 @@
     import '$lib/polyfill';
     import { Alert01Icon, FloppyDiskIcon, SearchVisualIcon } from 'hugeicons-svelte';
     import { endpoint, history } from '$lib/config';
-    import { lang, t, languages } from '$lib/lang';
+    import { lang, t, Locale } from '$lib/lang';
     import { theme } from '$lib/theme';
     import { canGoBack } from '$lib/state';
     import Cordova from '$lib/coms/Cordova.svelte';
     import { PUBLIC_REPO_URL } from '$env/static/public';
     import { connectionState } from '$lib/client';
+    import { availableLangs } from '$lang';
 
     let ep = $state($endpoint);
 
@@ -22,9 +23,23 @@
     }
 </script>
 
+{#snippet vts_doc(title: string)}
+    <a
+        href="https://github.com/DenchiSoft/VTubeStudio/wiki/Plugins#how-to-use-plugins"
+        target="_blank"
+        class="link link-secondary text-sm"
+    >
+        {title}
+    </a>
+{/snippet}
+
+{#snippet code(text: string)}
+    <code class="font-mono">{text}</code>
+{/snippet}
+
 <div class="form-group mx-auto max-w-sm min-h-full">
     <div class="form-field">
-        <label for="lang" class="form-label">{$t.settings.lang}</label>
+        <label for="lang" class="form-label">{t.settings.lang}</label>
         <div class="popover w-full">
             <button
                 id="lang"
@@ -36,7 +51,7 @@
             <div class="popover-content popover-bottom-left top-12">
                 <div class="popover-arrow"></div>
                 <div class="menu">
-                    {#each languages as l}
+                    {#each availableLangs as l}
                         <button
                             class="menu-item"
                             class:menu-active={$lang === l}
@@ -51,7 +66,7 @@
         </div>
     </div>
     <div class="form-field mb-2">
-        <span class="form-label">{$t.settings.theme}</span>
+        <span class="form-label">{t.settings.theme}</span>
         <div class="flex flex-row gap-2 justify-start items-start flex-wrap">
             <label class="text-sm align-middle">
                 <input
@@ -60,7 +75,7 @@
                     value={null}
                     bind:group={$theme}
                 />
-                {$t.settings.scheme.system}
+                {t.settings.scheme.system}
             </label>
             <label class="text-sm align-middle">
                 <input
@@ -69,7 +84,7 @@
                     value="light"
                     bind:group={$theme}
                 />
-                {$t.settings.scheme.light}
+                {t.settings.scheme.light}
             </label>
             <label class="text-sm align-middle">
                 <input
@@ -78,12 +93,12 @@
                     value="dark"
                     bind:group={$theme}
                 />
-                {$t.settings.scheme.dark}
+                {t.settings.scheme.dark}
             </label>
         </div>
     </div>
     <div class="form-field">
-        <label for="endpoint" class="form-label">{$t.settings.endpoint}</label>
+        <label for="endpoint" class="form-label">{t.settings.endpoint}</label>
         <form
             class="grid grid-cols-[1fr_auto] gap-2"
             onsubmit={(ev) => {
@@ -109,7 +124,7 @@
             />
             <button
                 class="btn btn-solid-primary btn-circle"
-                title={$t.actions.save}
+                title={t.actions.save}
                 disabled={unChanged || invalid}
             >
                 <FloppyDiskIcon class="w-5 h-5" />
@@ -127,27 +142,29 @@
                 class="btn btn-solid-secondary btn-block"
                 data-sveltekit-replacestate
             >
-                {$t.actions.scan}
+                {t.actions.scan}
                 <SearchVisualIcon class="size-5 ml-2" />
             </a>
         </Cordova>
-        <p class="text-sm text-content2">{@html $t.hint.settings.endpoint}</p>
+        <p class="text-sm text-content2">
+            {@render Locale.snippets.hint.settings.endpoint({ code, vts_doc })}
+        </p>
     </div>
     {#if connectionState.wsFromHttps}
         <div class="alert alert-warning items-start" data-sveltekit-replacestate>
             <Alert01Icon size={35} class="text-warning min-w-max mt-2" />
             <div class="flex flex-col">
-                <span>{$t.hint.ws.title}</span>
+                <span>{t.hint.ws.title}</span>
                 <span class="text-content2 text-sm text-justify">
-                    {@html $t.hint.ws.description}
+                    {@render Locale.snippets.hint.ws.description({ code })}
                 </span>
                 <span class="text-content2 text-sm font-semibold mt-2">
-                    {$t.hint.ws.suggestions.title}
+                    {t.hint.ws.suggestions.title}
                 </span>
                 <ul class="list-disc list-outside text-content2 text-sm ml-4">
-                    <li>{@html $t.hint.ws.suggestions.http}</li>
-                    <li>{@html $t.hint.ws.suggestions.proxy}</li>
-                    <li>{@html $t.hint.ws.suggestions.portForwarding}</li>
+                    <li>{@render Locale.snippets.hint.ws.suggestions.http({ code })}</li>
+                    <li>{t.hint.ws.suggestions.proxy}</li>
+                    <li>{t.hint.ws.suggestions.portForwarding}</li>
                 </ul>
             </div>
         </div>
@@ -155,9 +172,9 @@
         <div class="alert alert-warning" data-sveltekit-replacestate>
             <Alert01Icon size={35} class="text-warning min-w-max" />
             <div class="flex flex-col">
-                <span>{$t.status.disconnected.title}</span>
+                <span>{t.status.disconnected.title}</span>
                 <span class="text-content2 text-sm text-justify">
-                    {@html $t.status.disconnected.description}
+                    {t.status.disconnected.description}
                 </span>
             </div>
         </div>
@@ -165,9 +182,9 @@
         <div class="alert alert-warning" data-sveltekit-replacestate>
             <Alert01Icon size={35} class="text-warning min-w-max" />
             <div class="flex flex-col">
-                <span>{$t.status.unauthenticated.title}</span>
+                <span>{t.status.unauthenticated.title}</span>
                 <span class="text-content2 text-sm text-justify">
-                    {@html $t.status.unauthenticated.description}
+                    {t.status.unauthenticated.description}
                 </span>
             </div>
         </div>
@@ -175,17 +192,17 @@
     <div class="h-6"></div>
     <div class="form-field mt-auto">
         <a href="/how" class="btn" onclick={canGoBack} data-sveltekit-replacestate>
-            {$t.how.title}
+            {t.how.title}
         </a>
     </div>
     <div class="form-field">
         <a href="/privacy" class="btn" onclick={canGoBack} data-sveltekit-replacestate>
-            {$t.privacy.title}
+            {t.privacy.title}
         </a>
     </div>
     <div class="form-field">
         <a href={PUBLIC_REPO_URL} target="_blank" class="btn">
-            {$t.settings.source_code}
+            {t.settings.source_code}
         </a>
     </div>
 </div>

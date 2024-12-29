@@ -31,7 +31,7 @@
       "installing": "Initializing"
     },
     "settings": {
-      "endpoint": "The websocket endpoint for VTube Studio, starting with <code class=\"font-mono\">ws://</code> or <code class=\"font-mono\">wss://</code>, for more information please refer to <a href=\"https://github.com/DenchiSoft/VTubeStudio/wiki/Plugins#how-to-use-plugins\" target=\"_blank\" class=\"link link-secondary text-sm\">VTube Studio document</a>."
+      "endpoint": "The websocket endpoint for VTube Studio, starting with ${ code(\"ws://\") } or ${ code(\"wss://\") }, for more information please refer to ${ vts_doc(\"VTube Studio document\") }."
     },
     "show_hidden": "Show Hidden",
     "update": {
@@ -39,9 +39,9 @@
       "title": "Update Available"
     },
     "ws": {
-      "description": "This site is accessed via HTTPS, <code class=\"font-mono\">ws://</code> connection will not work due to browser security policy.",
+      "description": "This site is accessed via HTTPS, ${ code(\"ws://\") } connection will not work due to browser security policy.",
       "suggestions": {
-        "http": "Use <code class=\"font-mono\">http://</code> instead of <code class=\"font-mono\">https://</code>.",
+        "http": "Use ${ code(\"http://\") } instead of ${ code(\"https://\") }.",
         "portForwarding": "Use port forwarding so the connection can be treated as a local connection.",
         "proxy": "Use a secure proxy server to connect to VTube Studio.",
         "title": "You may:"

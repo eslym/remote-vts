@@ -1,3 +1,4 @@
+import type { TranslationKeys } from '$lang';
 import type { Readable } from 'svelte/store';
 // See https://svelte.dev/docs/kit/types#app.d.ts
 // for information about these interfaces
@@ -6,7 +7,7 @@ declare global {
         // interface Error {}
         // interface Locals {}
         interface PageData {
-            title?: Readable<string>;
+            title?: TranslationKeys;
             group?: string;
             back?: string;
         }

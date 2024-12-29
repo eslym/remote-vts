@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "@eslym/svelte-utility-stores": "^2.0.2",
+    "@eslym/sveltekit-lang": "^1.0.4",
     "@fontsource/noto-sans": "^5.1.0",
     "@fontsource/noto-sans-jp": "^5.1.0",
     "@fontsource/noto-sans-mono": "^5.1.0",

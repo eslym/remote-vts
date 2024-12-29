@@ -7,7 +7,7 @@
 
 <div class="accordion-group">
     <button class="accordion outline-none text-justify" tabindex="0">
-        <h2 class="accordion-title">{$t.how.connect}</h2>
+        <h2 class="accordion-title">{t.how.connect}</h2>
         <div class="accordion-content">
             <div class="min-h-0">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla necessitatibus iusto
@@ -17,7 +17,7 @@
         </div>
     </button>
     <button class="accordion outline-none text-justify" tabindex="0">
-        <h2 class="accordion-title">{$t.how.customize}</h2>
+        <h2 class="accordion-title">{t.how.customize}</h2>
         <div class="accordion-content">
             <div class="min-h-0">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla necessitatibus iusto

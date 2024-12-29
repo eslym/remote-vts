@@ -4,6 +4,7 @@
     "": {
       "devDependencies": {
         "@eslym/svelte-utility-stores": "^2.0.2",
+        "@eslym/sveltekit-lang": "^1.0.4",
         "@fontsource/noto-sans": "^5.1.0",
         "@fontsource/noto-sans-jp": "^5.1.0",
         "@fontsource/noto-sans-mono": "^5.1.0",
@@ -84,6 +85,8 @@
     "@esbuild/win32-x64": ["@esbuild/win32-x64@0.21.5", "", { "os": "win32", "cpu": "x64" }, "sha512-tQd/1efJuzPC6rCFwEvLtci/xNFcTZknmXs98FYDfGE4wP9ClFV98nyKrzJKVPMhdDnjzLhdUyMX4PsQAPjwIw=="],
 
     "@eslym/svelte-utility-stores": ["@eslym/svelte-utility-stores@2.0.2", "", { "peerDependencies": { "svelte": ">=4.0.0 <6.0.0" } }, "sha512-XnLQsuKrvbTv5+vvnav9HqjmqrA338/k/ouU2vROCR1v0Rw94UE6831zFHs3y7OWjQGIw0JklfWWweCS8D9TKw=="],
+
+    "@eslym/sveltekit-lang": ["@eslym/sveltekit-lang@1.0.4", "", { "peerDependencies": { "svelte": ">=5.7.0", "vite": ">=5.0.0" } }, "sha512-chnlWFxzuAHT/e2doycYV71KfOSpfBZvHLQ9zXobUgRrOx8SN71T/m0RdqWphRdKwS+RNwCQRzqRZoWQ1bUneg=="],
 
     "@fontsource/noto-sans": ["@fontsource/noto-sans@5.1.0", "", {}, "sha512-P6X+ynPOteCsbUHI7rU4UIpRJcuraJ3OllKqPIjKgxPZS0yPtxFyquADb4SmcgZosRrgqDy34/dcSIhio3Qx4Q=="],
 

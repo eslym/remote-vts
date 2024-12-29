@@ -121,13 +121,13 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-bottom-left">
                     <button class="dropdown-item text-sm" onclick={() => (editMode = false)}>
-                        {$t.actions.done_edit}
+                        {t.actions.done_edit}
                     </button>
                     <label
                         tabindex="-1"
                         class="dropdown-item text-sm flex flex-row justify-between"
                     >
-                        {$t.hint.show_hidden}
+                        {t.hint.show_hidden}
                         <input
                             tabindex="-1"
                             type="checkbox"
@@ -236,11 +236,11 @@
         <label for="modal-cooldown" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
             >✕</label
         >
-        <h2 class="text-sm font-semibold">{$t.hint.model_cooldown.title}</h2>
-        <span>{$t.hint.model_cooldown.description}</span>
+        <h2 class="text-sm font-semibold">{t.hint.model_cooldown.title}</h2>
+        <span>{t.hint.model_cooldown.description}</span>
         <div class="flex gap-3">
             <label for="modal-cooldown" class="btn btn-block">
-                {$t.hint.model_cooldown.confirm}
+                {t.hint.model_cooldown.confirm}
             </label>
         </div>
     </div>

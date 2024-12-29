@@ -103,18 +103,18 @@
 
 <form class="form-group" onsubmit={startScan}>
     <div class="form-field">
-        <label for="ip" class="form-label">{$t.settings.scan.ip}</label>
+        <label for="ip" class="form-label">{t.settings.scan.ip}</label>
         <input
             id="ip"
             type="text"
             class="input input-solid input-block font-mono"
-            placeholder={$t.settings.scan.no_ip}
+            placeholder={t.settings.scan.no_ip}
             bind:value={currentIp}
             disabled
         />
     </div>
     <div class="form-field">
-        <label for="port" class="form-label">{$t.settings.scan.port}</label>
+        <label for="port" class="form-label">{t.settings.scan.port}</label>
         <input
             id="port"
             type="number"
@@ -138,7 +138,7 @@
                 ></div>
             </div>
         {/if}
-        {$t.settings.scan[scanning ? 'stop' : 'start']}
+        {t.settings.scan[scanning ? 'stop' : 'start']}
     </button>
     {#if progress !== undefined}
         <progress class="progress progress-flat-success w-full" value={progress} max={ips.length}
@@ -146,7 +146,7 @@
     {/if}
 </form>
 <div class="form-field mt-8">
-    <div class="form-label">{$t.settings.scan.endpoints}</div>
+    <div class="form-label">{t.settings.scan.endpoints}</div>
     <div class="menu-section">
         <ul class="menu-items">
             {#each endpoints as ep}
@@ -173,7 +173,7 @@
                 </li>
             {:else}
                 <li class="menu-item menu-item-disabled text-lg text-center justify-center">
-                    {$t.settings.scan.empty}
+                    {t.settings.scan.empty}
                 </li>
             {/each}
         </ul>

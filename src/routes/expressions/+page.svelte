@@ -87,13 +87,13 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-bottom-left">
                     <button class="dropdown-item text-sm" onclick={() => (editMode = false)}>
-                        {$t.actions.done_edit}
+                        {t.actions.done_edit}
                     </button>
                     <label
                         tabindex="-1"
                         class="dropdown-item text-sm flex flex-row justify-between"
                     >
-                        {$t.hint.show_hidden}
+                        {t.hint.show_hidden}
                         <input
                             tabindex="-1"
                             type="checkbox"

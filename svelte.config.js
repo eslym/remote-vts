@@ -23,9 +23,6 @@ const config = {
         adapter: adapter({
             fallback: '404.html'
         }),
-        alias: {
-            '$lang/*': 'lang/*'
-        },
         version: {
             name: version
         },

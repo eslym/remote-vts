@@ -23,7 +23,7 @@
 
     // Other
     "esModuleInterop": true,
-    "sourceMap": true,
+    "sourceMap": true
   },
   "include": ["./hooks/*.ts", "./hooks/*.d.ts"],
   "exclude": ["./hooks/*.js"]

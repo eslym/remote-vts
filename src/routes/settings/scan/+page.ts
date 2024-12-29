@@ -1,9 +1,8 @@
-import { t } from '$lib/lang';
-import { derived } from 'svelte/store';
+import type { TranslationKeys } from '$lang';
 
 export function load() {
     return {
-        title: derived(t, ($t) => $t.page.scan),
+        title: 'page.scan' satisfies TranslationKeys,
         back: '/settings'
     };
 }

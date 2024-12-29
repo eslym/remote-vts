@@ -11,9 +11,9 @@
     <div class="alert alert-warning mb-8 sticky z-30 top-0" data-sveltekit-replacestate>
         <Alert01Icon size={35} class="text-warning min-w-max" />
         <div class="flex flex-col">
-            <span>{$t.status.disconnected.title}</span>
+            <span>{t.status.disconnected.title}</span>
             <span class="text-content2 text-sm text-justify">
-                {@html $t.status.disconnected.description}
+                {t.status.disconnected.description}
             </span>
         </div>
     </div>
@@ -21,9 +21,9 @@
     <div class="alert alert-warning mb-8 sticky z-30 top-0" data-sveltekit-replacestate>
         <Alert01Icon size={35} class="text-warning min-w-max" />
         <div class="flex flex-col">
-            <span>{$t.status.unauthenticated.title}</span>
+            <span>{t.status.unauthenticated.title}</span>
             <span class="text-content2 text-sm text-justify">
-                {@html $t.status.unauthenticated.description}
+                {t.status.unauthenticated.description}
             </span>
         </div>
     </div>

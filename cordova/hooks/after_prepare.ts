@@ -34,7 +34,9 @@ async function remove_splashscreen_theme(root: string) {
 }
 
 async function remove_cordova_icon(root: string) {
-    const files = await glob('platforms/android/app/src/main/res/mipmap*/ic_launcher*', { cwd: root });
+    const files = await glob('platforms/android/app/src/main/res/mipmap*/ic_launcher*', {
+        cwd: root
+    });
     await Promise.all(files.map((file) => unlink(join(root, file))));
     console.log('Removed cordova icon');
 }
@@ -46,25 +48,25 @@ async function update_config(root: string) {
     const config = create(config_content);
     const widget = config.first();
     const whitelist = widget.find((node) => {
-        if(node.node.nodeName !== 'allow-navigation') {
+        if (node.node.nodeName !== 'allow-navigation') {
             return false;
         }
         const obj = node.toObject() as any;
         return obj['allow-navigation']['@href'].match(/^https?:\/\//);
     });
-    if(whitelist) {
+    if (whitelist) {
         whitelist.att('href', `${app_url}/*`);
     } else {
         widget.ele('allow-navigation', { href: `${app_url}/*` });
     }
     const access = widget.find((node) => node.node.nodeName === 'access');
-    if(access) {
+    if (access) {
         access.att('origin', app_url);
     } else {
         widget.ele('access', { origin: app_url });
     }
     const content = widget.find((node) => node.node.nodeName === 'content');
-    if(content) {
+    if (content) {
         content.att('src', app_url);
     } else {
         widget.ele('content', { src: app_url });
@@ -78,18 +80,30 @@ async function set_gradle_properties(root: string) {
     const gradle_properties = join(root, 'platforms/android/gradle.properties');
     let gradle_properties_content = await readFile(gradle_properties, 'utf8');
     const pattern = /^cdvMinSdkVersion=.+$/m;
-    if(!pattern.test(gradle_properties_content)) {
+    if (!pattern.test(gradle_properties_content)) {
         gradle_properties_content += '\ncdvMinSdkVersion=31\n';
     } else {
-        gradle_properties_content = gradle_properties_content.replace(pattern, 'cdvMinSdkVersion=31');
+        gradle_properties_content = gradle_properties_content.replace(
+            pattern,
+            'cdvMinSdkVersion=31'
+        );
     }
     await writeFile(gradle_properties, gradle_properties_content);
     console.log('Updated gradle.properties');
 }
 
 async function patch_browsertab(root: string) {
-    const java_file = join(root, 'platforms/android/app/src/main/java/com/google/cordova/plugin/BrowserTab.java');
+    const java_file = join(
+        root,
+        'platforms/android/app/src/main/java/com/google/cordova/plugin/BrowserTab.java'
+    );
     const content = await readFile(java_file, 'utf8');
-    await writeFile(java_file, content.replace('import android.support.customtabs.CustomTabsIntent;', 'import androidx.browser.customtabs.CustomTabsIntent;'));
+    await writeFile(
+        java_file,
+        content.replace(
+            'import android.support.customtabs.CustomTabsIntent;',
+            'import androidx.browser.customtabs.CustomTabsIntent;'
+        )
+    );
     console.log('Patched BrowserTab.java');
 }

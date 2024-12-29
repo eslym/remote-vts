@@ -43,13 +43,18 @@ if (!import.meta.env.SSR) {
         document.documentElement.dataset.theme = $scheme;
         cordovaAvailable.then((available) => {
             if (!available) return;
-            StatusBar.backgroundColorByHexString($scheme === 'dark' ? DARK_ACTION_BAR : LIGHT_ACTION_BAR);
-            if($scheme === 'dark') {
+            StatusBar.backgroundColorByHexString(
+                $scheme === 'dark' ? DARK_ACTION_BAR : LIGHT_ACTION_BAR
+            );
+            if ($scheme === 'dark') {
                 StatusBar.styleLightContent();
             } else {
                 StatusBar.styleDefault();
             }
-            NavigationBar.backgroundColorByHexString($scheme === 'dark' ? DARK_NAVIGATION_BAR : LIGHT_NAVIGATION_BAR, $scheme === 'light');
+            NavigationBar.backgroundColorByHexString(
+                $scheme === 'dark' ? DARK_NAVIGATION_BAR : LIGHT_NAVIGATION_BAR,
+                $scheme === 'light'
+            );
         });
     });
 }
