@@ -13,7 +13,7 @@
                 <div class="flex flex-col">
                     <span>{t.hint.scan.title}</span>
                     <span class="text-content2 text-sm text-justify">
-                        {@html t.hint.scan.description}
+                        {t.hint.scan.description}
                     </span>
                 </div>
             </div>
