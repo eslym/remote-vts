@@ -1,5 +1,4 @@
 <script lang="ts">
-    import '$lib/polyfill';
     import { Alert01Icon, FloppyDiskIcon, SearchVisualIcon } from 'hugeicons-svelte';
     import { endpoint, history } from '$lib/config';
     import { lang, t, Locale } from '$lib/lang';
@@ -9,6 +8,7 @@
     import { PUBLIC_REPO_URL } from '$env/static/public';
     import { connectionState } from '$lib/client';
     import { availableLangs } from '$lang';
+    import { validURL } from '$lib/utils';
 
     let ep = $state($endpoint);
 
@@ -17,7 +17,7 @@
     let invalid = $derived(invalidWebsocket(ep));
 
     function invalidWebsocket(url: string) {
-        if (!URL.canParse(url)) return true;
+        if (!validURL(url)) return true;
         const u = new URL(url);
         return u.protocol !== 'ws:' && u.protocol !== 'wss:';
     }
@@ -130,7 +130,7 @@
                 <FloppyDiskIcon class="w-5 h-5" />
             </button>
             <datalist id="history">
-                {#each [...$history, 'ws://127.0.0.1:8001'].toSorted() as h}
+                {#each [...$history, 'ws://127.0.0.1:8001'].sort() as h}
                     <option value={h}></option>
                 {/each}
             </datalist>

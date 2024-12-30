@@ -1,13 +1,7 @@
 <script lang="ts">
-    import { client, connectionState } from '$lib/client';
+    import { client, connectionState, vtsState } from '$lib/client';
     import ConnectionState from '$lib/coms/ConnectionState.svelte';
-    import {
-        currentModel,
-        expressions,
-        expressionConfigs,
-        type CustomConfig,
-        type VTSExpression
-    } from '$lib/config';
+    import { expressionConfigs, type CustomConfig, type VTSExpression } from '$lib/config';
     import Button from '$lib/coms/Button.svelte';
     import { getActionBar } from '../+layout.svelte';
     import {
@@ -27,8 +21,8 @@
     let editModal = $state(false);
     let currentEdit: VTSExpression | undefined = $state(undefined as any);
 
-    let configs = $derived($currentModel ? expressionConfigs[$currentModel] : {});
-    let displayExpressions = $state(calculateOrder($currentModel ? $expressions : []));
+    let configs = $derived(vtsState.loadedModel ? expressionConfigs[vtsState.loadedModel] : {});
+    let displayExpressions = $derived(calculateOrder(vtsState.expressions, configs));
 
     let editing = $derived(
         currentEdit
@@ -49,8 +43,8 @@
         showHidden = false;
     });
 
-    function calculateOrder(expressions: VTSExpression[]) {
-        return expressions.sort((a, b) => {
+    function calculateOrder(expressions: VTSExpression[], configs: Record<string, CustomConfig>) {
+        return [...expressions].sort((a, b) => {
             const aindex = configs[a.file].index;
             const bindex = configs[b.file].index;
             if (aindex !== null && bindex !== null) {
@@ -86,7 +80,13 @@
                     <Tick04Icon size={20} />
                 </button>
                 <div class="dropdown-menu dropdown-menu-bottom-left">
-                    <button class="dropdown-item text-sm" onclick={() => (editMode = false)}>
+                    <button
+                        class="dropdown-item text-sm"
+                        onclick={() => {
+                            editMode = false;
+                            showHidden = false;
+                        }}
+                    >
                         {t.actions.done_edit}
                     </button>
                     <label
@@ -154,28 +154,22 @@
                             const i = src.index;
                             src.index = cfg.index;
                             cfg.index = i;
-                            displayExpressions = calculateOrder($currentModel ? $expressions : []);
                         }}
                     >
                         <Button
                             icon={cfg.icon}
                             label={cfg.displayName || expression.name || expression.file}
                             active={expression.active}
-                            onclick={async () => {
+                            onclick={() => {
                                 if (editMode) {
                                     currentEdit = expression;
                                     editModal = true;
                                     return;
                                 }
-                                await $client.expressionActivation({
+                                $client.expressionActivation({
                                     expressionFile: expression.file,
                                     active: !expression.active
                                 });
-                                const res = await $client.expressionState({ details: true });
-                                $expressions = res.expressions;
-                                displayExpressions = calculateOrder(
-                                    $currentModel ? $expressions : []
-                                );
                             }}
                             disabled={!editMode && !connectionState.authenticated}
                             clickable={!isDragging}
@@ -196,9 +190,7 @@
                                 class:opacity-0={isDragging}
                                 onclick={() => {
                                     cfg.hidden = !cfg.hidden;
-                                    displayExpressions = calculateOrder(
-                                        $currentModel ? $expressions : []
-                                    );
+                                    //displayExpressions = calculateOrder(vtsState.expressions);
                                 }}
                             >
                                 <HideIcon size={20} />

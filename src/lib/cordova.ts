@@ -1,10 +1,10 @@
-import '$lib/polyfill';
 import type { IApiClientOptions } from 'vtubestudio';
 import type { WebSocketReadyState } from 'vtubestudio/lib/ws';
+import { withResolvers } from './utils';
 
 type IWebSocketLike = ReturnType<Exclude<IApiClientOptions['webSocketFactory'], undefined>>;
 
-const { promise: cordovaAvailable, resolve: resolveCordova } = Promise.withResolvers<boolean>();
+const { promise: cordovaAvailable, resolve: resolveCordova } = withResolvers<boolean>();
 
 export { cordovaAvailable };
 

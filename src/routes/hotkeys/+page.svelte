@@ -1,19 +1,12 @@
 <script lang="ts">
-    import { client, connectionState } from '$lib/client';
+    import { client, connectionState, vtsState } from '$lib/client';
     import ConnectionState from '$lib/coms/ConnectionState.svelte';
-    import {
-        currentModel,
-        hotkeys,
-        hotkeyConfigs,
-        type VTSHotkey,
-        type CustomConfig
-    } from '$lib/config';
+    import { hotkeyConfigs, type VTSHotkey, type CustomConfig } from '$lib/config';
     import Button from '$lib/coms/Button.svelte';
     import { getActionBar } from '../+layout.svelte';
     import {
         Hold04Icon,
         Move02Icon,
-        PencilEdit01Icon,
         Tick04Icon,
         ViewIcon,
         ViewOffSlashIcon
@@ -23,8 +16,8 @@
     import ModalEdit from '$lib/coms/ModalEdit.svelte';
     import Draggable, { dragEffects, dragState } from '$lib/coms/Draggable.svelte';
 
-    let configs = $derived($currentModel ? hotkeyConfigs[$currentModel] : {});
-    let displayHotkeys = $state(calculateOrder($currentModel ? $hotkeys : []));
+    let configs = $derived(vtsState.loadedModel ? hotkeyConfigs[vtsState.loadedModel] : {});
+    let displayHotkeys = $derived(calculateOrder(vtsState.hotkeys, configs));
 
     let editMode = $state(false);
     let showHidden = $state(false);
@@ -51,8 +44,8 @@
         showHidden = false;
     });
 
-    function calculateOrder(hotkeys: VTSHotkey[]) {
-        return hotkeys.sort((a, b) => {
+    function calculateOrder(hotkeys: VTSHotkey[], configs: Record<string, CustomConfig>) {
+        return [...hotkeys].sort((a, b) => {
             const aindex = configs[a.hotkeyID].index;
             const bindex = configs[b.hotkeyID].index;
             if (aindex !== null && bindex !== null) {
@@ -131,7 +124,6 @@
                         <Button
                             icon={cfg.icon}
                             label={cfg.displayName || hotkey.name || hotkey.description}
-                            active={hotkey.hotkeyID === $currentModel}
                             disabled={false}
                             clickable={false}
                         >
@@ -156,13 +148,11 @@
                             const i = src.index;
                             src.index = cfg.index;
                             cfg.index = i;
-                            displayHotkeys = calculateOrder($currentModel ? $hotkeys : []);
                         }}
                     >
                         <Button
                             icon={cfg.icon}
                             label={cfg.displayName || hotkey.name || hotkey.description}
-                            active={hotkey.hotkeyID === $currentModel}
                             onclick={() => {
                                 if (editMode) {
                                     currentEdit = hotkey;
@@ -189,7 +179,6 @@
                                 class:opacity-0={isDragging}
                                 onclick={() => {
                                     cfg.hidden = !cfg.hidden;
-                                    displayHotkeys = calculateOrder($currentModel ? $hotkeys : []);
                                 }}
                             >
                                 <HideIcon size={20} />

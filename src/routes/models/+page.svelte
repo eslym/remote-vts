@@ -1,15 +1,8 @@
 <script lang="ts">
-    import '$lib/polyfill';
-    import { client, connectionState } from '$lib/client';
+    import { client, connectionState, vtsState } from '$lib/client';
     import Button from '$lib/coms/Button.svelte';
     import ConnectionState from '$lib/coms/ConnectionState.svelte';
-    import {
-        currentModel,
-        modelConfigs,
-        models,
-        type CustomConfig,
-        type VTSModel
-    } from '$lib/config';
+    import { modelConfigs, type CustomConfig, type VTSModel } from '$lib/config';
     import { t } from '$lib/lang';
     import {
         Tick04Icon,
@@ -25,7 +18,7 @@
     import { waitForEmoji } from '$lib/emoji';
     import Draggable, { dragEffects, dragState } from '$lib/coms/Draggable.svelte';
 
-    let displayModels = $state(calculateSortedOrders($models));
+    let displayModels = $derived(calculateSortedOrders(vtsState.models));
 
     let buttons: Record<string, HTMLButtonElement> = $state({});
 
@@ -57,7 +50,7 @@
     });
 
     function calculateSortedOrders(models: VTSModel[]) {
-        return models.toSorted((a, b) => {
+        return [...models].sort((a, b) => {
             const aindex = modelConfigs[a.modelID].index;
             const bindex = modelConfigs[b.modelID].index;
             if (aindex !== null && bindex !== null) {
@@ -104,8 +97,8 @@
     });
 
     onMount(() => {
-        if ($currentModel && buttons[$currentModel]) {
-            buttons[$currentModel].scrollIntoView({ block: 'center' });
+        if (vtsState.loadedModel && buttons[vtsState.loadedModel]) {
+            buttons[vtsState.loadedModel].scrollIntoView({ block: 'center' });
         }
     });
 </script>
@@ -120,7 +113,13 @@
                     <Tick04Icon size={20} />
                 </button>
                 <div class="dropdown-menu dropdown-menu-bottom-left">
-                    <button class="dropdown-item text-sm" onclick={() => (editMode = false)}>
+                    <button
+                        class="dropdown-item text-sm"
+                        onclick={() => {
+                            editMode = false;
+                            showHidden = false;
+                        }}
+                    >
                         {t.actions.done_edit}
                     </button>
                     <label
@@ -163,7 +162,7 @@
                         <Button
                             icon={cfg.icon}
                             label={cfg.displayName || model.modelName}
-                            active={model.modelID === $currentModel}
+                            active={model.modelID === vtsState.loadedModel}
                             disabled={false}
                             clickable={false}
                         >
@@ -188,13 +187,12 @@
                             const i = src.index;
                             src.index = cfg.index;
                             cfg.index = i;
-                            displayModels = calculateSortedOrders($models);
                         }}
                     >
                         <Button
                             icon={cfg.icon}
                             label={cfg.displayName || model.modelName}
-                            active={model.modelID === $currentModel}
+                            active={model.modelID === vtsState.loadedModel}
                             onclick={modelClicked.bind(null, model)}
                             disabled={!editMode && !connectionState.authenticated}
                             clickable={!isDragging}
@@ -216,7 +214,6 @@
                                 class:opacity-0={isDragging}
                                 onclick={() => {
                                     cfg.hidden = !cfg.hidden;
-                                    displayModels = calculateSortedOrders($models);
                                 }}
                             >
                                 <HideIcon size={20} />

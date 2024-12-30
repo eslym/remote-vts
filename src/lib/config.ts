@@ -1,9 +1,8 @@
 import { derived, type Writable } from 'svelte/store';
 import local from '@eslym/svelte-utility-stores/local';
 import json from '@eslym/svelte-utility-stores/json';
-import type { StorageStore } from '@eslym/svelte-utility-stores';
 import type { ApiClient } from 'vtubestudio';
-import { createSubscriber } from 'svelte/reactivity';
+import { wrapWritable } from './utils';
 
 export type VTSModel = Awaited<ReturnType<ApiClient['availableModels']>>['availableModels'][number];
 export type VTSHotkey = Awaited<
@@ -12,8 +11,6 @@ export type VTSHotkey = Awaited<
 export type VTSExpression = Awaited<
     ReturnType<ApiClient['expressionState']>
 >['expressions'][number];
-
-type Subscriber = ReturnType<typeof createSubscriber>;
 
 const endpoint_base = local('vts-endpoint');
 const endpoint_reader = derived(endpoint_base, ($endpoint) => {
@@ -38,19 +35,9 @@ history.update(($history) => {
     return $history;
 });
 
-export const models = json<VTSModel[]>(local('vts-models'), () => []);
-
-export const currentModel = local('vts-current-model');
-
-export const hotkeys = json<VTSHotkey[]>(local('vts-hotkeys'), () => []);
-
-export const expressions = json<VTSExpression[]>(local('vts-expressions'), () => []);
-
 const B62 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
-const B64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'.split('');
 
-function hexToBase62(hex: string) {
-    let n = BigInt('0x' + hex);
+function bigintToBase62(n: bigint) {
     let result = '';
     while (n > 0n) {
         result = B62[Number(n % 62n)] + result;
@@ -59,77 +46,59 @@ function hexToBase62(hex: string) {
     return result;
 }
 
-function base64toBase62(base64: string) {
+function hexToBase62(hex: string) {
+    return bigintToBase62(BigInt(`0x${hex}`));
+}
+
+function stringToBase62(str: string) {
+    const bytes = new TextEncoder().encode(str);
     let n = 0n;
-    for (let i = 0; i < base64.length; i++) {
-        n = n * 64n + BigInt(B64.indexOf(base64[i]));
+    for (const byte of bytes) {
+        n = (n << 8n) | BigInt(byte);
     }
-    return hexToBase62(n.toString(16));
+    return bigintToBase62(n);
 }
 
 class CustomConfig implements Config {
-    #icon: StorageStore;
-    #displayName: StorageStore;
-    #index: StorageStore;
-    #hidden: StorageStore;
-
-    #iconSubscriber: Subscriber;
-    #displayNameSubscriber: Subscriber;
-    #indexSubscriber: Subscriber;
-    #hiddenSubscriber: Subscriber;
-
-    get icon() {
-        this.#iconSubscriber();
-        return this.#icon.get() ?? '';
-    }
-
-    set icon(value: string | null) {
-        this.#icon.set(value || null);
-    }
-
-    get displayName() {
-        this.#displayNameSubscriber();
-        return this.#displayName.get() ?? '';
-    }
-
-    set displayName(value: string | null) {
-        this.#displayName.set(value || null);
-    }
-
-    get index() {
-        this.#indexSubscriber();
-        const hidden = this.#hidden.get();
-        if (hidden === 'true') return null;
-        const val = this.#index.get();
-        return val ? parseInt(val) : null;
-    }
-
-    set index(value: number | null) {
-        this.#index.set(value === null ? null : value.toString());
-    }
-
-    get hidden() {
-        this.#hiddenSubscriber();
-        return this.#hidden.get() === 'true';
-    }
-
-    set hidden(value: boolean) {
-        this.#hidden.set(value ? 'true' : null);
-        if (!value) {
-            this.index = null;
-        }
-    }
+    icon!: string | null;
+    displayName!: string | null;
+    index!: number | null;
+    hidden!: boolean;
 
     constructor(prefix: string, ...keys: string[]) {
-        this.#icon = local(`vts-${prefix}-${keys.join('-')}-icon`);
-        this.#displayName = local(`vts-${prefix}-${keys.join('-')}-display-name`);
-        this.#index = local(`vts-${prefix}-${keys.join('-')}-index`);
-        this.#hidden = local(`vts-${prefix}-${keys.join('-')}-hidden`);
+        const baseHidden = local(`vts-${prefix}-${keys.join('-')}-hidden`);
+        const hidden = derived(baseHidden, ($hidden) => typeof $hidden === 'string');
+        function setHidden(value: boolean) {
+            if (!value) localStorage.removeItem(baseHidden.key);
+            baseHidden.set(value ? '' : null);
+        }
 
-        this.#iconSubscriber = createSubscriber(this.#icon.subscribe);
-        this.#displayNameSubscriber = createSubscriber(this.#displayName.subscribe);
-        this.#indexSubscriber = createSubscriber(this.#index.subscribe);
-        this.#hiddenSubscriber = createSubscriber(this.#hidden.subscribe);
+        const baseIndex = local(`vts-${prefix}-${keys.join('-')}-index`);
+        const index = derived(baseIndex, ($index) => Number($index));
+        function setIndex(value: number | null) {
+            if (value === null) localStorage.removeItem(baseIndex.key);
+            if (baseHidden.get() === null) localStorage.removeItem(baseIndex.key);
+            baseIndex.set(`${value}`);
+        }
+
+        Object.defineProperties(this, {
+            icon: wrapWritable(local(`vts-${prefix}-${keys.join('-')}-icon`)),
+            displayName: wrapWritable(local(`vts-${prefix}-${keys.join('-')}-display-name`)),
+            index: wrapWritable({
+                subscribe: index.subscribe,
+                set: setIndex,
+                update(updater) {
+                    setIndex(updater(Number(baseIndex.get())));
+                }
+            } satisfies Writable<number | null>),
+            hidden: wrapWritable({
+                subscribe: hidden.subscribe,
+                set: setHidden,
+                update(updater) {
+                    setHidden(updater(Boolean(baseHidden.get())));
+                }
+            } satisfies Writable<boolean>)
+        });
     }
 }
 
@@ -216,10 +185,7 @@ function expressionsProxy(modelId: string) {
         {
             get(_, expressionId: string) {
                 if (typeof expressionId !== 'string') return undefined;
-                return getExpressionConfig(
-                    hexToBase62(modelId),
-                    base64toBase62(btoa(expressionId))
-                );
+                return getExpressionConfig(hexToBase62(modelId), stringToBase62(expressionId));
             }
         }
     );

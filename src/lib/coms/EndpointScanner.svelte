@@ -87,8 +87,8 @@
                 if (ip.number === i) continue;
                 _ips.push(i);
             }
-            ips = _ips
-                .toSorted((a, b) => Number(abs(ip.number - a) - abs(ip.number - b)))
+            ips = [..._ips]
+                .sort((a, b) => Number(abs(ip.number - a) - abs(ip.number - b)))
                 .map((n) => stringifyIp({ number: n, version: ip.version }, { compress: true }));
         },
         () => {}
@@ -97,8 +97,6 @@
     function abs(n: bigint) {
         return n < 0 ? -n : n;
     }
-
-    $inspect(ips[scanIndex]);
 </script>
 
 <form class="form-group" onsubmit={startScan}>
