@@ -1,3 +1,28 @@
+<script lang="ts" module>
+    let extra_links = $derived(
+        [
+            PUBLIC_REPO_URL
+                ? {
+                      title: t.settings.source_code,
+                      url: PUBLIC_REPO_URL
+                  }
+                : undefined,
+            PUBLIC_CONTACT_URL
+                ? {
+                      title: t.settings.feedback,
+                      url: PUBLIC_CONTACT_URL
+                  }
+                : undefined,
+            PUBLIC_SPONSOR_URL
+                ? {
+                      title: t.settings.sponsor,
+                      url: PUBLIC_SPONSOR_URL
+                  }
+                : undefined
+        ].filter(Boolean) as { title: string; url: string }[]
+    );
+</script>
+
 <script lang="ts">
     import { Alert01Icon, FloppyDiskIcon, SearchVisualIcon } from 'hugeicons-svelte';
     import { endpoint, history } from '$lib/config';
@@ -5,10 +30,11 @@
     import { theme } from '$lib/theme';
     import { canGoBack } from '$lib/state';
     import Cordova from '$lib/coms/Cordova.svelte';
-    import { PUBLIC_REPO_URL } from '$env/static/public';
+    import { PUBLIC_CONTACT_URL, PUBLIC_REPO_URL, PUBLIC_SPONSOR_URL } from '$env/static/public';
     import { connectionState } from '$lib/client';
     import { availableLangs } from '$lang';
     import { validURL } from '$lib/utils';
+    import { blur } from 'svelte/transition';
 
     let ep = $state($endpoint);
 
@@ -55,7 +81,10 @@
                         <button
                             class="menu-item"
                             class:menu-active={$lang === l}
-                            onclick={() => (($lang as any) = l)}
+                            onclick={(ev) => {
+                                $lang = l;
+                                ev.currentTarget.blur();
+                            }}
                         >
                             <span class="mr-2">{lang(l).icon}</span>
                             {lang(l).lang}
@@ -200,9 +229,14 @@
             {t.privacy.title}
         </a>
     </div>
-    <div class="form-field">
-        <a href={PUBLIC_REPO_URL} target="_blank" class="btn">
-            {t.settings.source_code}
-        </a>
-    </div>
+    {#if extra_links.length}
+        <div class="divider my-0"></div>
+        {#each extra_links as link}
+            <div class="form-field">
+                <a href={link.url} target="_blank" class="btn">
+                    {link.title}
+                </a>
+            </div>
+        {/each}
+    {/if}
 </div>

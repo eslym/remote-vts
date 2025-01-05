@@ -6,8 +6,6 @@
     import Cordova from '$lib/coms/Cordova.svelte';
     import { Locale, t } from '$lib/lang';
     import { Tick04Icon, Move02Icon, ViewOffSlashIcon, SearchVisualIcon } from 'hugeicons-svelte';
-
-    // TODO: complete this page
 </script>
 
 {#snippet bold(text: string)}

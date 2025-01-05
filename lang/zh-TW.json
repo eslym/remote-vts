@@ -99,6 +99,7 @@
   },
   "settings": {
     "endpoint": "VTS 插件端點",
+    "feedback": "意見反饋",
     "lang": "語言",
     "scan": {
       "empty": "未找到端點",
@@ -115,6 +116,7 @@
       "system": "系統設定"
     },
     "source_code": "源代碼",
+    "sponsor": "支持這個App",
     "theme": "界面模式"
   },
   "status": {
