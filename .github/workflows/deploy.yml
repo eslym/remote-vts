@@ -25,7 +25,7 @@ jobs:
         env:
           PUBLIC_REPO_URL: https://github.com/${{ github.repository }}
           PUBLIC_CONTACT_URL: https://github.com/${{ github.repository }}/issues/new
-          PUBLIC_SPONSOR_URL: ${{ env.SPONSOR_URL }}
+          PUBLIC_SPONSOR_URL: ${{ vars.SPONSOR_URL }}
 
       - name: Asset Links
         run: |
