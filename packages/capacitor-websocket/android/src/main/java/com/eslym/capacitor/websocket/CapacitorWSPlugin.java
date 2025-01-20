@@ -1,9 +1,5 @@
 package com.eslym.capacitor.websocket;
 
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -13,7 +9,6 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;

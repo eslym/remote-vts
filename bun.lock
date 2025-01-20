@@ -4,7 +4,6 @@
     "": {
       "devDependencies": {
         "@capacitor/android": "^6.2.0",
-        "@capacitor/app": "^6.0.2",
         "@capacitor/cli": "^6.2.0",
         "@capacitor/core": "^6.2.0",
         "@capacitor/inappbrowser": "^1.0.3",
@@ -99,8 +98,6 @@
     "@babel/helper-validator-identifier": ["@babel/helper-validator-identifier@7.25.9", "", {}, "sha512-Ed61U6XJc3CVRfkERJWDz4dJwKe7iLmmJsbOGu9wSloNSFttHV0I8g6UAgb7qnK5ly5bGLPd4oXZlxCdANBOWQ=="],
 
     "@capacitor/android": ["@capacitor/android@6.2.0", "", { "peerDependencies": { "@capacitor/core": "^6.2.0" } }, "sha512-3YIDPylV0Q2adEQ/H568p496QdYG0jK/XGMdx7OGSqdBZen92ciAsYdyhLtyl91UVsN1lBhDi5H6j3T2KS6aJg=="],
-
-    "@capacitor/app": ["@capacitor/app@6.0.2", "", { "peerDependencies": { "@capacitor/core": "^6.0.0" } }, "sha512-SiGTGgslK4TbWJVImCUL1odul7/YFkVfkYtAYS9AAEzQpxBECBeRnuN3FFBcfZ9eiN1XxFBFchhiwpxtx/c7yQ=="],
 
     "@capacitor/cli": ["@capacitor/cli@6.2.0", "", { "dependencies": { "@ionic/cli-framework-output": "^2.2.5", "@ionic/utils-fs": "^3.1.6", "@ionic/utils-subprocess": "2.1.11", "@ionic/utils-terminal": "^2.3.3", "commander": "^9.3.0", "debug": "^4.3.4", "env-paths": "^2.2.0", "kleur": "^4.1.4", "native-run": "^2.0.0", "open": "^8.4.0", "plist": "^3.0.5", "prompts": "^2.4.2", "rimraf": "^4.4.1", "semver": "^7.3.7", "tar": "^6.1.11", "tslib": "^2.4.0", "xml2js": "^0.5.0" }, "bin": { "cap": "bin/capacitor", "capacitor": "bin/capacitor" } }, "sha512-EWcXG39mZh35zrHhOqzN1ILeSyMRyEqWVtQDXqMGjCXYRH6b6p5TvyvLDN8ZNy26tbhI3i79gfrgirt+mNwuuw=="],
 

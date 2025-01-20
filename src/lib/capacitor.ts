@@ -3,7 +3,6 @@ import { InAppBrowser, DefaultSystemBrowserOptions } from '@capacitor/inappbrows
 import type { IApiClientOptions } from 'vtubestudio';
 import type { WebSocketReadyState } from 'vtubestudio/lib/ws';
 import { CapacitorWS } from '@eslym/capacitor-websocket';
-import { App } from '@capacitor/app';
 import { PUBLIC_CAPACITOR_UPDATE_URL } from '$env/static/public';
 import { version } from '$app/environment';
 import { LiveUpdate } from '@capawesome/capacitor-live-update';
@@ -25,11 +24,11 @@ if (Capacitor.isNativePlatform()) {
     }) as any);
 
     if (PUBLIC_CAPACITOR_UPDATE_URL) {
-        App.getInfo()
-            .then(async (info) => {
+        LiveUpdate.getVersionName()
+            .then(async ({ versionName }) => {
                 const url = new URL(PUBLIC_CAPACITOR_UPDATE_URL);
                 url.searchParams.set('platform', Capacitor.getPlatform());
-                url.searchParams.set('version', info.version);
+                url.searchParams.set('version', versionName);
                 const res = await CapacitorHttp.get({
                     url: url.href,
                     headers: {
@@ -39,14 +38,23 @@ if (Capacitor.isNativePlatform()) {
                 });
 
                 if (res.status !== 200) return;
-                if (res.data.name === version) return;
-
-                await LiveUpdate.downloadBundle({
-                    url: res.data.url,
-                    bundleId: res.data.name
-                });
-
-                updateAvailable.set(true);
+                if (res.data.name !== version) {
+                    await LiveUpdate.downloadBundle({
+                        url: res.data.url,
+                        bundleId: res.data.name
+                    });
+                    await LiveUpdate.setNextBundle({
+                        bundleId: res.data.name
+                    });
+                    updateAvailable.set(true);
+                    return;
+                }
+                const { bundleIds } = await LiveUpdate.getBundles();
+                for (const bundleId of bundleIds) {
+                    if (bundleId !== version) {
+                        await LiveUpdate.deleteBundle({ bundleId });
+                    }
+                }
             })
             .catch(() => {});
     }
