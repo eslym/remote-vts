@@ -31,7 +31,7 @@
     import { swReady, updateAvailable } from '$lib/sw';
     import { sineInOut } from 'svelte/easing';
     import { fade } from 'svelte/transition';
-    import { getContext, onDestroy, setContext, type Snippet } from 'svelte';
+    import { getContext, onDestroy, onMount, setContext, type Snippet } from 'svelte';
     import { SvelteSet } from 'svelte/reactivity';
     import { Capacitor } from '@capacitor/core';
     import { LiveUpdate } from '@capawesome/capacitor-live-update';
@@ -118,6 +118,12 @@
             group: 'settings'
         }
     ]);
+
+    onMount(() => {
+        if (Capacitor.isNativePlatform()) {
+            LiveUpdate.ready();
+        }
+    });
 </script>
 
 <svelte:head>
