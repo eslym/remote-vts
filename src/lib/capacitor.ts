@@ -7,6 +7,7 @@ import { PUBLIC_CAPACITOR_UPDATE_URL } from '$env/static/public';
 import { version } from '$app/environment';
 import { LiveUpdate } from '@capawesome/capacitor-live-update';
 import { updateAvailable } from '$lib/sw';
+import { App } from '@capacitor/app';
 
 if (Capacitor.isNativePlatform()) {
     window.addEventListener('click', ((ev: MouseEvent & { target: HTMLAnchorElement }) => {
@@ -22,6 +23,14 @@ if (Capacitor.isNativePlatform()) {
             options: DefaultSystemBrowserOptions
         });
     }) as any);
+
+    App.addListener('backButton', ({ canGoBack }) => {
+        if (canGoBack) {
+            window.history.back();
+        } else {
+            App.exitApp();
+        }
+    });
 
     if (PUBLIC_CAPACITOR_UPDATE_URL) {
         LiveUpdate.getVersionName()
