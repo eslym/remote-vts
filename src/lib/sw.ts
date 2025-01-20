@@ -1,4 +1,5 @@
 import { writable } from 'svelte/store';
+import { Capacitor } from '@capacitor/core';
 
 export const updateAvailable = writable(false);
 export const swReady = writable(false);
@@ -6,7 +7,7 @@ export const swReady = writable(false);
 const sw_url = '/service-worker.js';
 
 if (!import.meta.env.SSR) {
-    if ('navigator' in globalThis) {
+    if ('navigator' in globalThis && !Capacitor.isNativePlatform()) {
         (async () => {
             const old_reg = await navigator.serviceWorker.getRegistration(sw_url);
             swReady.set(Boolean(old_reg));

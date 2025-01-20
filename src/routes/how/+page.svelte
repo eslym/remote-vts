@@ -3,7 +3,7 @@
 </script>
 
 <script lang="ts">
-    import Cordova from '$lib/coms/Cordova.svelte';
+    import { Capacitor } from '@capacitor/core';
     import { Locale, t } from '$lib/lang';
     import { Tick04Icon, Move02Icon, ViewOffSlashIcon, SearchVisualIcon } from 'hugeicons-svelte';
 </script>
@@ -67,18 +67,17 @@
                                 })}
                             </li>
                             <li class="my-1.5">
-                                <Cordova>
+                                {#if Capacitor.isNativePlatform()}
                                     {@render Locale.snippets.how.connect.endpoint.scan({
                                         bold,
                                         scan_button
                                     })}
-                                    {#snippet notAvailable()}
-                                        {@render Locale.snippets.how.connect.endpoint.wss({
-                                            code,
-                                            bold
-                                        })}
-                                    {/snippet}
-                                </Cordova>
+                                {:else}
+                                    {@render Locale.snippets.how.connect.endpoint.wss({
+                                        code,
+                                        bold
+                                    })}
+                                {/if}
                             </li>
                         </ul>
                     </li>

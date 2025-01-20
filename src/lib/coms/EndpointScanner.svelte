@@ -4,7 +4,7 @@
 </script>
 
 <script lang="ts">
-    import { cordovaHttpGet } from '$lib/cordova';
+    import { CapacitorHttp } from '@capacitor/core';
     import { t } from '$lib/lang';
     import { page } from '$app/stores';
     import { parseCidr } from 'cidr-tools';
@@ -60,7 +60,12 @@
         const toScan = formatHost(ips[scanIndex], ipVersion);
         scanIndex++;
         scanParallel--;
-        cordovaHttpGet(`http://${toScan}`).then(
+        CapacitorHttp.get({
+            url: `http://${toScan}`,
+            headers: {
+                'User-Agent': 'VTubeStudio/1.0.0'
+            }
+        }).then(
             (res) => {
                 console.log(res);
                 if (res.status === 400 && res.headers?.server?.startsWith('websocket-sharp/')) {

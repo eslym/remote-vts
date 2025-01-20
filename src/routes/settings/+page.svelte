@@ -29,12 +29,12 @@
     import { lang, t, Locale } from '$lib/lang';
     import { theme } from '$lib/theme';
     import { canGoBack } from '$lib/state';
-    import Cordova from '$lib/coms/Cordova.svelte';
     import { PUBLIC_CONTACT_URL, PUBLIC_REPO_URL, PUBLIC_SPONSOR_URL } from '$env/static/public';
     import { connectionState } from '$lib/client';
     import { availableLangs } from '$lang';
     import { validURL } from '$lib/utils';
     import { blur } from 'svelte/transition';
+    import { Capacitor } from '@capacitor/core';
 
     let ep = $state($endpoint);
 
@@ -164,7 +164,7 @@
                 {/each}
             </datalist>
         </form>
-        <Cordova>
+        {#if Capacitor.isNativePlatform()}
             <a
                 href="/settings/scan"
                 onclick={canGoBack}
@@ -174,7 +174,7 @@
                 {t.actions.scan}
                 <SearchVisualIcon class="size-5 ml-2" />
             </a>
-        </Cordova>
+        {/if}
         <p class="text-sm text-content2">
             {@render Locale.snippets.hint.settings.endpoint({ code, vts_doc })}
         </p>
