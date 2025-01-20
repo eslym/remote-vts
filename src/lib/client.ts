@@ -106,6 +106,7 @@ function onConnect() {
                 await refreshModels();
                 await sleep(2500);
             } catch (_) {
+                if (!shouldPing) return;
                 reconnect(get(endpoint));
                 break;
             }
@@ -177,11 +178,10 @@ export const client = derived(endpoint, ($endpoint) => {
 });
 
 if (!import.meta.env.SSR) {
-    async function load() {
-        if (await cordovaAvailable) {
-            WebsocketClass = CordovaWebsocket;
+    (async () => {
+        if (Capacitor.isNativePlatform()) {
+            WebsocketClass = (await import('./capacitor')).CapacitorWebsocket;
         }
         client.subscribe(() => {});
-    }
-    load();
+    })();
 }

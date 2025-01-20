@@ -33,6 +33,8 @@
     import { fade } from 'svelte/transition';
     import { getContext, onDestroy, setContext, type Snippet } from 'svelte';
     import { SvelteSet } from 'svelte/reactivity';
+    import { Capacitor } from '@capacitor/core';
+    import { LiveUpdate } from '@capawesome/capacitor-live-update';
 
     let { children }: Props = $props();
     let snippets: Set<Snippet<[]>> = $state(new SvelteSet());
@@ -221,7 +223,16 @@
             <h2 class="text-sm font-semibold">{t.hint.update.title}</h2>
             <span>{t.hint.update.description}</span>
             <div class="flex gap-3">
-                <button class="btn btn-primary btn-block" onclick={() => window.location.reload()}>
+                <button
+                    class="btn btn-primary btn-block"
+                    onclick={() => {
+                        if (Capacitor.isNativePlatform()) {
+                            LiveUpdate.reload();
+                        } else {
+                            window.location.reload();
+                        }
+                    }}
+                >
                     {t.actions.reload}
                 </button>
                 <label for="modal-update" class="btn btn-block btn-ghost">

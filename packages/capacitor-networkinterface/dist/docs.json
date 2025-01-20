@@ -1,0 +1,25 @@
+{
+  "api": {
+    "name": "NetworkInterfacePlugin",
+    "slug": "networkinterfaceplugin",
+    "docs": "",
+    "tags": [],
+    "methods": [
+      {
+        "name": "getWiFiIPAddress",
+        "signature": "() => Promise<{ ip: string; mask: number; }>",
+        "parameters": [],
+        "returns": "Promise<{ ip: string; mask: number; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "getwifiipaddress"
+      }
+    ],
+    "properties": []
+  },
+  "interfaces": [],
+  "enums": [],
+  "typeAliases": [],
+  "pluginConfigs": []
+}

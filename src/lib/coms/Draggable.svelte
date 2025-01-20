@@ -231,6 +231,8 @@
             }
         };
     };
+
+    let accId = 0;
 </script>
 
 <script lang="ts">
@@ -261,7 +263,7 @@
         ondraggingend
     }: Props = $props();
 
-    const dragId = crypto.randomUUID();
+    const dragId = `${++accId}`;
 
     let targetNode: HTMLElement | undefined = undefined;
     let isDragging = $derived(dragTarget === dragId);

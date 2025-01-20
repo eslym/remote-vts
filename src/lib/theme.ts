@@ -1,5 +1,6 @@
 import { derived, writable } from 'svelte/store';
-import { cordovaAvailable } from './cordova';
+import { StatusBar, Style } from '@capacitor/status-bar';
+import { Capacitor } from '@capacitor/core';
 
 export const DARK_ACTION_BAR = '#161616';
 export const LIGHT_ACTION_BAR = '#fcfcfc';
@@ -41,20 +42,13 @@ if (!import.meta.env.SSR) {
 
     scheme.subscribe(($scheme) => {
         document.documentElement.dataset.theme = $scheme;
-        cordovaAvailable.then((available) => {
-            if (!available) return;
-            StatusBar.backgroundColorByHexString(
-                $scheme === 'dark' ? DARK_ACTION_BAR : LIGHT_ACTION_BAR
-            );
-            if ($scheme === 'dark') {
-                StatusBar.styleLightContent();
-            } else {
-                StatusBar.styleDefault();
-            }
-            NavigationBar.backgroundColorByHexString(
-                $scheme === 'dark' ? DARK_NAVIGATION_BAR : LIGHT_NAVIGATION_BAR,
-                $scheme === 'light'
-            );
-        });
+        if (Capacitor.isNativePlatform()) {
+            StatusBar.setStyle({
+                style: $scheme === 'dark' ? Style.Dark : Style.Light
+            });
+            StatusBar.setBackgroundColor({
+                color: $scheme === 'dark' ? DARK_ACTION_BAR : LIGHT_ACTION_BAR
+            });
+        }
     });
 }

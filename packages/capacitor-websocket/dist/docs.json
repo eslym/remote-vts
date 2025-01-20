@@ -1,0 +1,125 @@
+{
+  "api": {
+    "name": "CapacitorWSPlugin",
+    "slug": "capacitorwsplugin",
+    "docs": "",
+    "tags": [],
+    "methods": [
+      {
+        "name": "connect",
+        "signature": "(options: { url: string; }) => Promise<{ id: string; }>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "{ url: string; }"
+          }
+        ],
+        "returns": "Promise<{ id: string; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "connect"
+      },
+      {
+        "name": "send",
+        "signature": "(options: { id: string; data: string; }) => Promise<void>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "{ id: string; data: string; }"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "send"
+      },
+      {
+        "name": "close",
+        "signature": "(options: { id: string; code?: number; reason?: string; }) => Promise<void>",
+        "parameters": [
+          {
+            "name": "options",
+            "docs": "",
+            "type": "{ id: string; code?: number | undefined; reason?: string | undefined; }"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "close"
+      },
+      {
+        "name": "addListener",
+        "signature": "<E extends keyof CapacitorWSEvents>(eventName: E, listenerFunc: (event: CapacitorWSEvents[E]) => void) => void",
+        "parameters": [
+          {
+            "name": "eventName",
+            "docs": "",
+            "type": "E"
+          },
+          {
+            "name": "listenerFunc",
+            "docs": "",
+            "type": "(event: CapacitorWSEvents[E]) => void"
+          }
+        ],
+        "returns": "void",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [
+          "CapacitorWSEvents",
+          "E"
+        ],
+        "slug": "addlistenere-"
+      }
+    ],
+    "properties": []
+  },
+  "interfaces": [
+    {
+      "name": "CapacitorWSEvents",
+      "slug": "capacitorwsevents",
+      "docs": "",
+      "tags": [],
+      "methods": [],
+      "properties": [
+        {
+          "name": "message",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "{ id: string; data: string; }"
+        },
+        {
+          "name": "open",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "{ id: string; }"
+        },
+        {
+          "name": "close",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "{ id: string; code: number; reason: string; }"
+        },
+        {
+          "name": "error",
+          "tags": [],
+          "docs": "",
+          "complexTypes": [],
+          "type": "{ id: string; message: string; }"
+        }
+      ]
+    }
+  ],
+  "enums": [],
+  "typeAliases": [],
+  "pluginConfigs": []
+}

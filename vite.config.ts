@@ -6,7 +6,7 @@ export default defineConfig({
     plugins: [sveltekit(), lang({ defaultLocale: 'en' })],
     server: {
         fs: {
-            allow: ['./lang']
+            allow: ['./lang', './packages']
         }
     }
 });

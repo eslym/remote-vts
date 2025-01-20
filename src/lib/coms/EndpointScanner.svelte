@@ -5,6 +5,7 @@
 
 <script lang="ts">
     import { CapacitorHttp } from '@capacitor/core';
+    import { NetworkInterface } from '@eslym/capacitor-networkinterface';
     import { t } from '$lib/lang';
     import { page } from '$app/stores';
     import { parseCidr } from 'cidr-tools';
@@ -64,28 +65,29 @@
             url: `http://${toScan}`,
             headers: {
                 'User-Agent': 'VTubeStudio/1.0.0'
-            }
+            },
+            readTimeout: 1000,
+            connectTimeout: 5000
         }).then(
             (res) => {
                 console.log(res);
-                if (res.status === 400 && res.headers?.server?.startsWith('websocket-sharp/')) {
+                if (res.status === 400 && res.headers?.Server?.startsWith('websocket-sharp/')) {
                     endpoints.push(`ws://${toScan}`);
                 }
                 scanParallel++;
                 progress++;
             },
-            () => {}
+            () => {
+                scanParallel++;
+                progress++;
+            }
         );
     });
 
-    networkinterface.getWiFiIPAddress(
-        (addr) => {
+    NetworkInterface.getWiFiIPAddress()
+        .then((addr) => {
             const _ips: bigint[] = [];
-            const mask = parseIp(addr.subnet)
-                .number.toString(2)
-                .split('')
-                .filter((c) => c === '1').length;
-            currentIp = `${addr.ip}/${mask}`;
+            currentIp = `${addr.ip}/${addr.mask}`;
             const cidr = parseCidr(currentIp);
             const ip = parseIp(addr.ip);
             for (let i = cidr.start; i <= cidr.end; i++) {
@@ -95,9 +97,8 @@
             ips = [..._ips]
                 .sort((a, b) => Number(abs(ip.number - a) - abs(ip.number - b)))
                 .map((n) => stringifyIp({ number: n, version: ip.version }, { compress: true }));
-        },
-        () => {}
-    );
+        })
+        .catch(() => {});
 
     function abs(n: bigint) {
         return n < 0 ? -n : n;

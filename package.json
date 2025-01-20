@@ -12,9 +12,13 @@
   "devDependencies": {
     "@capacitor/android": "^6.2.0",
     "@capacitor/app": "^6.0.2",
-    "@capacitor/browser": "^6.0.5",
     "@capacitor/cli": "^6.2.0",
     "@capacitor/core": "^6.2.0",
+    "@capacitor/inappbrowser": "^1.0.3",
+    "@capacitor/status-bar": "^6.0.2",
+    "@capawesome/capacitor-live-update": "^6.7.2",
+    "@eslym/capacitor-networkinterface": "workspace:*",
+    "@eslym/capacitor-websocket": "workspace:*",
     "@eslym/svelte-utility-stores": "^2.0.2",
     "@eslym/sveltekit-lang": "^1.0.4",
     "@fontsource/noto-sans": "^5.1.0",
@@ -27,6 +31,7 @@
     "@sveltejs/vite-plugin-svelte": "^4.0.2",
     "autoprefixer": "^10.4.20",
     "cidr-tools": "^11.0.2",
+    "dotenv": "^16.4.7",
     "emojibase-data": "^15",
     "hugeicons-svelte": "^0.0.1",
     "ip-bigint": "^8.2.0",
@@ -42,5 +47,8 @@
     "typescript": "^5.7.2",
     "vite": "^5.4.11",
     "vtubestudio": "^3.10.1"
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }
