@@ -20,6 +20,7 @@
     },
     "model_cooldown": {
       "confirm": "瞭解了",
+      "description": "模型加載仍在冷卻中。每 2 秒只能切換一次模型。",
       "title": "太快了！"
     },
     "scan": {

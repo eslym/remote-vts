@@ -17,9 +17,17 @@ const ASSETS = [
     ...(import.meta.env.DEV ? [] : [FALLBACK]) // the fallback page
 ];
 
+const GOOGLE_FONTS = new Set(['https://fonts.googleapis.com', 'https://fonts.gstatic.com']);
+
+// Cache local assets in capacitor is very redundant,
+// since capacitor already caches all assets in the app bundle.
+// This is a workaround to only cache google fonts in capacitor.
+const CACHE_FONTS_ONLY = location.search.includes('fonts-only');
+
 const sw = self as ServiceWorkerGlobalScope & typeof globalThis;
 
 sw.addEventListener('install', (event: ExtendableEvent) => {
+    if (CACHE_FONTS_ONLY) return;
     // Create a new cache and add all files to it
     async function addFilesToCache() {
         const cache = await caches.open(CACHE);
@@ -58,9 +66,11 @@ sw.addEventListener('install', (event: ExtendableEvent) => {
 });
 
 sw.addEventListener('activate', (event: ExtendableEvent) => {
+    if (CACHE_FONTS_ONLY) return;
     // Remove previous cached data from disk
     async function deleteOldCaches() {
         for (const key of await caches.keys()) {
+            if (!key.startsWith('cache-')) continue;
             if (key !== CACHE) await caches.delete(key);
         }
     }
@@ -73,18 +83,44 @@ sw.addEventListener('fetch', (event: FetchEvent) => {
     if (event.request.method !== 'GET') return;
 
     const url = new URL(event.request.url);
-    if (url.origin !== location.origin) return;
+
+    if (GOOGLE_FONTS.has(url.origin)) {
+        if (event.request.destination === 'font')
+            return event.respondWith(networkFirstRespond(url.href, 'google-fonts'));
+        else return networkFirstRespond(url.href, 'google-fonts');
+    }
+
+    if (CACHE_FONTS_ONLY || url.origin !== location.origin) return;
 
     if (ASSETS.includes(url.pathname)) {
-        event.respondWith(respond(url.pathname));
+        event.respondWith(cacheFirstRespond(url.pathname));
     } else if (!import.meta.env.DEV && !UNCACHEABLE.has(url.pathname)) {
-        event.respondWith(respond(FALLBACK));
+        event.respondWith(cacheFirstRespond(FALLBACK));
     }
 });
 
-async function respond(pathname: string) {
-    const cache = await caches.open(CACHE);
-    return cache.match(pathname) as Promise<Response>;
+async function cacheFirstRespond(pathname: string, cacheKey = CACHE) {
+    const cache = await caches.open(cacheKey);
+    let res = await cache.match(pathname);
+    if (res) return res;
+    res = await fetch(pathname);
+    cache.put(pathname, res.clone());
+    return res;
+}
+
+async function networkFirstRespond(pathname: string, cacheKey = CACHE) {
+    const cache = await caches.open(cacheKey);
+    try {
+        const res = await fetch(pathname);
+        if (res.ok) {
+            cache.put(pathname, res.clone());
+        }
+        return res;
+    } catch (err) {
+        const res = await cache.match(pathname);
+        if (res) return res;
+        throw err;
+    }
 }
 
 async function withRetry(fn: () => Promise<void>) {

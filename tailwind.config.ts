@@ -13,10 +13,10 @@ export default {
                     '"Noto Sans SC"',
                     '"Noto Sans TC"',
                     '"Noto Sans JP"',
-                    '"Twemoji"',
                     'ui-sans-serif',
                     'system-ui',
                     'sans-serif',
+                    '"Twemoji"',
                     "'Apple Color Emoji'",
                     "'Segoe UI Emoji'",
                     "'Segoe UI Symbol'",
@@ -27,7 +27,6 @@ export default {
                     '"Noto Sans SC"',
                     '"Noto Sans TC"',
                     '"Noto Sans JP"',
-                    '"Twemoji"',
                     'ui-monospace',
                     'SFMono-Regular',
                     'Menlo',
@@ -35,6 +34,7 @@ export default {
                     'Consolas',
                     "'Liberation Mono'",
                     "'Courier New'",
+                    '"Twemoji"',
                     'monospace'
                 ],
                 emoji: ['"Twemoji"']

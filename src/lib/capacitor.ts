@@ -89,7 +89,6 @@ CapacitorWS.addListener('close', (ev) => {
 });
 
 CapacitorWS.addListener('error', (ev) => {
-    console.error('error', ev);
     const socket = sockets.get(ev.id);
     if (socket) {
         socket.readyState = 3;

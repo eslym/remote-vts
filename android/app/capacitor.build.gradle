@@ -13,6 +13,7 @@ dependencies {
     implementation project(':capacitor-inappbrowser')
     implementation project(':capacitor-status-bar')
     implementation project(':capawesome-capacitor-live-update')
+    implementation project(':eslym-capacitor-android-serviceworker')
     implementation project(':eslym-capacitor-networkinterface')
     implementation project(':eslym-capacitor-websocket')
 
