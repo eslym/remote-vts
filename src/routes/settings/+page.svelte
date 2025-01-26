@@ -24,7 +24,14 @@
 </script>
 
 <script lang="ts">
-    import { Alert01Icon, FloppyDiskIcon, SearchVisualIcon } from '@eslym/hugeicons-svelte';
+    import {
+        Alert01Icon,
+        ComputerIcon,
+        FloppyDiskIcon,
+        Moon02Icon,
+        SearchVisualIcon,
+        Sun01Icon
+    } from '@eslym/hugeicons-svelte';
     import { endpoint, history } from '$lib/config';
     import { lang, t, Locale } from '$lib/lang';
     import { theme } from '$lib/theme';
@@ -33,7 +40,6 @@
     import { connectionState } from '$lib/client';
     import { availableLangs } from '$lang';
     import { validURL } from '$lib/utils';
-    import { blur } from 'svelte/transition';
     import { Capacitor } from '@capacitor/core';
 
     let ep = $state($endpoint);
@@ -95,35 +101,61 @@
         </div>
     </div>
     <div class="form-field mb-2">
-        <span class="form-label">{t.settings.theme}</span>
-        <div class="flex flex-row gap-2 justify-start items-start flex-wrap">
-            <label class="text-sm align-middle">
-                <input
-                    class="radio inline-flex mr-1"
-                    type="radio"
-                    value={null}
-                    bind:group={$theme}
-                />
-                {t.settings.scheme.system}
-            </label>
-            <label class="text-sm align-middle">
-                <input
-                    class="radio inline-flex mr-1"
-                    type="radio"
-                    value="light"
-                    bind:group={$theme}
-                />
-                {t.settings.scheme.light}
-            </label>
-            <label class="text-sm align-middle">
-                <input
-                    class="radio inline-flex mr-1"
-                    type="radio"
-                    value="dark"
-                    bind:group={$theme}
-                />
-                {t.settings.scheme.dark}
-            </label>
+        <label for="theme" class="form-label">{t.settings.theme}</label>
+        <div class="popover w-full">
+            <button
+                id="theme"
+                class="select select-solid select-block text-left popover-trigger !block"
+            >
+                {#if $theme === null}
+                    <ComputerIcon class="opacity-75 w-5 h-5 mr-2 inline-block" />
+                    {t.settings.scheme.system}
+                {:else if $theme === 'light'}
+                    <Sun01Icon class="opacity-75 w-5 h-5 mr-2 inline-block" />
+                    {t.settings.scheme.light}
+                {:else if $theme === 'dark'}
+                    <Moon02Icon class="opacity-75 w-5 h-5 mr-2 inline-block" />
+                    {t.settings.scheme.dark}
+                {/if}
+            </button>
+            <div class="popover-content popover-bottom-left top-12">
+                <div class="popover-arrow"></div>
+                <div class="menu">
+                    <button
+                        class="menu-item"
+                        class:menu-active={$theme === null}
+                        onclick={(ev) => {
+                            $theme = null;
+                            ev.currentTarget.blur();
+                        }}
+                    >
+                        <ComputerIcon class="opacity-75 w-5 h-5 mr-2 inline-block" />
+                        {t.settings.scheme.system}
+                    </button>
+                    <button
+                        class="menu-item"
+                        class:menu-active={$theme === 'light'}
+                        onclick={(ev) => {
+                            $theme = 'light';
+                            ev.currentTarget.blur();
+                        }}
+                    >
+                        <Sun01Icon class="opacity-75 w-5 h-5 mr-2 inline-block" />
+                        {t.settings.scheme.light}
+                    </button>
+                    <button
+                        class="menu-item"
+                        class:menu-active={$theme === 'dark'}
+                        onclick={(ev) => {
+                            $theme = 'dark';
+                            ev.currentTarget.blur();
+                        }}
+                    >
+                        <Moon02Icon class="opacity-75 w-5 h-5 mr-2 inline-block" />
+                        {t.settings.scheme.dark}
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
     <div class="form-field">
