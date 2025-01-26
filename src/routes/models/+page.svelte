@@ -10,7 +10,7 @@
         Hold04Icon,
         ViewOffSlashIcon,
         ViewIcon
-    } from 'hugeicons-svelte';
+    } from '@eslym/hugeicons-svelte';
     import { onMount } from 'svelte';
     import { ErrorCode, VTubeStudioError } from 'vtubestudio';
     import { getActionBar } from '../+layout.svelte';

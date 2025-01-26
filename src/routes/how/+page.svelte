@@ -5,7 +5,7 @@
 <script lang="ts">
     import { Capacitor } from '@capacitor/core';
     import { Locale, t } from '$lib/lang';
-    import { Tick04Icon, Move02Icon, ViewOffSlashIcon, SearchVisualIcon } from 'hugeicons-svelte';
+    import { Tick04Icon, Move02Icon, ViewOffSlashIcon, SearchVisualIcon } from '@eslym/hugeicons-svelte';
 </script>
 
 {#snippet bold(text: string)}

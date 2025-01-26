@@ -22,7 +22,7 @@
         SmileIcon,
         UserIcon,
         LinkBackwardIcon
-    } from 'hugeicons-svelte';
+    } from '@eslym/hugeicons-svelte';
     import { Locale, t } from '$lib/lang';
     import { DARK_ACTION_BAR, LIGHT_ACTION_BAR, scheme } from '$lib/theme';
     interface Props {

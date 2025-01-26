@@ -10,7 +10,7 @@
         Tick04Icon,
         ViewIcon,
         ViewOffSlashIcon
-    } from 'hugeicons-svelte';
+    } from '@eslym/hugeicons-svelte';
     import { t } from '$lib/lang';
     import { waitForEmoji } from '$lib/emoji';
     import ModalEdit from '$lib/coms/ModalEdit.svelte';

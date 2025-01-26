@@ -2,7 +2,7 @@
     import { Capacitor } from '@capacitor/core';
     import EndpointScanner from '$lib/coms/EndpointScanner.svelte';
     import { t } from '$lib/lang';
-    import { Alert01Icon } from 'hugeicons-svelte';
+    import { Alert01Icon } from '@eslym/hugeicons-svelte';
 </script>
 
 <div class="form-group mx-auto max-w-sm">

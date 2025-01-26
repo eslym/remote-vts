@@ -1,7 +1,7 @@
 <script lang="ts">
     import { connectionState } from '$lib/client';
     import { t } from '$lib/lang';
-    import { Alert01Icon } from 'hugeicons-svelte';
+    import { Alert01Icon } from '@eslym/hugeicons-svelte';
     import type { Snippet } from 'svelte';
 
     let { children = undefined }: { children?: Snippet } = $props();

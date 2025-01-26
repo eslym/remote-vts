@@ -24,7 +24,7 @@
 </script>
 
 <script lang="ts">
-    import { Alert01Icon, FloppyDiskIcon, SearchVisualIcon } from 'hugeicons-svelte';
+    import { Alert01Icon, FloppyDiskIcon, SearchVisualIcon } from '@eslym/hugeicons-svelte';
     import { endpoint, history } from '$lib/config';
     import { lang, t, Locale } from '$lib/lang';
     import { theme } from '$lib/theme';

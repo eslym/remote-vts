@@ -13,6 +13,7 @@
         "@eslym/capacitor-android-serviceworker": "workspace:*",
         "@eslym/capacitor-networkinterface": "workspace:*",
         "@eslym/capacitor-websocket": "workspace:*",
+        "@eslym/hugeicons-svelte": "^0.4.5",
         "@eslym/svelte-utility-stores": "^2.0.2",
         "@eslym/sveltekit-lang": "^1.0.4",
         "@sveltejs/adapter-static": "^3.0.6",
@@ -22,7 +23,6 @@
         "cidr-tools": "^11.0.2",
         "dotenv": "^16.4.7",
         "emojibase-data": "^15",
-        "hugeicons-svelte": "^0.0.1",
         "ip-bigint": "^8.2.0",
         "prettier-plugin-svelte": "^3.3.2",
         "prettier-plugin-tailwindcss": "^0.6.9",
@@ -204,6 +204,8 @@
     "@eslym/capacitor-networkinterface": ["@eslym/capacitor-networkinterface@workspace:packages/capacitor-networkinterface"],
 
     "@eslym/capacitor-websocket": ["@eslym/capacitor-websocket@workspace:packages/capacitor-websocket"],
+
+    "@eslym/hugeicons-svelte": ["@eslym/hugeicons-svelte@0.4.5", "", {}, "sha512-LJOHhxOwP5VGpwTY1dr7xvNYARHIRVTe2MB63yBCsXpHpUnm399ARO5aEqtmDoCNcgb0Ql0sOiEOkWJsQ3TJpA=="],
 
     "@eslym/svelte-utility-stores": ["@eslym/svelte-utility-stores@2.0.2", "", { "peerDependencies": { "svelte": ">=4.0.0 <6.0.0" } }, "sha512-XnLQsuKrvbTv5+vvnav9HqjmqrA338/k/ouU2vROCR1v0Rw94UE6831zFHs3y7OWjQGIw0JklfWWweCS8D9TKw=="],
 
@@ -632,8 +634,6 @@
     "has-tostringtag": ["has-tostringtag@1.0.2", "", { "dependencies": { "has-symbols": "^1.0.3" } }, "sha512-NqADB8VjPFLM2V0VvHUewwwsw0ZWBaIdgo+ieHtK3hasLz4qeCRjYcqfB6AQrBggRKppKF8L52/VqdVsO47Dlw=="],
 
     "hasown": ["hasown@2.0.2", "", { "dependencies": { "function-bind": "^1.1.2" } }, "sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ=="],
-
-    "hugeicons-svelte": ["hugeicons-svelte@0.0.1", "", { "peerDependencies": { "svelte": "^4.0.0" } }, "sha512-NQFtnDactAcililMobtnDzW1ElrIX543yo6Zlky85D4QjN19unO4pLGBwUYn9S5iN9TX9ao05Jb9QV4+SXw5tw=="],
 
     "ignore": ["ignore@5.3.2", "", {}, "sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g=="],
 

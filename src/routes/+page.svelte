@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Settings01Icon, DashboardSquare01Icon, SmileIcon, UserIcon } from 'hugeicons-svelte';
+    import { Settings01Icon, DashboardSquare01Icon, SmileIcon, UserIcon } from '@eslym/hugeicons-svelte';
     import { t } from '$lib/lang';
 </script>
 
