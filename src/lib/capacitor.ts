@@ -33,11 +33,11 @@ if (Capacitor.isNativePlatform()) {
     });
 
     if (PUBLIC_CAPACITOR_UPDATE_URL) {
-        LiveUpdate.getVersionName()
-            .then(async ({ versionName }) => {
+        LiveUpdate.getVersionCode()
+            .then(async ({ versionCode }) => {
                 const url = new URL(PUBLIC_CAPACITOR_UPDATE_URL);
                 url.searchParams.set('platform', Capacitor.getPlatform());
-                url.searchParams.set('version', versionName);
+                url.searchParams.set('build', versionCode);
                 const res = await CapacitorHttp.get({
                     url: url.href,
                     headers: {
